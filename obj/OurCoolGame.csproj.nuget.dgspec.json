@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj": {}
+    "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj": {}
   },
   "projects": {
-    "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj": {
+    "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj",
-        "projectName": "Our_cool_game",
-        "projectPath": "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj",
+        "projectUniqueName": "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj",
+        "projectName": "OurCoolGame",
+        "projectPath": "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj",
         "packagesPath": "C:\\Users\\emely\\.nuget\\packages\\",
         "outputPath": "E:\\programming\\git\\crispy-disco\\obj\\",
         "projectStyle": "PackageReference",
@@ -17,14 +17,14 @@
           "C:\\Users\\emely\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp2.1"
+          "net5.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp2.1": {
-            "targetAlias": "netcoreapp2.1",
+          "net5.0": {
+            "targetAlias": "net5.0",
             "projectReferences": {}
           }
         },
@@ -35,16 +35,8 @@
         }
       },
       "frameworks": {
-        "netcoreapp2.1": {
-          "targetAlias": "netcoreapp2.1",
-          "dependencies": {
-            "Microsoft.NETCore.App": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.1.0, )",
-              "autoReferenced": true
-            }
-          },
+        "net5.0": {
+          "targetAlias": "net5.0",
           "imports": [
             "net461",
             "net462",
@@ -55,6 +47,11 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
           "runtimeIdentifierGraphPath": "C:\\Users\\emely\\.dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
         }
       }

@@ -1,0 +1,12 @@
+E:\programming\git\crispy-disco\bin\Debug\netcoreapp2.1\OurCoolGame.deps.json
+E:\programming\git\crispy-disco\bin\Debug\netcoreapp2.1\OurCoolGame.runtimeconfig.json
+E:\programming\git\crispy-disco\bin\Debug\netcoreapp2.1\OurCoolGame.runtimeconfig.dev.json
+E:\programming\git\crispy-disco\bin\Debug\netcoreapp2.1\OurCoolGame.dll
+E:\programming\git\crispy-disco\bin\Debug\netcoreapp2.1\OurCoolGame.pdb
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.csprojAssemblyReference.cache
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.AssemblyInfoInputs.cache
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.AssemblyInfo.cs
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.csproj.CoreCompileInputs.cache
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.dll
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.pdb
+E:\programming\git\crispy-disco\obj\Debug\netcoreapp2.1\OurCoolGame.genruntimeconfig.cache
