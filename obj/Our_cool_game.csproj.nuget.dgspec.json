@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj": {}
+    "D:\\temp\\crispy-disco\\Our_cool_game.csproj": {}
   },
   "projects": {
-    "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj": {
+    "D:\\temp\\crispy-disco\\Our_cool_game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj",
+        "projectUniqueName": "D:\\temp\\crispy-disco\\Our_cool_game.csproj",
         "projectName": "Our_cool_game",
-        "projectPath": "E:\\programming\\git\\crispy-disco\\Our_cool_game.csproj",
-        "packagesPath": "C:\\Users\\emely\\.nuget\\packages\\",
-        "outputPath": "E:\\programming\\git\\crispy-disco\\obj\\",
+        "projectPath": "D:\\temp\\crispy-disco\\Our_cool_game.csproj",
+        "packagesPath": "C:\\Users\\max\\.nuget\\packages\\",
+        "outputPath": "D:\\temp\\crispy-disco\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\emely\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\max\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -55,7 +62,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Users\\emely\\.dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

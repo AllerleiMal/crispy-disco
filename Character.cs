@@ -56,7 +56,7 @@ namespace OurCoolGame
                 }
                 default:
                 {
-                    throw new Exception("You need to add new race to constructor(heath points switch-case");
+                    throw new Exception("You need to add new race to constructor(heath points switch-case)");
                 }
             }
 
