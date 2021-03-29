@@ -7,7 +7,7 @@ namespace OurCoolGame
     public class Character : IComparable
     {
         private static int _objectId;
-        public int Identifier { get; private set; } //must be unique(need to check if it is working)
+        public int ID { get; private set; } //must be unique(need to check if it is working)
         public string Name { get; private set; }
         public State CharacterState { get; set; } = State.Healthy;
         public bool CanTalk { get; set; } = true;
@@ -21,7 +21,7 @@ namespace OurCoolGame
 
         public Character(string name, Race characterRace, Gender characterGender, int age)
         {
-            Identifier = _objectId;
+            ID = _objectId;
             ++_objectId;
             Name = name;
             CharacterRace = characterRace;
@@ -100,7 +100,7 @@ namespace OurCoolGame
         { 
             var characterInfo = "";
             //probably I forgot smth
-            characterInfo += "ID: " + Identifier + ", name: " + Name + ", race: " + CharacterRace + ", age: " + Age +
+            characterInfo += "ID: " + ID + ", name: " + Name + ", race: " + CharacterRace + ", age: " + Age +
                              ", state: " + CharacterState + ", HP: " + CurrentHealthPoints + ", maximum HP: " +
                              MaxHealthPoints + ", XP: " + ExperiencePoints;
             return characterInfo;
