@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.OurCoolGame.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../:\programming\git\crispy-disco\.idea\.idea.OurCoolGame.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
