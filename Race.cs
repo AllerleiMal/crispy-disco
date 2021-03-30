@@ -6,6 +6,6 @@
         Gnome,
         Elf,
         Orc,
-        Goblin   
+        Goblin
     }
 }
