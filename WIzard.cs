@@ -6,8 +6,8 @@ namespace OurCoolGame
 {
     public class Wizard : Character
     {
-        public int curMana { get; set; }
-        public int maxMana { get; set; }
+        public int CurMana { get; private set; }
+        public int MaxMana { get; private set; }
         public Wizard(string name, Race characterRace, Gender characterGender, int age) : base(name, characterRace, characterGender, age)
         {
             switch (characterRace)
