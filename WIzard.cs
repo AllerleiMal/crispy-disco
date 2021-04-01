@@ -40,23 +40,5 @@ namespace OurCoolGame
             }
             
         }
-
-        private int ReadSpell(int CurMana)
-        {
-            CurMana = curMana;
-            if (CurMana >= 0)
-            {
-                if (CurMana < ManaCost)
-                {
-                    throw new Exception("You need more mana to do this spell!");
-                }
-                else
-                {
-                    CurMana -= ManaCost;
-                }
-            }
-
-            return CurMana;
-        }
     }
 }
