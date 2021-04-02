@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OurCoolGame
 {
     public class Character : IComparable
     {
         private static int _objectId;
-        public int ID { get; private set; } //must be unique(need to check if it is working)
+        public int ID { get; private set; }
         public string Name { get; private set; }
         public State CharacterState { get; set; } = State.Healthy;
         public bool CanTalk { get; set; } = true;
@@ -56,7 +54,7 @@ namespace OurCoolGame
                 }
                 default:
                 {
-                    throw new Exception("You need to add new race to constructor(heath points switch-case");
+                    throw new Exception("You need to add new race to constructor(heath points switch-case)");
                 }
             }
 
@@ -97,9 +95,8 @@ namespace OurCoolGame
         }
 
         public override string ToString()
-        { 
+        {
             var characterInfo = "";
-            //probably I forgot smth
             characterInfo += "ID: " + ID + ", name: " + Name + ", race: " + CharacterRace + ", age: " + Age +
                              ", state: " + CharacterState + ", HP: " + CurrentHealthPoints + ", maximum HP: " +
                              MaxHealthPoints + ", XP: " + ExperiencePoints;
