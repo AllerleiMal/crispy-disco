@@ -14,27 +14,27 @@ namespace OurCoolGame
             {
                 case Race.Elf:
                 {
-                    maxMana = 400;
+                    MaxMana = 400;
                     break;
                 }
                 case Race.Gnome:
                 {
-                    maxMana = 150;
+                    MaxMana = 150;
                     break;
                 }
                 case Race.Goblin:
                 {
-                    maxMana = 200;
+                    MaxMana = 200;
                     break;
                 }
                 case Race.Human:
                 {
-                    maxMana = 300;
+                    MaxMana = 300;
                     break;
                 }
                 case Race.Orc:
                 {
-                    maxMana = 250;
+                    MaxMana = 250;
                     break;
                 }
             }
