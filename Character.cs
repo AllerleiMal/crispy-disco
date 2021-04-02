@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using OurCoolGame.Enums;
 
 namespace OurCoolGame
 {
@@ -101,6 +103,15 @@ namespace OurCoolGame
                              ", state: " + CharacterState + ", HP: " + CurrentHealthPoints + ", maximum HP: " +
                              MaxHealthPoints + ", XP: " + ExperiencePoints;
             return characterInfo;
+        }
+
+        public void Cure()
+        {
+            if (CharacterState != State.Sick)
+            {
+                return;
+            }
+            StateUpdate();
         }
     }
 }

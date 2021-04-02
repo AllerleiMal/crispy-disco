@@ -1,6 +1,7 @@
 ﻿using System;
+using OurCoolGame.Enums;
 
-namespace OurCoolGame
+namespace OurCoolGame.Spells
 {
     class SpellRestoreHealth : Spell
     {
