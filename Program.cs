@@ -1,4 +1,7 @@
 ﻿using System;
+using OurCoolGame.Artefacts;
+using OurCoolGame.Enums;
+using OurCoolGame.Spells;
 
 namespace OurCoolGame
 {

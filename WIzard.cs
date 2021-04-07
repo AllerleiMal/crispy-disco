@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection.PortableExecutable;
+﻿using OurCoolGame.Enums;
 
 namespace OurCoolGame
 {
     public class Wizard : Character
     {
-        public int CurMana { get; private set; }
+        public int CurMana { get; set; }
         public int MaxMana { get; private set; }
         public Wizard(string name, Race characterRace, Gender characterGender, int age) : base(name, characterRace, characterGender, age)
         {

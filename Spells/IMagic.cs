@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OurCoolGame
+﻿namespace OurCoolGame.Spells
 {
     interface IMagic
     {

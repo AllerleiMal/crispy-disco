@@ -1,4 +1,4 @@
-﻿namespace OurCoolGame
+﻿namespace OurCoolGame.Enums
 {
     public enum Race
     {
