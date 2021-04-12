@@ -8,24 +8,22 @@ namespace OurCoolGame.Spells
         public virtual bool Pronouncing { get; protected set; }
         public virtual bool Gesturing { get; protected set; }
 
-        public virtual void MagicEffect(Character character, int magicPower)
+        public virtual void MagicEffect(Wizard origin, Wizard target = null, int magicPower = 0)
         {
-            throw new Exception("Wrong method parameters (Spell MagicEffect)");
+            Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
+            return;
         }
 
-        public virtual void MagicEffect(Character character)
+        public virtual void MagicEffect(Wizard origin, Wizard target)
         {
-            throw new Exception("Wrong method parameters (Spell MagicEffect)");
+            Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
+            return;
         }
 
-        public virtual void MagicEffect(int magicPower)
+        public virtual void MagicEffect(Wizard origin, int magicPower)
         {
-            throw new Exception("Wrong method parameters (Spell MagicEffect)");
-        }
-
-        public virtual void MagicEffect()
-        {
-            throw new Exception("Wrong method parameters (Spell MagicEffect)");
+            Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
+            return;
         }
     }
 }
