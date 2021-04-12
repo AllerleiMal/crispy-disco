@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
+using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
 
 namespace OurCoolGame
@@ -18,6 +19,7 @@ namespace OurCoolGame
         public int CurrentHealthPoints { get; set; }
         public int MaxHealthPoints { get; set; }
         public int ExperiencePoints { get; set; } = 0;
+        public List<Artefact> _inventory;
 
         public Character(string name, Race characterRace, Gender characterGender, int age)
         {
@@ -61,6 +63,7 @@ namespace OurCoolGame
             }
 
             CurrentHealthPoints = MaxHealthPoints;
+            _inventory = new List<Artefact>();
         }
 
         public bool IsBetter(Character lhs)
@@ -112,6 +115,44 @@ namespace OurCoolGame
                 return;
             }
             StateUpdate();
+        }
+
+        public void PickUpArtefact(Artefact artefact)
+        {
+            _inventory.Add(artefact);
+        }
+
+        public void ThrowAwayArtefact(Artefact artefact)
+        {
+            if (_inventory.Count == 0)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("You can't throw away anything, while your inventory is empty");
+                Console.ResetColor();
+            }
+            // var index = _inventory.FindIndex(0, target => artefact == target);
+            // check how it works with different fields of one artefact
+            _inventory.Remove(artefact);
+        }
+
+        public void GiveArtefact(Character target, Artefact artefact)
+        {
+            _inventory.Remove(artefact);
+            target.PickUpArtefact(artefact);
+        }
+
+        public void UseArtefact(Artefact artefact, Character target)
+        {
+            if (!artefact.Renewability)
+            {
+                ThrowAwayArtefact(artefact);
+            }
+            // if (!typeof(T).IsSubclassOf(typeof(Artefact)))
+            // {
+            //     //exception or message
+            //     return;
+            // }
+            artefact.UseArtefact((Wizard)this, (Wizard)target);
         }
     }
 }

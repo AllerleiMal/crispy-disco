@@ -7,9 +7,14 @@
             Renewability = true;
         }
 
-        protected override void UseArtefact(Wizard origin, Wizard target)
+        public override void UseArtefact(Wizard origin, Wizard target)
         {
             target.CurrentHealthPoints -= ArtefactPower;
+        }
+        
+        public override string ToString()
+        {
+            return "lightning staff";
         }
     }
 }

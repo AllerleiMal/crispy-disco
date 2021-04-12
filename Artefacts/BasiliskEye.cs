@@ -9,12 +9,16 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        protected override void UseArtefact(Wizard origin, Wizard target)
+        public override void UseArtefact(Wizard origin, Wizard target)
         {
             if (target.CharacterState != State.Dead)
             {
                 target.CharacterState = State.Paralyzed;
             }
+        }
+        public override string ToString()
+        {
+            return "basilisk eye";
         }
     }
 }

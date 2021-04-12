@@ -9,9 +9,13 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        protected override void UseArtefact(Wizard origin, Wizard target = null)
+        public override void UseArtefact(Wizard origin, Wizard target = null)
         {
             origin.CurMana += ArtefactPower;
+        }
+        public override string ToString()
+        {
+            return "bottle of dead water";
         }
     }
 }

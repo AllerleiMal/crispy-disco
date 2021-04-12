@@ -1,4 +1,5 @@
 ﻿using OurCoolGame.Enums;
+using OurCoolGame.Spells;
 
 namespace OurCoolGame
 {
@@ -36,7 +37,17 @@ namespace OurCoolGame
                     break;
                 }
             }
-            
         }
+        
+        // public void CastSpell<T>(Wizard origin, Wizard target, int magicPower)
+        // {
+        //     if (!typeof(T).IsSubclassOf(typeof(Spell)))
+        //     {
+        //         //here must be output message or exception throwing
+        //         return;
+        //     }
+        //
+        //     T spell = new T();
+        // }
     }
 }

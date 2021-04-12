@@ -9,10 +9,15 @@ namespace OurCoolGame.Artefacts
             Renewability = true;
         }
 
-        protected override void UseArtefact(Wizard origin, Wizard target)
+        public override void UseArtefact(Wizard origin, Wizard target)
         {
             target.CharacterState = State.Poisoned;
             target.CurrentHealthPoints -= ArtefactPower;
+        }
+        
+        public override string ToString()
+        {
+            return "poisonous salvina";
         }
     }
 }
