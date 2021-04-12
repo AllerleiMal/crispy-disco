@@ -2,9 +2,8 @@
 {
     interface IMagic
     {
-        public void MagicEffect(Character character, int magicPower);
-        public void MagicEffect(Character character);
-        public void MagicEffect(int magicPower);
-        public void MagicEffect();
+        public void MagicEffect(Wizard origin, Wizard target = null, int magicPower = 0);
+        public void MagicEffect(Wizard origin, Wizard target);
+        public void MagicEffect(Wizard origin, int magicPower);
     }
 }

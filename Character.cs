@@ -58,7 +58,8 @@ namespace OurCoolGame
                 }
                 default:
                 {
-                    throw new Exception("You need to add new race to constructor(heath points switch-case)");
+                    Console.WriteLine("You need to add new race to constructor(heath points switch-case)");
+                    break;
                 }
             }
 
