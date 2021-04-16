@@ -1,4 +1,5 @@
-﻿using OurCoolGame.Enums;
+﻿using System;
+using OurCoolGame.Enums;
 using OurCoolGame.Spells;
 
 namespace OurCoolGame
@@ -49,5 +50,17 @@ namespace OurCoolGame
         //
         //     T spell = new T();
         // }
+        
+        public void LowManaOrHpMessage()
+        {
+            if ((double) CurrentHealthPoints / MaxHealthPoints * 100 - 10 < 0)
+            {
+                Console.WriteLine("Your HP is low {0}/{1}", CurrentHealthPoints, MaxHealthPoints);
+            }
+            if ((double) CurMana / MaxMana * 100 - 10 < 0)
+            {
+                Console.WriteLine("Your mana is low {0}/{1}", CurMana, MaxMana);
+            }
+        }
     }
 }

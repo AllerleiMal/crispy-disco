@@ -32,9 +32,11 @@ namespace OurCoolGame
             Wizard wizard = null;
             gameLogic.CreateCharacter(ref wizard);
             Console.WriteLine(wizard.ToString());
+            gameLogic.GenerateLevel();
             while (true)
             {
-                
+                gameLogic.GenerateLevel();
+                break;
             }
         }
     }
