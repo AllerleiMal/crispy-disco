@@ -12,10 +12,11 @@ namespace OurCoolGame
         private Wizard _mainPlayer;
 
         private int _difficultyLevel;
-        // private List<Artefact> _allArtefacts; 
+        private Random _random;
 
         public GameLogic()
         {
+            _random = new Random();
             _difficultyLevel = 0;
             _mainPlayer = null;
             _enemy = new List<Wizard>();
@@ -276,6 +277,29 @@ namespace OurCoolGame
              *
              * after demonstration work of spells, use Dead Water as it was done with living water
              */
+        }
+
+        private void RunEasyLevel()
+        {
+            
+        }
+
+        private BottleSize RandomizeBottleSize()
+        {
+            var size = _random.Next(3);
+            return size switch
+            {
+                0 => BottleSize.Small,
+                1 => BottleSize.Medium,
+                2 => BottleSize.Big,
+                _ => BottleSize.Big
+            };
+        }
+
+        private Artefact RandomizeArtefact()
+        {
+            
+            return null;
         }
     }
 }
