@@ -1,4 +1,5 @@
-﻿using OurCoolGame.Enums;
+﻿using System;
+using OurCoolGame.Enums;
 
 namespace OurCoolGame.Artefacts
 {
@@ -9,9 +10,16 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard origin, Wizard target = null)
+        public override void UseArtefact(Wizard target)
         {
-            origin.CurMana += ArtefactPower;
+            if (target.CharacterState == State.Dead)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You are already dead, this artefact didn't do anything, but a puddle of odd-smelling liquid");
+                Console.ResetColor();
+                return;
+            }
+            target.CurMana += ArtefactPower;
         }
         public override string ToString()
         {

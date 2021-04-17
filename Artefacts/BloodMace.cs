@@ -3,11 +3,11 @@ using OurCoolGame.Enums;
 
 namespace OurCoolGame.Artefacts
 {
-    public class BasiliskEye : Artefact
+    public class BloodMace : Artefact
     {
-        public BasiliskEye() : base(250)
+        public BloodMace() : base(200)
         {
-            Renewability = false;
+            Renewability = true;
         }
 
         public override void UseArtefact(Wizard target)
@@ -15,15 +15,16 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are already dead, this artefact didn't do anything, but spoiled artefact");
+                Console.WriteLine("You are already dead, this artefact didn't do anything, but more blood");
                 Console.ResetColor();
             }
-            target.CharacterState = State.Paralyzed;
-            //add move modifier
+            target.CurrentHealthPoints -= ArtefactPower;
+            ArtefactPower = _random.Next(180, 250);
         }
+
         public override string ToString()
         {
-            return "basilisk eye";
+            return "bloodMace";
         }
     }
 }

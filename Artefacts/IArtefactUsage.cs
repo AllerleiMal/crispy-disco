@@ -2,6 +2,6 @@
 {
     public interface IArtefactUsage
     {
-        public void UseArtefact(Wizard origin, Wizard target = null);
+        public void UseArtefact(Wizard target);
     }
 }

@@ -143,7 +143,7 @@ namespace OurCoolGame
             target.PickUpArtefact(artefact);
         }
 
-        public void UseArtefact(Artefact artefact, Character target)
+        public void UseArtefact(Artefact artefact, Wizard target)
         {
             if (!artefact.Renewability)
             {
@@ -155,7 +155,7 @@ namespace OurCoolGame
             //     return;
             // }
             Console.WriteLine("Artefact {0} was used by {1} on {2}", artefact, Name, target.Name);
-            artefact.UseArtefact((Wizard)this, (Wizard)target);
+            artefact.UseArtefact(target);
         }
 
         public void ShowInventory()
