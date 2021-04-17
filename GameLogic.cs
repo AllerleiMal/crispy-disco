@@ -12,7 +12,7 @@ namespace OurCoolGame
         private Wizard _mainPlayer;
 
         private int _difficultyLevel;
-        private Random _random;
+        private readonly Random _random;
 
         public GameLogic()
         {
@@ -214,7 +214,7 @@ namespace OurCoolGame
             Console.WriteLine(
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
                 _enemy[0].Name);
-            _mainPlayer.PickUpArtefact(new LightningStaff(150));
+            _mainPlayer.PickUpArtefact(new LightningStaff());
             while (true)
             {
                 var temp = Console.ReadLine();
@@ -235,7 +235,7 @@ namespace OurCoolGame
             while (true)
             {
                 var temp = Console.ReadLine();
-                if (temp == "USE ARTEFACT 1 TO dummy")
+                if (temp == "USE ARTEFACT 1 ON dummy")
                 {
                     _mainPlayer.UseArtefact(_mainPlayer._inventory[0], _enemy[0]);
                     break;
@@ -248,7 +248,7 @@ namespace OurCoolGame
             Thread.Sleep(2000);
             Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
-            _enemy[0]._inventory.Add(new LightningStaff(1500));
+            _enemy[0]._inventory.Add(new LightningStaff());
             Thread.Sleep(2000);
             _enemy[0].UseArtefact(_enemy[0]._inventory[0], _mainPlayer);
             Thread.Sleep(2000);
@@ -262,7 +262,7 @@ namespace OurCoolGame
             while (true)
             {
                 var temp = Console.ReadLine();
-                if (temp == "USE ARTEFACT 2 TO me")
+                if (temp == "USE ARTEFACT 2 ON me")
                 {
                     _mainPlayer.UseArtefact(_mainPlayer._inventory[1], _mainPlayer);
                     break;
@@ -281,7 +281,8 @@ namespace OurCoolGame
 
         private void RunEasyLevel()
         {
-            
+            MoveCounter = 0;
+
         }
 
         private BottleSize RandomizeBottleSize()

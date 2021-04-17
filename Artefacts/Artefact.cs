@@ -6,11 +6,13 @@ namespace OurCoolGame.Artefacts
     public abstract class Artefact : IArtefactUsage
     {
         public bool Renewability { get; set; }
-        public int ArtefactPower { get; set; }
+        protected int ArtefactPower { get; set; }
+        protected readonly Random _random;
 
         protected Artefact(int artefactPower)
         {
             ArtefactPower = artefactPower;
+            _random = new Random();
         }
 
         public override string ToString()
@@ -18,10 +20,7 @@ namespace OurCoolGame.Artefacts
             return "artefact";
         }
 
-        public virtual void UseArtefact(Wizard origin, Wizard target = null)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void UseArtefact(Wizard target);
 
         private sealed class RenewabilityArtefactPowerEqualityComparer : IEqualityComparer<Artefact>
        {

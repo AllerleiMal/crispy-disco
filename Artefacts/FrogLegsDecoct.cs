@@ -1,26 +1,30 @@
-﻿namespace OurCoolGame.Artefacts
+﻿using System;
+using OurCoolGame.Enums;
+
+namespace OurCoolGame.Artefacts
 {
     public class FrogLegsDecoct : Artefact
     {
-        public FrogLegsDecoct(int artefactPower) : base(artefactPower)
+        public FrogLegsDecoct() : base(200)
         {
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard origin, Wizard target = null)
+        public override void UseArtefact(Wizard target)
         {
-            if (target == null)
+            if (target.CharacterState == State.Dead)
             {
-                origin.Cure();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You are already dead, this artefact didn't do anything. Local frogs look at you very suspiciously!");
+                Console.ResetColor();
+                return;
             }
-            else
-            {
-                target.Cure();
-            }
+            target.Cure();
+            target.CurrentHealthPoints += ArtefactPower;
         }
         public override string ToString()
         {
-            return "frog legs decoct";
+            return "FrogLegsDecoct";
         }
     }
 }
