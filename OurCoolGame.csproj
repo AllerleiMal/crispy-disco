@@ -6,8 +6,4 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="GameLogic" />
-  </ItemGroup>
-
 </Project>

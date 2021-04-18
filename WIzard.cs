@@ -51,8 +51,8 @@ namespace OurCoolGame
         }
         private bool SpellLearnedCheck(Spell spell)
         {
-            bool learned = _learnedSpells.FindIndex(target => spell == target) != -1;
-            if(!learned)
+            var learned = _learnedSpells.FindIndex(target => spell == target) != -1;
+            if (!learned)
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("The character doesn't know this spell");
@@ -98,6 +98,7 @@ namespace OurCoolGame
             if(SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this, target, magicPower);
+                ExperiencePoints += 150;
             }
         }
         public void CastSpell(Spell spell, Wizard target)
@@ -105,6 +106,7 @@ namespace OurCoolGame
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this, target);
+                ExperiencePoints += 150;
             }
         }
         public void CastSpell(Spell spell, int magicPower)
@@ -112,6 +114,7 @@ namespace OurCoolGame
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this, magicPower);
+                ExperiencePoints += 150;
             }
         }
         public void CastSpell(Spell spell)
@@ -119,6 +122,7 @@ namespace OurCoolGame
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this);
+                ExperiencePoints += 150;
             }
         }
     }

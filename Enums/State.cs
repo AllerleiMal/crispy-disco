@@ -8,6 +8,7 @@
         Sick,
         Poisoned,
         Paralyzed,
-        Dead
+        Dead,
+        Invulnerable
     }
 }
