@@ -3,27 +3,26 @@ using System.Collections.Generic;
 
 namespace OurCoolGame.Artefacts
 {
-    public abstract class Artefact
+    public abstract class Artefact : IArtefactUsage
     {
         public bool Renewability { get; set; }
-        public int ArtefactPower { get; set; }
+        protected int ArtefactPower { get; set; }
+        protected readonly Random _random;
 
         protected Artefact(int artefactPower)
         {
             ArtefactPower = artefactPower;
+            _random = new Random();
         }
 
-        public virtual void UseArtefact(Wizard origin, Wizard target = null)
-        {
-            
-        }
-
-       public override string ToString()
+        public override string ToString()
         {
             return "artefact";
         }
 
-       private sealed class RenewabilityArtefactPowerEqualityComparer : IEqualityComparer<Artefact>
+        public abstract void UseArtefact(Wizard target);
+
+        private sealed class RenewabilityArtefactPowerEqualityComparer : IEqualityComparer<Artefact>
        {
            public bool Equals(Artefact x, Artefact y)
            {

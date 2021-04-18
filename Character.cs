@@ -121,6 +121,7 @@ namespace OurCoolGame
         public void PickUpArtefact(Artefact artefact)
         {
             _inventory.Add(artefact);
+            Console.WriteLine("Artefact {0} was added to the inventory of {1}", artefact, Name);
         }
 
         public void ThrowAwayArtefact(Artefact artefact)
@@ -130,6 +131,7 @@ namespace OurCoolGame
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("You can't throw away anything, while your inventory is empty");
                 Console.ResetColor();
+                return;
             }
             // var index = _inventory.FindIndex(0, target => artefact == target);
             // check how it works with different fields of one artefact
@@ -138,11 +140,11 @@ namespace OurCoolGame
 
         public void GiveArtefact(Character target, Artefact artefact)
         {
-            _inventory.Remove(artefact);
+            ThrowAwayArtefact(artefact);
             target.PickUpArtefact(artefact);
         }
 
-        public void UseArtefact(Artefact artefact, Character target)
+        public void UseArtefact(Artefact artefact, Wizard target)
         {
             if (!artefact.Renewability)
             {
@@ -153,7 +155,16 @@ namespace OurCoolGame
             //     //exception or message
             //     return;
             // }
-            artefact.UseArtefact((Wizard)this, (Wizard)target);
+            Console.WriteLine("Artefact {0} was used by {1} on {2}", artefact, Name, target.Name);
+            artefact.UseArtefact(target);
+        }
+
+        public void ShowInventory()
+        {
+            for (var i = 0; i < _inventory.Count; ++i)
+            {
+                Console.WriteLine("({0}) {1}", i + 1, _inventory[i]);
+            }
         }
     }
 }

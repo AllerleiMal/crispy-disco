@@ -1,7 +1,7 @@
 # crispy-disco
 ###Part 1:
 ###Create "Character" class and add fields:
-- unique id (*);  **need to be tested**
+- ~~unique id~~ (*);  **need to be tested**
 - ~~name~~ (*); 
 - ~~state (normal, weakened, sick, poisoned, paralyzed, dead);~~
 - ~~ability to speak at the moment~~

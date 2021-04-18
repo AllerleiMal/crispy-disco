@@ -1,4 +1,5 @@
 ﻿using OurCoolGame.Enums;
+using System;
 
 namespace OurCoolGame.Artefacts
 {
@@ -9,14 +10,27 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard origin, Wizard target = null)
+        public override void UseArtefact(Wizard target)
         {
-            origin.CurrentHealthPoints += ArtefactPower;
+            if (target.CharacterState == State.Dead)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You are already dead, this artefact didn't do anything. But flowers are growing around you now.");
+                Console.ResetColor();
+                return;
+            }
+            target.CurrentHealthPoints += ArtefactPower;
         }
         
         public override string ToString()
         {
-            return "bottle of living water";
+            return ArtefactPower switch
+            {
+                (int) BottleSize.Big => "big bottle of living water",
+                (int) BottleSize.Medium => "medium bottle of living water",
+                (int) BottleSize.Small => "small bottle of living water",
+                _ => "small bottle of living water"
+            };
         }
     }
 }
