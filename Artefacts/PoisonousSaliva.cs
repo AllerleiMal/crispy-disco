@@ -25,7 +25,7 @@ namespace OurCoolGame.Artefacts
         
         public override string ToString()
         {
-            return "poisonous salvina";
+            return "poisonous saliva";
         }
     }
 }

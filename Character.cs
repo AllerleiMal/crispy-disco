@@ -131,6 +131,7 @@ namespace OurCoolGame
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("You can't throw away anything, while your inventory is empty");
                 Console.ResetColor();
+                return;
             }
             // var index = _inventory.FindIndex(0, target => artefact == target);
             // check how it works with different fields of one artefact
@@ -139,7 +140,7 @@ namespace OurCoolGame
 
         public void GiveArtefact(Character target, Artefact artefact)
         {
-            _inventory.Remove(artefact);
+            ThrowAwayArtefact(artefact);
             target.PickUpArtefact(artefact);
         }
 

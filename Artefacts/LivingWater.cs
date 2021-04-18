@@ -24,7 +24,13 @@ namespace OurCoolGame.Artefacts
         
         public override string ToString()
         {
-            return "bottle of living water";
+            return ArtefactPower switch
+            {
+                (int) BottleSize.Big => "big bottle of living water",
+                (int) BottleSize.Medium => "medium bottle of living water",
+                (int) BottleSize.Small => "small bottle of living water",
+                _ => "small bottle of living water"
+            };
         }
     }
 }

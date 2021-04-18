@@ -10,7 +10,7 @@ namespace OurCoolGame
     {
         public static int MoveCounter { get; set; } = 0;
         private Wizard _mainPlayer;
-
+        
         private int _difficultyLevel;
         private readonly Random _random;
 
@@ -185,20 +185,20 @@ namespace OurCoolGame
                 }
                 case <= 3:
                 {
-                    //RunEasyLevel();
+                    RunEasyLevel();
                     break;
                 }
                 case > 3 and <= 6:
                 {
-                    //RunMediumLevel();
+                    RunMediumLevel();
                     break;
                 }
                 case > 6 and <= 10:
                 {
-                    // RunHardLevel();
+                    RunHardLevel();
                     if (_difficultyLevel == 10)
                     {
-                        // RunFinalPlot();
+                        RunFinalPlot();
                     }
 
                     break;
@@ -209,7 +209,6 @@ namespace OurCoolGame
         //this method is for creating a basic arena with 1 enemy with training messages
         private void RunTraining()
         {
-            ++_difficultyLevel;
             _enemy.Add(new Wizard("dummy", Race.Human, Gender.Undefined, 10));
             Console.WriteLine(
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
@@ -277,14 +276,106 @@ namespace OurCoolGame
              *
              * after demonstration work of spells, use Dead Water as it was done with living water
              */
+            _enemy.Clear();
+            _teammates.Clear();
+            ++_difficultyLevel;
         }
 
+        //this method will generate easy fight situation 1v2 or 1v1
         private void RunEasyLevel()
         {
             MoveCounter = 0;
-
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("-- EASY LOCATION --");
+            Console.ResetColor();
+            Thread.Sleep(2000);
+            // Console.WriteLine("At the start of each level you will choose the artefact you want from the list given");
+            ChooseArtefactWhenLevelStarts();
+            Thread.Sleep(2000);
+            _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Female, 42));
+            
+            
+            
+            
+            
+            _enemy.Clear();
+            _teammates.Clear();
+            ++_difficultyLevel;
         }
 
+        private void GenerateNamesForEasyLevel()
+        {
+            
+        }
+        private void ChooseArtefactWhenLevelStarts()
+        {
+            Console.WriteLine("It's time to choose the artefact: ");
+            Thread.Sleep(1000);
+            Console.WriteLine("(1)Bottle of living water\n(2)Bottle of dead water\n(3)Basilisk eye\n(4)Frog legs decoct\n(5)Poisonous saliva");
+            int switchIntInput;
+            while (true)
+            {
+                if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput is < 1 or > 5)
+                {
+                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("Gods hate ridicule, you played with fire and lose");
+                    _mainPlayer.CurrentHealthPoints -= 50;
+                    continue;
+                }
+
+                break;
+            }
+
+            switch (switchIntInput)
+            {
+                case 1:
+                {
+                    _mainPlayer.PickUpArtefact(new LivingWater(RandomizeBottleSize()));
+                    break;
+                }
+                case 2:
+                {
+                    _mainPlayer.PickUpArtefact(new DeadWater(RandomizeBottleSize()));
+                    break;
+                }
+                case 3:
+                {
+                    _mainPlayer.PickUpArtefact(new BasiliskEye());
+                    break;
+                }
+                case 4:
+                {
+                    _mainPlayer.PickUpArtefact(new FrogLegsDecoct());
+                    break;
+                }
+                case 5:
+                {
+                    _mainPlayer.PickUpArtefact(new PoisonousSaliva());
+                    break;
+                }
+            }
+        }
+        
+        //this method will generate easy fight situation 2v2 or 2v3
+        private void RunMediumLevel()
+        {
+            MoveCounter = 0;
+            ++_difficultyLevel;
+        }
+        //this method will generate easy fight situation 2v3 or 2v4 ??????
+        private void RunHardLevel()
+        {
+            MoveCounter = 0;
+            ++_difficultyLevel;
+        }
+        //final plot will be lineal as the training level i bet
+        private void RunFinalPlot()
+        {
+            MoveCounter = 0;
+            ++_difficultyLevel;
+        }
+
+        //this is an additional method to create living/dead water bottles during artefact generation or after killing bots
         private BottleSize RandomizeBottleSize()
         {
             var size = _random.Next(3);
@@ -297,10 +388,24 @@ namespace OurCoolGame
             };
         }
 
+        //this method will be used to generate artefacts for bots and at the level start
         private Artefact RandomizeArtefact()
         {
-            
-            return null;
+            var artefactNumber = _random.Next(1, 5);
+            return artefactNumber switch
+            {
+                1 => new FrogLegsDecoct(),
+                2 => new BasiliskEye(),
+                3 => new DeadWater(RandomizeBottleSize()),
+                4 => new LivingWater(RandomizeBottleSize()),
+                5 => new PoisonousSaliva(),
+                _ => new LivingWater(RandomizeBottleSize())
+            };
+        }
+        
+        public bool FinalLevelComplete()
+        {
+            return _difficultyLevel == 11;
         }
     }
 }
