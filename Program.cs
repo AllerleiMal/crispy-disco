@@ -10,10 +10,8 @@ namespace OurCoolGame
         static void Main(string[] args)
         {
             var myFirstCharacter = new Wizard("Snor", Race.Human, Gender.Undefined, 32);
-            // Console.WriteLine(myFirstCharacter.ToString());
             var mySecondCharacter = new Wizard("Amur", Race.Orc, Gender.Male, 12);
-            // Console.WriteLine(mySecondCharacter.ToString());
-            LivingWater water = new LivingWater(BottleSize.Medium);
+            /*LivingWater water = new LivingWater(BottleSize.Medium);  // ТУТ КАКОЙ-ТО ТЕСТ ИНВЕНТАРЯ
             myFirstCharacter.PickUpArtefact(water);
             Console.WriteLine(myFirstCharacter._inventory[0]);
             Console.WriteLine(typeof(LivingWater));
@@ -26,7 +24,23 @@ namespace OurCoolGame
             Console.WriteLine(myFirstCharacter.CurrentHealthPoints);
             mySecondCharacter.CurrentHealthPoints = mySecondCharacter.CurrentHealthPoints - 100;
             myFirstCharacter.UseArtefact(water, mySecondCharacter);
-            Console.WriteLine(myFirstCharacter.CurrentHealthPoints);
+            Console.WriteLine(myFirstCharacter.CurrentHealthPoints);*/
+            //  ТУТ ТЕСТ СПЕЛЛОВ
+            mySecondCharacter.CurrentHealthPoints = 100;
+            Console.WriteLine(myFirstCharacter.ToString());
+            Console.WriteLine(mySecondCharacter.ToString());
+            SpellHeal heal = new SpellHeal();
+            myFirstCharacter.LearnSpell(heal);
+            myFirstCharacter.CastSpell(myFirstCharacter._learnedSpells[0], mySecondCharacter, 100);
+            Console.WriteLine("\n" + myFirstCharacter.ToString());
+            Console.WriteLine(mySecondCharacter.ToString());
+
+            myFirstCharacter.CastSpell(myFirstCharacter._learnedSpells[0], mySecondCharacter, 100);
+            myFirstCharacter.CastSpell(myFirstCharacter._learnedSpells[0], mySecondCharacter);
+            myFirstCharacter.CastSpell(myFirstCharacter._learnedSpells[0], 100);
+            SpellAntidote antidote = new SpellAntidote();
+            myFirstCharacter.CastSpell(antidote, mySecondCharacter);
+
         }
     }
 }
