@@ -8,12 +8,12 @@ namespace OurCoolGame.Spells
         public virtual bool Pronouncing { get; protected set; }
         public virtual bool Gesturing { get; protected set; }
 
-        public virtual void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public virtual void MagicEffect(Wizard origin, Character target, int magicPower)
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
             return;
         }
-        public virtual void MagicEffect(Wizard origin, Wizard target)
+        public virtual void MagicEffect(Wizard origin, Character target)
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
             return;

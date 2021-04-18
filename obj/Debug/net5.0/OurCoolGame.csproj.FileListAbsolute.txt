@@ -30,3 +30,11 @@ D:\temp\crispy-disco\obj\Debug\net5.0\OurCoolGame.dll
 D:\temp\crispy-disco\obj\Debug\net5.0\ref\OurCoolGame.dll
 D:\temp\crispy-disco\obj\Debug\net5.0\OurCoolGame.pdb
 D:\temp\crispy-disco\obj\Debug\net5.0\OurCoolGame.genruntimeconfig.cache
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.csprojAssemblyReference.cache
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.GeneratedMSBuildEditorConfig.editorconfig
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.AssemblyInfoInputs.cache
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.AssemblyInfo.cs
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.csproj.CoreCompileInputs.cache
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.dll
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\ref\OurCoolGame.dll
+D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.pdb

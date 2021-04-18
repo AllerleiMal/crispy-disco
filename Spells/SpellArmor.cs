@@ -9,7 +9,7 @@ namespace OurCoolGame.Spells
         public override bool Gesturing { get; protected set; } = true;
         public override bool Pronouncing { get; protected set; } = false;
 
-        public override void MagicEffect(Wizard origin, Wizard target, int magicPower) // magicPower is equal to count of turns armor lasts
+        public override void MagicEffect(Wizard origin, Character target, int magicPower) // magicPower is equal to count of turns armor lasts
         {
             if (origin.CurMana < ManaCost * magicPower)
             {

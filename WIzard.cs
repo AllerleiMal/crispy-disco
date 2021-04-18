@@ -93,7 +93,7 @@ namespace OurCoolGame
                 _learnedSpells.Remove(spell);
             }
         }
-        public void CastSpell(Spell spell, Wizard target, int magicPower)
+        public void CastSpell(Spell spell, Character target, int magicPower) //why target only wizard? it also can be just character
         {
             if(SpellLearnedCheck(spell))
             {
@@ -101,7 +101,7 @@ namespace OurCoolGame
                 ExperiencePoints += 150;
             }
         }
-        public void CastSpell(Spell spell, Wizard target)
+        public void CastSpell(Spell spell, Character target)
         {
             if (SpellLearnedCheck(spell))
             {
@@ -123,13 +123,6 @@ namespace OurCoolGame
             {
                 spell.MagicEffect(this);
                 ExperiencePoints += 150;
-            }
-        }
-        public void ShowLearnedSpells()
-        {
-            for (var i = 0; i < _learnedSpells.Count; ++i)
-            {
-                Console.WriteLine("({0}) {1}", i + 1, _learnedSpells[i]);
             }
         }
         public void ShowLearnedSpells()

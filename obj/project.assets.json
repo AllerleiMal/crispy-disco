@@ -8,24 +8,26 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\emely\\.nuget\\packages\\": {}
+    "C:\\Users\\gmm11\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj",
+      "projectUniqueName": "D:\\program etc\\projects\\cool_game\\crispy-disco\\OurCoolGame.csproj",
       "projectName": "OurCoolGame",
-      "projectPath": "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj",
-      "packagesPath": "C:\\Users\\emely\\.nuget\\packages\\",
-      "outputPath": "E:\\programming\\git\\crispy-disco\\obj\\",
+      "projectPath": "D:\\program etc\\projects\\cool_game\\crispy-disco\\OurCoolGame.csproj",
+      "packagesPath": "C:\\Users\\gmm11\\.nuget\\packages\\",
+      "outputPath": "D:\\program etc\\projects\\cool_game\\crispy-disco\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\emely\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\gmm11\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -58,7 +60,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\emely\\.dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -165,8 +165,72 @@ namespace OurCoolGame
 
                 //add other commands
                 Console.WriteLine(
-                    "!help - get info about commands\n!new_game - will start the game from the very beginning\nUSE SPELL [number of the spell in your spell list] TO [target character] or\nif you want to use armor or heal USE SPELL [number of the spell in your spell list] TO [target character] WITH [spell power] - ...\n!inventory - to see your artefacts");
+                    "!help - get info about commands\n!new_game - will start the game from the very beginning\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts");
+                Thread.Sleep(2000);
+                Console.WriteLine("Ok, now you know more and can do something");
                 break;
+            }
+        }
+        
+        //a little menu for usage of spells and artefacts
+        public void UseMenu(int numberOfEnemy) //а еще тк я чет начала в конце путаться то уже боюсь писать проверки на ввод думаю их в конце можно когда уже код хотя бы без ошибок будет
+        {
+            Console.WriteLine("Write what do you want do use: \"SPELL\" or \"ARTEFACT\"");
+            while (true)
+            {
+                if (Console.ReadLine() == "ARTEFACT")
+                {
+                    _mainPlayer.ShowInventory();
+                    Thread.Sleep(2000);
+                    Console.WriteLine("Pick a number of an artefact that you want to use");
+                    int pickArtefact = Convert.ToInt32(Console.ReadLine());
+                    Thread.Sleep(2000);
+                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact], _enemy[numberOfEnemy]);
+                    Thread.Sleep(2000);
+                    Console.WriteLine("Good! Let's check, what happened with enemy");
+                    Console.WriteLine("{0}/{1}", _enemy[numberOfEnemy].CurrentHealthPoints, _enemy[numberOfEnemy].MaxHealthPoints);
+                    break;
+                }
+                
+                if (Console.ReadLine() == "SPELL")
+                {
+                    _mainPlayer.ShowLearnedSpells();
+                    Thread.Sleep(2000);
+                    Console.WriteLine("Pick a number of a spell that you want to use");
+                    int pickSpell = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Write down who this spell is for: \"ME\" or \"ENEMY\""); //teammates??????????????????????????????
+                    string forWhom = Console.ReadLine();
+                    Character useForWhom = null;
+                    switch (forWhom)
+                    {
+                        case "ME":
+                            useForWhom = _mainPlayer;
+                            break;
+                        case "ENEMY":
+                            useForWhom = _enemy[numberOfEnemy];
+                            break;
+                    }
+                    
+                    if (_mainPlayer._learnedSpells[pickSpell] ==  new SpellArmor() || _mainPlayer._learnedSpells[pickSpell] == new SpellHeal()) //////////////////idk how to use properly SpellHeal and Armor
+                    {
+                        Console.WriteLine("Write how much mana you want to spend");
+                        int spendMana = Convert.ToInt32(Console.ReadLine());
+                        _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell], useForWhom, spendMana); ///////////////////i dont blyat' understand
+                        Thread.Sleep(2000);
+                        Console.WriteLine("OMG! Let's check, what happened");
+                        Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: [3}/{4}", _mainPlayer.CurrentHealthPoints, _mainPlayer.MaxHealthPoints, _enemy[numberOfEnemy].CurrentHealthPoints, _enemy[numberOfEnemy].MaxHealthPoints); //Я КОРОЧЕ НЕМНОГО НЕ ПОНЯЛА ПРИКОЛЫ ТИММЕЙТОВ А ТАК МОЖНО ТУТ ВСЕ НАМУТИТЬ НА НИХ ТАК КАК ВОССТАНАВЛИВАТЬ ЗДОРОВЬЕ ПРОТИВНИКУ НУ ОЧЕНЬ ТУПО
+                    }
+                    else //i guess its better to write else if but again idk how properly use 
+                    {
+                        _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell], useForWhom);
+                        Console.WriteLine("OMG! Let's check, what happened");
+                        Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: [3}/{4}", _mainPlayer.CurrentHealthPoints, _mainPlayer.MaxHealthPoints, _enemy[numberOfEnemy].CurrentHealthPoints, _enemy[numberOfEnemy].MaxHealthPoints);
+                    }
+                    break;
+
+                }
+                
+                Console.WriteLine("Something went wrong, try again and follow the right command's format");
             }
         }
 
@@ -210,10 +274,11 @@ namespace OurCoolGame
         //this method is for creating a basic arena with 1 enemy with training messages
         private void RunTraining()
         {
+            int numberOfEnemy = 0; ///////////////////////////////////////////////// not sure about this
             _enemy.Add(new Wizard("dummy", Race.Human, Gender.Undefined, 10));
             Console.WriteLine(
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
-                _enemy[0].Name);
+                _enemy[numberOfEnemy].Name);
             _mainPlayer.PickUpArtefact(new LightningStaff());
             while (true)
             {
@@ -229,32 +294,45 @@ namespace OurCoolGame
                 "Good job! Now you can see what is in your bag. Choose one of the artefact and use it on your enemy.\n Ah, ye... You don't know how. Enter \"!help\"");
             Thread.Sleep(2000);
             ShowInformationAboutCommands();
-            Console.WriteLine("Ok, now you know more and can do something");
+            UseMenu(numberOfEnemy);
+            Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
-            Console.WriteLine("Try your artefact on the {0}", _enemy[0].Name);
+            _enemy[numberOfEnemy]._inventory.Add(new LightningStaff());
+            Thread.Sleep(2000);
+            _enemy[numberOfEnemy].UseArtefact(_enemy[numberOfEnemy]._inventory[numberOfEnemy], _mainPlayer);
+            Thread.Sleep(2000);
+            Console.WriteLine("Ouffff, your defence is really weak {0}/{1} HP", _mainPlayer.CurrentHealthPoints, _mainPlayer.MaxHealthPoints);
+            Thread.Sleep(2000);
+            _mainPlayer.PickUpArtefact(new LivingWater(BottleSize.Small));
+            Thread.Sleep(2000);
+            _mainPlayer.PickUpArtefact(new DeadWater(BottleSize.Small));
+            Thread.Sleep(2000);
+            Console.WriteLine("You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP");
+            UseMenu(numberOfEnemy);
+            /*Console.WriteLine("Try your artefact on the {0}", _enemy[numberOfEnemy].Name);
             while (true)
             {
                 var temp = Console.ReadLine();
                 if (temp == "USE ARTEFACT 1 ON dummy")
                 {
-                    _mainPlayer.UseArtefact(_mainPlayer._inventory[0], _enemy[0]);
+                    _mainPlayer.UseArtefact(_mainPlayer._inventory[0], _enemy[numberOfEnemy]);
                     break;
                 }
                 Console.WriteLine("Something went wrong, try again and follow the right command's format");
             }
             Console.WriteLine("Good! Let's check, what happened with our dummy");
             Thread.Sleep(2000);
-            Console.WriteLine("{0}/{1}", _enemy[0].CurrentHealthPoints, _enemy[0].MaxHealthPoints);
-            Thread.Sleep(2000);
-            Console.WriteLine("Now we would check how you can take damage");
+            Console.WriteLine("{0}/{1}", _enemy[numberOfEnemy].CurrentHealthPoints, _enemy[numberOfEnemy].MaxHealthPoints);
+            Thread.Sleep(2000);*/
+            /*Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
             _enemy[0]._inventory.Add(new LightningStaff());
             Thread.Sleep(2000);
-            _enemy[0].UseArtefact(_enemy[0]._inventory[0], _mainPlayer);
+            _enemy[0].UseArtefact(_enemy[numberOfEnemy]._inventory[numberOfEnemy], _mainPlayer);
             Thread.Sleep(2000);
             Console.WriteLine("Ouffff, your defence is really weak {0}/{1} HP", _mainPlayer.CurrentHealthPoints, _mainPlayer.MaxHealthPoints);
-            Thread.Sleep(2000);
-            _mainPlayer.PickUpArtefact(new LivingWater(BottleSize.Small));
+            Thread.Sleep(2000);*/
+            /*_mainPlayer.PickUpArtefact(new LivingWater(BottleSize.Small));
             Thread.Sleep(2000);
             _mainPlayer.PickUpArtefact(new DeadWater(BottleSize.Small));
             Thread.Sleep(2000);
@@ -269,7 +347,7 @@ namespace OurCoolGame
                 }
                 Console.WriteLine("Something went wrong, try again and follow the right command's format");
             }
-            Console.WriteLine("Now it is better, {0}/{1} HP", _mainPlayer.CurrentHealthPoints, _mainPlayer.MaxHealthPoints);
+            Console.WriteLine("Now it is better, {0}/{1} HP", _mainPlayer.CurrentHealthPoints, _mainPlayer.MaxHealthPoints);*/
 
             /*
              * here should be same thing for spells, as it is for artefacts
@@ -277,8 +355,9 @@ namespace OurCoolGame
              *
              * after demonstration work of spells, use Dead Water as it was done with living water
              */
+            /*numberOfEnemy = 1;
             _enemy.Add(new Wizard("groupmate", Race.Human, Gender.Undefined, 20));
-            Console.WriteLine("Now let's find out what you can do! If you are ready for your second fight with {0}, enter \"!spells\"", _enemy[1].Name);
+            Console.WriteLine("Now let's find out what you can do! If you are ready for your second fight with {0}, enter \"!spells\"", _enemy[numberOfEnemy].Name);
             _mainPlayer.LearnSpell(new SpellHeal());
             while (true)
             {
@@ -302,7 +381,7 @@ namespace OurCoolGame
                     break;
                 }
                 Console.WriteLine("Something went wrong, try again and follow the right command's format"); 
-            }
+            }*/
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
