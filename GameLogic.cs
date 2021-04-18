@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
+using OurCoolGame.Spells;
 
 namespace OurCoolGame
 {
@@ -164,7 +165,7 @@ namespace OurCoolGame
 
                 //add other commands
                 Console.WriteLine(
-                    "!help - get info about commands\n!new_game - will start the game from the very beginning\nUSE SPELL [number of the spell in your spell list] TO [target character] WITH [spell power] - ...\n!inventory - to see your artefacts");
+                    "!help - get info about commands\n!new_game - will start the game from the very beginning\nUSE SPELL [number of the spell in your spell list] TO [target character] or\nif you want to use armor or heal USE SPELL [number of the spell in your spell list] TO [target character] WITH [spell power] - ...\n!inventory - to see your artefacts");
                 break;
             }
         }
@@ -276,6 +277,32 @@ namespace OurCoolGame
              *
              * after demonstration work of spells, use Dead Water as it was done with living water
              */
+            _enemy.Add(new Wizard("groupmate", Race.Human, Gender.Undefined, 20));
+            Console.WriteLine("Now let's find out what you can do! If you are ready for your second fight with {0}, enter \"!spells\"", _enemy[1].Name);
+            _mainPlayer.LearnSpell(new SpellHeal());
+            while (true)
+            {
+                var temp = Console.ReadLine();
+                if (temp == "!spells")
+                {
+                    _mainPlayer.ShowLearnedSpells();
+                    break;
+                }
+                Console.WriteLine("Something went wrong, try again and follow the right command's format");
+            }
+            Console.WriteLine("Cool! Now you can see what spells you know, let's try it. If you forget how do do this, write \"!help\"");
+            Thread.Sleep(2000);
+            ShowInformationAboutCommands();
+            while (true)
+            {
+                var temp = Console.ReadLine();
+                if (temp == "USE SPELL 1 TO {0} WITH ")
+                {
+                    _mainPlayer.CastSpell(, _mainPlayer, );
+                    break;
+                }
+                Console.WriteLine("Something went wrong, try again and follow the right command's format"); 
+            }
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
