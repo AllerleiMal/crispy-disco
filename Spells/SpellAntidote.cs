@@ -10,7 +10,7 @@ namespace OurCoolGame.Spells
         public override bool Pronouncing { get; protected set; } = false;
 
 
-        public override void MagicEffect(Wizard origin, Wizard target)
+        public override void MagicEffect(Wizard origin, Character target)
         {
             if (origin.CurMana < ManaCost)
             {
