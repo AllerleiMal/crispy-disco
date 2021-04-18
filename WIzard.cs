@@ -46,9 +46,7 @@ namespace OurCoolGame
         public override string ToString()
         {
             var characterInfo = "";
-            characterInfo += "ID: " + ID + ", name: " + Name + ", race: " + CharacterRace + ", age: " + Age +
-                             ", state: " + CharacterState + ", HP: " + CurrentHealthPoints + ", maximum HP: " +
-                             MaxHealthPoints + ", XP: " + ExperiencePoints + ", MP: " + CurMana + ", maximum MP: " + MaxMana;
+            characterInfo += base.ToString() + ", MP: " + CurMana + ", maximum MP: " + MaxMana;
             return characterInfo;
         }
         private bool SpellLearnedCheck(Spell spell)

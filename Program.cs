@@ -29,8 +29,9 @@ namespace OurCoolGame
             mySecondCharacter.CurrentHealthPoints = 100;
             Console.WriteLine(myFirstCharacter.ToString());
             Console.WriteLine(mySecondCharacter.ToString());
-            SpellHeal heal = new SpellHeal();
-            myFirstCharacter.LearnSpell(heal);
+
+            myFirstCharacter.LearnSpell(new SpellHeal());
+            
             myFirstCharacter.CastSpell(myFirstCharacter._learnedSpells[0], mySecondCharacter, 100);
             Console.WriteLine("\n" + myFirstCharacter.ToString());
             Console.WriteLine(mySecondCharacter.ToString());
