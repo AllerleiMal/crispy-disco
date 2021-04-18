@@ -125,5 +125,12 @@ namespace OurCoolGame
                 ExperiencePoints += 150;
             }
         }
+        public void ShowLearnedSpells()
+        {
+            for (var i = 0; i < _learnedSpells.Count; ++i)
+            {
+                Console.WriteLine("({0}) {1}", i + 1, _learnedSpells[i]);
+            }
+        }
     }
 }
