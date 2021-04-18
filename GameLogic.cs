@@ -183,24 +183,24 @@ namespace OurCoolGame
                     RunTraining();
                     break;
                 }
-                case <= 3:
+                case 1:
                 {
                     RunEasyLevel();
                     break;
                 }
-                case > 3 and <= 6:
+                case 2:
                 {
                     RunMediumLevel();
                     break;
                 }
-                case > 6 and <= 10:
+                case 3:
                 {
                     RunHardLevel();
-                    if (_difficultyLevel == 10)
-                    {
-                        RunFinalPlot();
-                    }
-
+                    break;
+                }
+                case 4:
+                {
+                    RunFinalPlot();
                     break;
                 }
             }
@@ -284,14 +284,7 @@ namespace OurCoolGame
         //this method will generate easy fight situation 1v2 or 1v1
         private void RunEasyLevel()
         {
-            MoveCounter = 0;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("-- EASY LOCATION --");
-            Console.ResetColor();
-            Thread.Sleep(2000);
-            // Console.WriteLine("At the start of each level you will choose the artefact you want from the list given");
-            ChooseArtefactWhenLevelStarts();
-            Thread.Sleep(2000);
+            LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
             _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Female, 42));
             
             
@@ -306,6 +299,17 @@ namespace OurCoolGame
         private void GenerateNamesForEasyLevel()
         {
             
+        }
+
+        private void LevelStartingMessages(string message, ConsoleColor color)
+        {
+            MoveCounter = 0;
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+            Console.ResetColor();
+            Thread.Sleep(2000);
+            ChooseArtefactWhenLevelStarts();
+            Thread.Sleep(2000);
         }
         private void ChooseArtefactWhenLevelStarts()
         {
@@ -359,19 +363,20 @@ namespace OurCoolGame
         //this method will generate easy fight situation 2v2 or 2v3
         private void RunMediumLevel()
         {
-            MoveCounter = 0;
+            LevelStartingMessages("-- MEDIUM LEVEL --", ConsoleColor.DarkCyan);
+            
             ++_difficultyLevel;
         }
         //this method will generate easy fight situation 2v3 or 2v4 ??????
         private void RunHardLevel()
         {
-            MoveCounter = 0;
+            LevelStartingMessages("-- HARD LEVEL --", ConsoleColor.DarkBlue);
             ++_difficultyLevel;
         }
         //final plot will be lineal as the training level i bet
         private void RunFinalPlot()
         {
-            MoveCounter = 0;
+            LevelStartingMessages("-- FINAL --", ConsoleColor.Red);
             ++_difficultyLevel;
         }
 
@@ -405,7 +410,22 @@ namespace OurCoolGame
         
         public bool FinalLevelComplete()
         {
-            return _difficultyLevel == 11;
+            return _difficultyLevel == 6;
+        }
+
+        //use it after all made a move
+        public void UpdateMoveCounters()
+        {
+            foreach (var enemy in _enemy)
+            {
+                enemy.MoveCounter -= 1;
+            }
+            foreach (var teammate in _teammates)
+            {
+                teammate.MoveCounter -= 1;
+            }
+
+            _mainPlayer.MoveCounter -= 1;
         }
     }
 }
