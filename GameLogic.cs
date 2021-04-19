@@ -386,6 +386,7 @@ namespace OurCoolGame
 
         private void GenerateNamesForEasyLevel()
         {
+            
         }
 
         private void LevelStartingMessages(string message, ConsoleColor color)
