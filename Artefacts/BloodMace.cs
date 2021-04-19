@@ -9,17 +9,18 @@ namespace OurCoolGame.Artefacts
         {
             Renewability = true;
         }
-
+        
         public override void UseArtefact(Wizard target)
         {
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are already dead, this artefact didn't do anything, but more blood");
+                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything, but more blood");
                 Console.ResetColor();
             }
             target.CurrentHealthPoints -= ArtefactPower;
             ArtefactPower = _random.Next(180, 250);
+            target.CharacterState = State.Sick;
         }
 
         public override string ToString()

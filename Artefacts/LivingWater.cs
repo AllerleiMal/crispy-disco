@@ -15,7 +15,7 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are already dead, this artefact didn't do anything. But flowers are growing around you now.");
+                Console.WriteLine("This character is already dead, this artefact didn't do anything. But flowers are growing around you now.");
                 Console.ResetColor();
                 return;
             }

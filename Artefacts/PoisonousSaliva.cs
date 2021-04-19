@@ -15,7 +15,7 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are already dead, this artefact didn't do anything. You have a strange acid taste in your mouth.");
+                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything. You have a strange acid taste in your mouth.");
                 Console.ResetColor();
                 return;
             }

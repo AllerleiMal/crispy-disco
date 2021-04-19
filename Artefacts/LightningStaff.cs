@@ -15,14 +15,13 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are already dead, this artefact didn't do anything. But a very strange thundercloud appeared");
+                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything. But a very strange thundercloud appeared");
                 Console.ResetColor();
                 return;
             }
             target.CurrentHealthPoints -= ArtefactPower;
-            
-            //delete if we decide so
             ArtefactPower = _random.Next(150, 200);
+            target.CharacterState = State.Sick;
         }
         
         public override string ToString()

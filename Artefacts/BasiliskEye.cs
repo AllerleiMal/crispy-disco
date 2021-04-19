@@ -15,7 +15,7 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are already dead, this artefact didn't do anything, but spoiled artefact");
+                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything, but spoiled artefact");
                 Console.ResetColor();
             }
             target.CharacterState = State.Paralyzed;
