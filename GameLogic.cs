@@ -152,7 +152,7 @@ namespace OurCoolGame
         }
 
         //that is a method that would be called with !help, it shows information about basic game commands
-        public void ShowInformationAboutCommands(int numberOfEnemy)
+        public void InputProcessing()
         {
             string temp;
             //maybe while true should be deleted
@@ -170,7 +170,7 @@ namespace OurCoolGame
 
                 if (temp == "!use")
                 {
-                    UseMenu(numberOfEnemy);
+                    UseMenu();
                     break;
                 }
 
@@ -182,7 +182,7 @@ namespace OurCoolGame
 
 
         //a little menu for usage of spells and artefacts
-        public void UseMenu(int numberOfEnemy)
+        public void UseMenu()
         {
             Console.WriteLine("Write what do you want do use: \"SPELL\" or \"ARTEFACT\"");
             string temp;
@@ -194,14 +194,23 @@ namespace OurCoolGame
                     _mainPlayer.ShowInventory();
                     Thread.Sleep(2000);
                     Console.WriteLine("Pick a number of an artefact that you want to use");
-                    int pickArtefact = Convert.ToInt32(Console.ReadLine()); //check for number
+                    int pickArtefact = Convert.ToInt32(Console.ReadLine());
+                    while (true)
+                    {
+                        if (pickArtefact > _mainPlayer._inventory.Capacity || pickArtefact <= 0)
+                        {
+                            Console.WriteLine("What are you trying to enter you stupid piece of shit");
+                            _mainPlayer.CurrentHealthPoints -= 20;
+                            break;
+                        }
+                    }
                     Thread.Sleep(2000);
-                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1], _enemy[numberOfEnemy]);//а если применяешь на себя то надо вывести гг использовал на гг
+                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1], _enemy[0]);//а если применяешь на себя то надо вывести гг использовал на гг
                     Thread.Sleep(2000);
                     Console.WriteLine("OMG! Let's check, what happened");
                     Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                        _mainPlayer.MaxHealthPoints, _enemy[numberOfEnemy].CurrentHealthPoints,
-                        _enemy[numberOfEnemy].MaxHealthPoints);
+                        _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
+                        _enemy[0].MaxHealthPoints);
                     break;
                 }
 
@@ -211,20 +220,30 @@ namespace OurCoolGame
                     if (isEmpty)
                     {
                         Console.WriteLine("Oopsie... You don't know it yet ;("); 
-                        UseMenu(numberOfEnemy);
+                        UseMenu();
                     }
                     else
                     {
                         _mainPlayer.ShowLearnedSpells();
                         Thread.Sleep(2000);
                         Console.WriteLine("Pick a number of a spell that you want to use");
-                        int pickSpell = Convert.ToInt32(Console.ReadLine()); //check for number
+                        int pickSpell = Convert.ToInt32(Console.ReadLine());
+                        while (true)
+                        {
+                            if (pickSpell > _mainPlayer._learnedSpells.Capacity || pickSpell <= 0)
+                            {
+                                Console.WriteLine("What are you trying to enter you stupid piece of shit");
+                                _mainPlayer.CurrentHealthPoints -= 20;
+                                break;
+                            }
+                        }
                         Console.WriteLine("Write down who this spell is for: \"ME\" or \"ENEMY\"");
                         string forWhom = Console.ReadLine();
                         if (forWhom != "ME" || forWhom != "ENEMY")
                         {
                             Console.WriteLine("What are you trying to enter you stupid piece of shit");
-                            UseMenu(numberOfEnemy);
+                            _mainPlayer.CurrentHealthPoints -= 20;
+                            UseMenu();
                         }
                         Character useForWhom = null;
                         switch (forWhom)
@@ -233,7 +252,7 @@ namespace OurCoolGame
                                 useForWhom = _mainPlayer;
                                 break;
                             case "ENEMY":
-                                useForWhom = _enemy[numberOfEnemy];
+                                useForWhom = _enemy[0];
                                 break;
                         }
 
@@ -242,16 +261,25 @@ namespace OurCoolGame
                         {
                             Console.WriteLine("Write how much mana you want to spend");
                             int spendMana = Convert.ToInt32(Console.ReadLine());
+                            while (true)
+                            {
+                                if (!Int32.TryParse(Console.ReadLine(), out spendMana))
+                                {
+                                    Console.WriteLine("What are you trying to enter you stupid piece of shit");
+                                    _mainPlayer.CurrentHealthPoints -= 20;
+                                    break;
+                                }
+                            }
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1], useForWhom, spendMana);
                             Thread.Sleep(2000);
                             Console.WriteLine("OMG! Let's check, what happened");
                             Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                                _mainPlayer.MaxHealthPoints, _enemy[numberOfEnemy].CurrentHealthPoints,
-                                _enemy[numberOfEnemy].MaxHealthPoints);
+                                _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
+                                _enemy[0].MaxHealthPoints);
                             break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1] == new SpellAntidote() ||
+                        if (_mainPlayer._learnedSpells[pickSpell - 1] == new SpellAntidote() || //тут надо смотреть типа идея была что по ифам я проверяю ввод на спеллы чтобы потом сделать проверку из разряда пользователь ввел фигню какую то
                             _mainPlayer._learnedSpells[pickSpell - 1] == new SpellCure() ||
                             _mainPlayer._learnedSpells[pickSpell - 1] == new SpellRevival() ||
                             _mainPlayer._learnedSpells[pickSpell - 1] == new SpellUnparalyze())
@@ -259,8 +287,8 @@ namespace OurCoolGame
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1], useForWhom);
                             Console.WriteLine("OMG! Let's check, what happened");
                             Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                                _mainPlayer.MaxHealthPoints, _enemy[numberOfEnemy].CurrentHealthPoints,
-                                _enemy[numberOfEnemy].MaxHealthPoints);
+                                _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
+                                _enemy[0].MaxHealthPoints);
                             break;
                         }
                     }
@@ -316,23 +344,13 @@ namespace OurCoolGame
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
                 _enemy[numberOfEnemy].Name);
             _mainPlayer.PickUpArtefact(new LightningStaff());
-            while (true)
-            {
-                var temp = Console.ReadLine();
-                if (temp == "!inventory")
-                {
-                    _mainPlayer.ShowInventory();
-                    break;
-                }
-
-                Console.WriteLine("Something went wrong, try again and follow the right command's format");
-            }
+            InputProcessing();
 
             Console.WriteLine(
                 "Good job! Now you can see what is in your bag. Choose one of the artefact and use it on your enemy.\n Ah, ye... You don't know how. Enter \"!help\"");
             Thread.Sleep(2000);
-            ShowInformationAboutCommands(numberOfEnemy);
-            UseMenu(numberOfEnemy);
+            InputProcessing();
+            UseMenu();
             Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
             _enemy[numberOfEnemy]._inventory.Add(new LightningStaff());
@@ -348,7 +366,7 @@ namespace OurCoolGame
             Thread.Sleep(2000);
             Console.WriteLine(
                 "You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP");
-            UseMenu(numberOfEnemy);
+            UseMenu();
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
