@@ -9,6 +9,10 @@ namespace OurCoolGame.Spells
         public override bool Gesturing { get; protected set; } = true;
         public override bool Pronouncing { get; protected set; } = true;
 
+        public override string ToString()
+        {
+            return "Revival";
+        }
         public override void MagicEffect(Wizard origin, Character target)
         {
             if (origin.CurMana < ManaCost)

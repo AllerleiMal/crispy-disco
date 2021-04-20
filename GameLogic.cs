@@ -56,11 +56,10 @@ namespace OurCoolGame
             {
                 Console.WriteLine("Enter the age of your character:");
                 //here we try to parse string with age, and if it is not possible, ask for input one more time
-                if (int.TryParse(Console.ReadLine(), out age))
+                if (int.TryParse(Console.ReadLine(), out age) && age >= 12)
                 {
                     break;
                 }
-
                 Console.WriteLine(
                     "It is probably a miss click or you don't even know, that age contains only numbers you stupid piece of shit");
             }
@@ -174,52 +173,98 @@ namespace OurCoolGame
                     break;
                 }
 
+                if (temp == "!inventory")
+                {
+                    _mainPlayer.ShowInventory();
+                    break;
+                }
+
+                if (temp == "!new_game")
+                {
+                    GameStart(); /////////////////////////////
+                    break;
+                }
+
                 //add other commands
                 Console.WriteLine(
                     "omg... please, check what you're trying to enter. if you forget, i can remind: enter \"!help\"");
             }
         }
 
+        private int SelectTarget()
+        {
+            Console.WriteLine("Now select your target:\n(0)YOU");
+            for (int i = 1; i <= _enemy.Count; i++)
+            {
+                Console.WriteLine($"({i}) {_enemy[i - 1].Name} (ENEMY)");
+            }
+
+            int select;
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out select) && select >= 0 && select <= _enemy.Count)
+                {
+                    return select;
+                }
+
+                Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
+                _mainPlayer.CurrentHealthPoints -= 20;
+            }
+        }
 
         //a little menu for usage of spells and artefacts
         public void UseMenu()
         {
-            Console.WriteLine("Write what do you want do use: \"SPELL\" or \"ARTEFACT\"");
+            Console.WriteLine("Write what do you want do use: \"spell\" or \"artefact\"");
             string temp;
             while (true)
             {
-                temp = Console.ReadLine();
-                if (temp == "ARTEFACT")
+                temp = Console.ReadLine()?.ToUpper();
+                if (temp == "A" || temp == "ARTEFACT")
                 {
                     _mainPlayer.ShowInventory();
                     Thread.Sleep(2000);
                     Console.WriteLine("Pick a number of an artefact that you want to use");
-                    int pickArtefact = Convert.ToInt32(Console.ReadLine());
+                    int pickArtefact;
                     while (true)
                     {
-                        if (pickArtefact > _mainPlayer._inventory.Capacity || pickArtefact <= 0)
+                        if (int.TryParse(Console.ReadLine(), out pickArtefact) &&
+                            pickArtefact <= _mainPlayer._inventory.Count && pickArtefact > 0)
                         {
-                            Console.WriteLine("What are you trying to enter you stupid piece of shit");
-                            _mainPlayer.CurrentHealthPoints -= 20;
                             break;
                         }
+
+                        Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
+                        _mainPlayer.CurrentHealthPoints -= 10;
                     }
+
                     Thread.Sleep(2000);
-                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1], _enemy[0]);//а если применяешь на себя то надо вывести гг использовал на гг
+                    int select = SelectTarget();
+                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1],
+                        select == 0 ? _mainPlayer : _enemy[select - 1]);
                     Thread.Sleep(2000);
-                    Console.WriteLine("OMG! Let's check, what happened");
-                    Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                        _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
-                        _enemy[0].MaxHealthPoints);
+                    if (select == 0)
+                        Console.WriteLine(
+                            "YOU STUPID ASSHOLE WTF ARE YOU DOING K NOW YOU HAVE DOUBLE DAMAGE AHHAHA"); //JOKE
+                    else
+                        Console.WriteLine("OMG! Let's check, what happened");
+                    Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
+                        _mainPlayer.MaxHealthPoints);
+                    for (int i = 0; i < _enemy.Count; i++)
+                    {
+                        Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
+                            _enemy[i].MaxHealthPoints);
+                    }
+
                     break;
                 }
 
-                if (temp == "SPELL")
+                if (temp == "SPELL" || temp == "S")
                 {
                     bool isEmpty = !_mainPlayer._learnedSpells.Any();
                     if (isEmpty)
                     {
-                        Console.WriteLine("Oopsie... You don't know it yet ;("); 
+                        Console.WriteLine("Oopsie... You don't know it yet ;(");
                         UseMenu();
                     }
                     else
@@ -227,50 +272,39 @@ namespace OurCoolGame
                         _mainPlayer.ShowLearnedSpells();
                         Thread.Sleep(2000);
                         Console.WriteLine("Pick a number of a spell that you want to use");
-                        int pickSpell = Convert.ToInt32(Console.ReadLine());
+                        int pickSpell;
                         while (true)
                         {
-                            if (pickSpell > _mainPlayer._learnedSpells.Capacity || pickSpell <= 0)
+                            if (int.TryParse(Console.ReadLine(), out pickSpell) &&
+                                pickSpell <= _mainPlayer._learnedSpells.Count && pickSpell > 0)
                             {
-                                Console.WriteLine("What are you trying to enter you stupid piece of shit");
-                                _mainPlayer.CurrentHealthPoints -= 20;
                                 break;
                             }
-                        }
-                        Console.WriteLine("Write down who this spell is for: \"ME\" or \"ENEMY\"");
-                        string forWhom = Console.ReadLine();
-                        if (forWhom != "ME" || forWhom != "ENEMY")
-                        {
-                            Console.WriteLine("What are you trying to enter you stupid piece of shit");
+
+                            Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
                             _mainPlayer.CurrentHealthPoints -= 20;
-                            UseMenu();
-                        }
-                        Character useForWhom = null;
-                        switch (forWhom)
-                        {
-                            case "ME":
-                                useForWhom = _mainPlayer;
-                                break;
-                            case "ENEMY":
-                                useForWhom = _enemy[0];
-                                break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1] == new SpellArmor() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1] == new SpellHeal())
+                        int select = SelectTarget();
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellArmor().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString())
                         {
-                            Console.WriteLine("Write how much mana you want to spend");
-                            int spendMana = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Enter magic power");
+                            int magic;
                             while (true)
                             {
-                                if (!Int32.TryParse(Console.ReadLine(), out spendMana))
+                                if (int.TryParse(Console.ReadLine(), out magic) && magic > 0 &&
+                                    magic * _mainPlayer._learnedSpells[pickSpell - 1].ManaCost <= _mainPlayer.CurMana)
                                 {
-                                    Console.WriteLine("What are you trying to enter you stupid piece of shit");
-                                    _mainPlayer.CurrentHealthPoints -= 20;
                                     break;
                                 }
+
+                                Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
+                                _mainPlayer.CurrentHealthPoints -= 20;
                             }
-                            _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1], useForWhom, spendMana);
+
+                            _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
+                                select == 0 ? _mainPlayer : _enemy[select - 1], magic);
                             Thread.Sleep(2000);
                             Console.WriteLine("OMG! Let's check, what happened");
                             Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
@@ -279,24 +313,28 @@ namespace OurCoolGame
                             break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1] == new SpellAntidote() || //тут надо смотреть типа идея была что по ифам я проверяю ввод на спеллы чтобы потом сделать проверку из разряда пользователь ввел фигню какую то
-                            _mainPlayer._learnedSpells[pickSpell - 1] == new SpellCure() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1] == new SpellRevival() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1] == new SpellUnparalyze())
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellAntidote().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellCure().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellRevival().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellUnparalyze().ToString())
                         {
-                            _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1], useForWhom);
+                            _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
+                                select == 0 ? _mainPlayer : _enemy[select - 1]);
                             Console.WriteLine("OMG! Let's check, what happened");
                             Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
                                 _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
                                 _enemy[0].MaxHealthPoints);
-                            break;
                         }
                     }
+
+                    break;
                 }
-                Console.WriteLine("Something went wrong, try again and follow the right command's format");
+
+                Console.WriteLine(
+                    "Something went wrong, try again and follow the right command's format. -20HP"); //JOKE
             }
         }
-        
+
 
         public void ShowRules()
         {
@@ -338,11 +376,10 @@ namespace OurCoolGame
         //this method is for creating a basic arena with 1 enemy with training messages
         private void RunTraining()
         {
-            int numberOfEnemy = 0; ///////////////////////////////////////////////// not sure about this
             _enemy.Add(new Wizard("dummy", Race.Human, Gender.Undefined, 10));
             Console.WriteLine(
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
-                _enemy[numberOfEnemy].Name);
+                _enemy[0].Name);
             _mainPlayer.PickUpArtefact(new LightningStaff());
             InputProcessing();
 
@@ -353,9 +390,9 @@ namespace OurCoolGame
             UseMenu();
             Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
-            _enemy[numberOfEnemy]._inventory.Add(new LightningStaff());
+            _enemy[0]._inventory.Add(new LightningStaff());
             Thread.Sleep(2000);
-            _enemy[numberOfEnemy].UseArtefact(_enemy[numberOfEnemy]._inventory[numberOfEnemy], _mainPlayer);
+            _enemy[0].UseArtefact(_enemy[0]._inventory[0], _mainPlayer);
             Thread.Sleep(2000);
             Console.WriteLine("Ouffff, your defence is really weak {0}/{1} HP", _mainPlayer.CurrentHealthPoints,
                 _mainPlayer.MaxHealthPoints);
@@ -367,6 +404,19 @@ namespace OurCoolGame
             Console.WriteLine(
                 "You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP");
             UseMenu();
+            Console.WriteLine("Now let's check what you can do! Check your spells");
+            _mainPlayer.LearnSpell(new SpellHeal());
+            UseMenu();
+            Console.WriteLine("Training is ended. Now you can begin you journey");
+            Console.Write("Preparing all things down");
+            Thread.Sleep(2000);
+            Console.Write(".");
+            Thread.Sleep(2000);
+            Console.Write(".");
+            Thread.Sleep(2000);
+            Console.Write(".");
+            Console.WriteLine("");
+            Thread.Sleep(2000);
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
@@ -415,7 +465,6 @@ namespace OurCoolGame
                     _mainPlayer.CurrentHealthPoints -= 50;
                     continue;
                 }
-
                 break;
             }
 

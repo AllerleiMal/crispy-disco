@@ -8,7 +8,10 @@ namespace OurCoolGame.Spells
         public override int ManaCost { get; protected set; } = 30;
         public override bool Gesturing { get; protected set; } = false;
         public override bool Pronouncing { get; protected set; } = false;
-
+        public override string ToString()
+        {
+            return "Antidote";
+        }
 
         public override void MagicEffect(Wizard origin, Character target)
         {
