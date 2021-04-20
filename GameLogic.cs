@@ -204,8 +204,10 @@ namespace OurCoolGame
                             break;
                         }
                     }
+
                     Thread.Sleep(2000);
-                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1], _enemy[0]);//а если применяешь на себя то надо вывести гг использовал на гг
+                    _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1],
+                        _enemy[0]); //а если применяешь на себя то надо вывести гг использовал на гг
                     Thread.Sleep(2000);
                     Console.WriteLine("OMG! Let's check, what happened");
                     Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
@@ -216,10 +218,10 @@ namespace OurCoolGame
 
                 if (temp == "SPELL")
                 {
-                    bool isEmpty = !_mainPlayer._learnedSpells.Any();
+                    var isEmpty = !_mainPlayer._learnedSpells.Any();
                     if (isEmpty)
                     {
-                        Console.WriteLine("Oopsie... You don't know it yet ;("); 
+                        Console.WriteLine("Oopsie... You don't know it yet ;(");
                         UseMenu();
                     }
                     else
@@ -237,6 +239,7 @@ namespace OurCoolGame
                                 break;
                             }
                         }
+
                         Console.WriteLine("Write down who this spell is for: \"ME\" or \"ENEMY\"");
                         string forWhom = Console.ReadLine();
                         if (forWhom != "ME" || forWhom != "ENEMY")
@@ -245,6 +248,7 @@ namespace OurCoolGame
                             _mainPlayer.CurrentHealthPoints -= 20;
                             UseMenu();
                         }
+
                         Character useForWhom = null;
                         switch (forWhom)
                         {
@@ -270,6 +274,7 @@ namespace OurCoolGame
                                     break;
                                 }
                             }
+
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1], useForWhom, spendMana);
                             Thread.Sleep(2000);
                             Console.WriteLine("OMG! Let's check, what happened");
@@ -279,7 +284,8 @@ namespace OurCoolGame
                             break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1] == new SpellAntidote() || //тут надо смотреть типа идея была что по ифам я проверяю ввод на спеллы чтобы потом сделать проверку из разряда пользователь ввел фигню какую то
+                        if (_mainPlayer._learnedSpells[pickSpell - 1] ==
+                            new SpellAntidote() || //тут надо смотреть типа идея была что по ифам я проверяю ввод на спеллы чтобы потом сделать проверку из разряда пользователь ввел фигню какую то
                             _mainPlayer._learnedSpells[pickSpell - 1] == new SpellCure() ||
                             _mainPlayer._learnedSpells[pickSpell - 1] == new SpellRevival() ||
                             _mainPlayer._learnedSpells[pickSpell - 1] == new SpellUnparalyze())
@@ -293,10 +299,11 @@ namespace OurCoolGame
                         }
                     }
                 }
+
                 Console.WriteLine("Something went wrong, try again and follow the right command's format");
             }
         }
-        
+
 
         public void ShowRules()
         {
@@ -386,7 +393,6 @@ namespace OurCoolGame
 
         private void GenerateNamesForEasyLevel()
         {
-            
         }
 
         private void LevelStartingMessages(string message, ConsoleColor color)
