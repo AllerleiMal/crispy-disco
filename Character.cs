@@ -19,29 +19,42 @@ namespace OurCoolGame
             {
                 if (CharacterState == State.Invulnerable)
                 {
-                    return;
+                    if (MoveCounter != 0)
+                    {
+                        return;
+                    }
                 }
 
-                if (value is State.Dead or State.Healthy or State.Weakened) return;
-                if (CharacterState == State.Paralyzed)
+                switch (value)
                 {
-                    CanMove = false;
-                    CanTalk = false;
+                    case State.Dead or State.Healthy or State.Weakened:
+                    {
+                        _characterState = value;
+                        return;
+                    }
+                    case State.Paralyzed:
+                    {
+                        CanMove = false;
+                        CanTalk = false;
+                        break;
+                    }
+                    case State.Poisoned:
+                    {
+                        CanTalk = false;
+                        break;
+                    }
+                    case State.Sick:
+                    {
+                        CanMove = false;
+                        break;
+                    }
                 }
 
-                if (CharacterState == State.Poisoned)
-                {
-                    CanTalk = false;
-                }
-
-                if (CharacterState == State.Sick)
-                {
-                    CanMove = false;
-                }
                 MoveCounter = 3;
                 _characterState = value;
             }
         }
+
         public bool CanTalk { get; set; } = true;
         public bool CanMove { get; set; } = true;
         public Race CharacterRace { get; set; }
@@ -58,12 +71,20 @@ namespace OurCoolGame
                 {
                     return;
                 }
+
                 _currentHealthPoints = value;
-                if (_currentHealthPoints <= 0)
+                if (_currentHealthPoints > MaxHealthPoints)
                 {
-                    _currentHealthPoints = 0;
-                    CharacterState = State.Dead;
+                    _currentHealthPoints = MaxHealthPoints;
                 }
+
+                if (_currentHealthPoints > 0)
+                {
+                    return;
+                }
+
+                _currentHealthPoints = 0;
+                CharacterState = State.Dead;
             }
         }
 
@@ -81,10 +102,12 @@ namespace OurCoolGame
                 {
                     _moveCounter = 0;
                 }
+
                 if (CharacterState is State.Poisoned or State.Sick)
                 {
                     CurrentHealthPoints -= 20;
                 }
+
                 if (_moveCounter == 0)
                 {
                     StateUpdate();
@@ -145,7 +168,7 @@ namespace OurCoolGame
         {
             return ExperiencePoints > lhs.ExperiencePoints;
         }
-        
+
         private void StateUpdate()
         {
             var healthPercentage = (double) CurrentHealthPoints * 100 / MaxHealthPoints;
@@ -158,11 +181,15 @@ namespace OurCoolGame
 
             if (healthPercentage - 10 < double.Epsilon)
             {
+                CanTalk = true;
+                CanMove = false;
                 CharacterState = State.Weakened;
             }
 
             if (healthPercentage < double.Epsilon)
             {
+                CanMove = false;
+                CanTalk = false;
                 CharacterState = State.Dead;
             }
 
@@ -207,8 +234,6 @@ namespace OurCoolGame
                 return;
             }
 
-            // var index = _inventory.FindIndex(0, target => artefact == target);
-            // check how it works with different fields of one artefact
             _inventory.Remove(artefact);
         }
 
@@ -225,11 +250,6 @@ namespace OurCoolGame
                 ThrowAwayArtefact(artefact);
             }
 
-            // if (!typeof(T).IsSubclassOf(typeof(Artefact)))
-            // {
-            //     //exception or message
-            //     return;
-            // }
             Console.WriteLine("Artefact {0} was used by {1} on {2}", artefact, Name, target.Name);
             artefact.UseArtefact(target);
             ExperiencePoints += 100;

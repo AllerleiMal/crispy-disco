@@ -38,11 +38,3 @@ D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.cspr
 D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.dll
 D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\ref\OurCoolGame.dll
 D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.pdb
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\OurCoolGame.exe
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\OurCoolGame.deps.json
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\OurCoolGame.runtimeconfig.json
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\OurCoolGame.runtimeconfig.dev.json
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\OurCoolGame.dll
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\ref\OurCoolGame.dll
-D:\program etc\projects\cool_game\crispy-disco\bin\Debug\net5.0\OurCoolGame.pdb
-D:\program etc\projects\cool_game\crispy-disco\obj\Debug\net5.0\OurCoolGame.genruntimeconfig.cache
