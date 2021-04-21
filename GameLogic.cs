@@ -60,6 +60,7 @@ namespace OurCoolGame
                 {
                     break;
                 }
+
                 Console.WriteLine(
                     "It is probably a miss click or you don't even know, that age contains only numbers you stupid piece of shit");
             }
@@ -181,7 +182,7 @@ namespace OurCoolGame
 
                 if (temp == "!new_game")
                 {
-                    GameStart(); /////////////////////////////
+                    GameStart(); //хз как это правильно вызвать а то ты написал что новую игру можно сделать а тут не прописал
                     break;
                 }
 
@@ -235,7 +236,7 @@ namespace OurCoolGame
                         }
 
                         Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
-                        _mainPlayer.CurrentHealthPoints -= 10;
+                        _mainPlayer.CurrentHealthPoints -= 20;
                     }
 
                     Thread.Sleep(2000);
@@ -305,26 +306,22 @@ namespace OurCoolGame
 
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1], magic);
-                            Thread.Sleep(2000);
-                            Console.WriteLine("OMG! Let's check, what happened");
-                            Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                                _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
-                                _enemy[0].MaxHealthPoints);
+
                             break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellAntidote().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellCure().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellRevival().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellUnparalyze().ToString())
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellArmor().ToString() || 
+                             _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString())
                         {
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1]);
-                            Console.WriteLine("OMG! Let's check, what happened");
-                            Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                                _mainPlayer.MaxHealthPoints, _enemy[0].CurrentHealthPoints,
-                                _enemy[0].MaxHealthPoints);
                         }
+
+                        Thread.Sleep(2000);
+                        Console.WriteLine("OMG! Let's check, what happened");
+                        Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
+                            _mainPlayer.MaxHealthPoints, _enemy[select - 1].CurrentHealthPoints,
+                            _enemy[select - 1].MaxHealthPoints);
                     }
 
                     break;
@@ -420,6 +417,8 @@ namespace OurCoolGame
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
+            _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
+            _mainPlayer.CurMana = _mainPlayer.MaxMana;
         }
 
         //this method will generate easy fight situation 1v2 or 1v1
@@ -465,6 +464,7 @@ namespace OurCoolGame
                     _mainPlayer.CurrentHealthPoints -= 50;
                     continue;
                 }
+
                 break;
             }
 
