@@ -335,7 +335,7 @@ namespace OurCoolGame
 
         public void ShowRules()
         {
-            //there should be basic rules
+            Console.WriteLine("So, now there is the most important part - RULES! Jk, have fan and don't write stupid \"things\", Gods will punish you...");
         }
 
         public void GenerateLevel()
@@ -425,9 +425,12 @@ namespace OurCoolGame
         private void RunEasyLevel()
         {
             LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
-            _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Female, 42));
-
-
+            _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Male, 74));
+            Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name, _enemy[0].CharacterRace, _enemy[0].Age);
+            _enemy[0].MaxHealthPoints = 1000;
+            Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
+            _enemy[0].GiveArtefact(_enemy[0], new ShadowDagger());
+            Console.WriteLine("Oh, and he has Blood Mace... Good luck :)");
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
