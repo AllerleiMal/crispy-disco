@@ -6,6 +6,14 @@ using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
 using OurCoolGame.Spells;
 
+//todo test constructor
+//todo test menu
+//todo add move counters changing to the appropriate methods(menu methods i bet)
+//todo implement enemy move(maybe generalize it)
+//todo add attack spell
+//todo add spell randomizer
+
+
 namespace OurCoolGame
 {
     public class GameLogic
@@ -430,7 +438,9 @@ namespace OurCoolGame
             _enemy[0].MaxHealthPoints = 1000;
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
             _enemy[0].GiveArtefact(_enemy[0], new ShadowDagger());
-            Console.WriteLine("Oh, and he has Blood Mace... Good luck :)");
+            Console.WriteLine("Oh, and he has Shadow Dagger... Good luck :)");
+            
+            
             _enemy.Clear();
             _teammates.Clear();
             ++_difficultyLevel;
@@ -570,6 +580,145 @@ namespace OurCoolGame
             }
 
             _mainPlayer.MoveCounter -= 1;
+        }
+        
+        void EnemyMove(Wizard enemy)
+        {
+            if (enemy.CharacterState == State.Dead)
+            {
+                return;
+            }
+            
+            Wizard inDangerTarget = enemy;
+            Wizard lowerManaTarget = enemy;
+
+            if (_enemy.Count > 1)
+            {
+                foreach (var wizard in _enemy)
+                {
+                    if (wizard.CurrentHealthPoints < inDangerTarget.CurrentHealthPoints || wizard.CharacterState is State.Dead or State.Paralyzed)
+                    {
+                        if (wizard.CharacterState == State.Paralyzed &&
+                            inDangerTarget.CharacterState == State.Paralyzed)
+                        {
+                            switch (wizard.CurrentHealthPoints < inDangerTarget.CurrentHealthPoints)
+                            {
+                                case true:
+                                {
+                                    inDangerTarget = wizard;
+                                    break;
+                                }
+                                case false:
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            inDangerTarget = wizard;
+                        }
+                    }
+
+                    if (wizard.CurMana < lowerManaTarget.CurMana)
+                    {
+                        lowerManaTarget = wizard;
+                    }
+                }
+            }
+
+            switch (inDangerTarget.CharacterState)
+            {
+                case State.Dead:
+                {
+                    if (TryCastSpell(new SpellRevival(), enemy, inDangerTarget))
+                    {
+                        return;
+                    }
+                    break;
+                }
+                case State.Paralyzed:
+                {
+                    if (TryCastSpell(new SpellUnparalyze(), enemy, inDangerTarget))
+                    {
+                        return;
+                    }
+                    break;
+                }
+            }
+            
+            Artefact outFromFunc;
+            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 && enemy.HasWaterBottle(true, out outFromFunc))
+            {
+                enemy.UseArtefact(outFromFunc, inDangerTarget);
+                return;
+            }
+            
+            if (lowerManaTarget.CurMana < lowerManaTarget.MaxMana / 4 && enemy.HasWaterBottle(false, out outFromFunc))
+            {
+                enemy.UseArtefact(outFromFunc, lowerManaTarget);
+                return;
+            }
+
+            if (enemy.CurMana > enemy.MaxMana * 8 / 10)
+            {
+                if (TryCastSpell(new SpellArmor(), enemy, enemy))
+                {
+                    return;
+                }
+            }
+            
+            switch (enemy.CharacterState)
+            {
+                case State.Poisoned:
+                {
+                    if (TryUseArtefact(new FrogLegsDecoct(), enemy, enemy))
+                    {
+                        return;
+                    }
+                    break;
+                }
+                case State.Sick:
+                {
+                    if (TryCastSpell(new SpellAntidote(), enemy, enemy))
+                    {
+                        return;
+                    }
+                    break;
+                }
+            }
+
+            if (_mainPlayer.CharacterState != State.Dead && (_mainPlayer.CharacterState is State.Healthy or State.Weakened) && enemy.HasStatusArtefact(out outFromFunc))
+            {
+                enemy.UseArtefact(outFromFunc, _mainPlayer);
+                return;
+            }
+            
+            enemy.UseArtefact(enemy._inventory[0], _mainPlayer);
+        }
+
+        private bool TryCastSpell(Spell spell, Wizard origin, Wizard target)
+        {
+            var usedItemIndex = origin._learnedSpells.FindIndex(targetSpell => targetSpell == spell);
+            if (usedItemIndex != -1)
+            {
+                origin.CastSpell(origin._learnedSpells[usedItemIndex], target);
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryUseArtefact(Artefact artefact, Wizard origin, Wizard target)
+        {
+            var usedItemIndex = origin._inventory.FindIndex(targetArtefact => targetArtefact == artefact);
+            if (usedItemIndex != -1)
+            {
+                origin.UseArtefact(origin._inventory[usedItemIndex], target);
+                return true;
+            }
+
+            return false;
         }
     }
 }
