@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
 
@@ -261,6 +262,42 @@ namespace OurCoolGame
             {
                 Console.WriteLine("({0}) {1}", i + 1, _inventory[i]);
             }
+        }
+
+        public bool HasWaterBottle(bool isLiving, out Artefact outputArtefact)
+        {
+            Tuple<Artefact, Artefact, Artefact> variants = isLiving switch
+            {
+                true => new Tuple<Artefact, Artefact, Artefact>(new LivingWater(BottleSize.Small),
+                    new LivingWater(BottleSize.Medium), new LivingWater(BottleSize.Big)),
+                false => new Tuple<Artefact, Artefact, Artefact>(new DeadWater(BottleSize.Small),
+                    new DeadWater(BottleSize.Medium), new DeadWater(BottleSize.Big))
+            };
+
+            int foundIndex = _inventory.FindIndex(artefact =>
+                artefact == variants.Item1 || artefact == variants.Item2 || artefact == variants.Item3);
+            outputArtefact = foundIndex != -1 ? _inventory[foundIndex] : null;
+            return foundIndex != -1;
+        }
+
+        public bool HasStatusArtefact(out Artefact outputArtefact)
+        {
+            var artefactIndex = _inventory.FindIndex(artefact => artefact == new BasiliskEye());
+            if (artefactIndex != -1)
+            {
+                outputArtefact = _inventory[artefactIndex];
+                return true;
+            }
+
+            artefactIndex = _inventory.FindIndex(artefact => artefact == new PoisonousSaliva());
+            if (artefactIndex != -1)
+            {
+                outputArtefact = _inventory[artefactIndex];
+                return true;
+            }
+
+            outputArtefact = null;
+            return false;
         }
     }
 }

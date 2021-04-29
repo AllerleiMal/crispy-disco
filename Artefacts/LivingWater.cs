@@ -21,7 +21,7 @@ namespace OurCoolGame.Artefacts
             }
             target.CurrentHealthPoints += ArtefactPower;
         }
-        
+
         public override string ToString()
         {
             return ArtefactPower switch

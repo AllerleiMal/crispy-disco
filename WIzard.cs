@@ -124,8 +124,7 @@ namespace OurCoolGame
             }
         }
 
-        public void
-            CastSpell(Spell spell, Character target,
+        public void CastSpell(Spell spell, Character target,
                 int magicPower) //why target only wizard? it also can be just character
         {
             if (SpellLearnedCheck(spell))
