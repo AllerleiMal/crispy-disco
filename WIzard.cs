@@ -129,9 +129,12 @@ namespace OurCoolGame
         {
             if (SpellLearnedCheck(spell))
             {
-                spell.MagicEffect(this, target, magicPower);
-                Console.WriteLine("Spell {0} was used by {1} on {2}", spell, Name, target.Name);
-                ExperiencePoints += 150;
+                if ((spell.Gesturing == CanMove || CanMove) && (spell.Pronouncing == CanTalk || CanTalk))
+                {
+                    spell.MagicEffect(this, target, magicPower);
+                    Console.WriteLine("Spell {0} was used by {1} on {2}", spell, Name, target.Name);
+                    ExperiencePoints += 150;
+                }
             }
         }
 
@@ -139,9 +142,12 @@ namespace OurCoolGame
         {
             if (SpellLearnedCheck(spell))
             {
-                spell.MagicEffect(this, target);
-                Console.WriteLine("Spell {0} was used by {1} on {2}", spell, Name, target.Name);
-                ExperiencePoints += 150;
+                if ((spell.Gesturing == CanMove || CanMove) && (spell.Pronouncing == CanTalk || CanTalk))
+                {
+                    spell.MagicEffect(this, target);
+                    Console.WriteLine("Spell {0} was used by {1} on {2}", spell, Name, target.Name);
+                    ExperiencePoints += 150;
+                }
             }
         }
 
@@ -149,9 +155,12 @@ namespace OurCoolGame
         {
             if (SpellLearnedCheck(spell))
             {
-                spell.MagicEffect(this, magicPower);
-                Console.WriteLine("Spell {0} was used by {1}", spell, Name);
-                ExperiencePoints += 150;
+                if ((spell.Gesturing == CanMove || CanMove) && (spell.Pronouncing == CanTalk || CanTalk))
+                {
+                    spell.MagicEffect(this, magicPower);
+                    Console.WriteLine("Spell {0} was used by {1}", spell, Name);
+                    ExperiencePoints += 150;
+                }
             }
         }
 
@@ -159,9 +168,12 @@ namespace OurCoolGame
         {
             if (SpellLearnedCheck(spell))
             {
-                spell.MagicEffect(this);
-                Console.WriteLine("Spell {0} was used by {1}", spell, Name);
-                ExperiencePoints += 150;
+                if ((spell.Gesturing == CanMove || CanMove) && (spell.Pronouncing == CanTalk || CanTalk))
+                {
+                    spell.MagicEffect(this);
+                    Console.WriteLine("Spell {0} was used by {1}", spell, Name);
+                    ExperiencePoints += 150;
+                }
             }
         }
 
