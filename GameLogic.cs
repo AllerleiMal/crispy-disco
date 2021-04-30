@@ -13,12 +13,11 @@ namespace OurCoolGame
     {
         public static int MoveCounter { get; set; } = 0;
         private Wizard _mainPlayer;
+        EnemyGenerator _enemyGenerator;
 
         private int _difficultyLevel;
         private readonly Random _random;
-
-        List<Spell> _allSpells;
-
+        
         public GameLogic()
         {
             _random = new Random();
@@ -26,14 +25,7 @@ namespace OurCoolGame
             _mainPlayer = null;
             _enemy = new List<Wizard>();
             _teammates = new List<Wizard>();
-            _allSpells = new List<Spell>();
-            _allSpells.Add(new SpellAntidote());
-            _allSpells.Add(new SpellArmor());
-            _allSpells.Add(new SpellCure());
-            _allSpells.Add(new SpellFireball());
-            _allSpells.Add(new SpellHeal());
-            _allSpells.Add(new SpellRevival());
-            _allSpells.Add(new SpellUnparalyze());
+            _enemyGenerator = new EnemyGenerator();
         }
 
         private List<Wizard> _enemy;
@@ -493,7 +485,7 @@ namespace OurCoolGame
         {
             Console.WriteLine("New level starts so you can learn spell: ");
             Thread.Sleep(1000);
-            List<Spell> unlearnedSpells = new List<Spell>(_allSpells);
+            List<Spell> unlearnedSpells = new List<Spell>(_enemyGenerator._allSpells);
             for (int i = 0; i < _mainPlayer._learnedSpells.Capacity; i++)
                 unlearnedSpells.Remove(unlearnedSpells.Find(match =>
                     match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
@@ -542,12 +534,12 @@ namespace OurCoolGame
             {
                 case 1:
                 {
-                    _mainPlayer.PickUpArtefact(new LivingWater(RandomizeBottleSize()));
+                    _mainPlayer.PickUpArtefact(new LivingWater(_enemyGenerator.RandomizeBottleSize())); /////////////////////////////////////////////////////////////////////////////////////////////////////////
                     break;
                 }
                 case 2:
                 {
-                    _mainPlayer.PickUpArtefact(new DeadWater(RandomizeBottleSize()));
+                    _mainPlayer.PickUpArtefact(new DeadWater(_enemyGenerator.RandomizeBottleSize()));
                     break;
                 }
                 case 3:
@@ -608,34 +600,7 @@ namespace OurCoolGame
             ++_difficultyLevel;
         }
 
-        //this is an additional method to create living/dead water bottles during artefact generation or after killing bots
-        private BottleSize RandomizeBottleSize()
-        {
-            var size = _random.Next(3);
-            return size switch
-            {
-                0 => BottleSize.Small,
-                1 => BottleSize.Medium,
-                2 => BottleSize.Big,
-                _ => BottleSize.Big
-            };
-        }
-
         //this method will be used to generate artefacts for bots and at the level start
-        private Artefact RandomizeArtefact()
-        {
-            var artefactNumber = _random.Next(1, 5);
-            return artefactNumber switch
-            {
-                1 => new FrogLegsDecoct(),
-                2 => new BasiliskEye(),
-                3 => new DeadWater(RandomizeBottleSize()),
-                4 => new LivingWater(RandomizeBottleSize()),
-                5 => new PoisonousSaliva(),
-                _ => new LivingWater(RandomizeBottleSize())
-            };
-        }
-
         public bool FinalLevelComplete()
         {
             return _difficultyLevel == 5;
@@ -827,17 +792,12 @@ namespace OurCoolGame
         private void ShowFightInfo()
         {
             Console.WriteLine("Your HP: {0}/{1}\nYour MP: {2}/{3}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
-                _mainPlayer.MaxHealthPoints, _mainPlayer.CurrentMana, _mainPlayer.MaxMana);
+                               _mainPlayer.MaxHealthPoints, _mainPlayer.CurrentMana, _mainPlayer.MaxMana);
             for (int i = 0; i < _enemy.Count; i++)
             {
                 Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
                     _enemy[i].MaxHealthPoints);
             }
-        }
-
-        private Spell RandomizeSpell()
-        {
-            return _allSpells[_random.Next(0, 6)];
         }
     }
 }
