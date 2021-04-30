@@ -15,13 +15,16 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This character is already dead, this artefact didn't do anything. Local frogs look at you very suspiciously!");
+                Console.WriteLine(
+                    "This character is already dead, this artefact didn't do anything. Local frogs look at you very suspiciously!");
                 Console.ResetColor();
                 return;
             }
+
             target.Cure();
             target.CurrentHealthPoints += ArtefactPower;
         }
+
         public override string ToString()
         {
             return "FrogLegsDecoct";

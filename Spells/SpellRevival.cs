@@ -13,19 +13,22 @@ namespace OurCoolGame.Spells
         {
             return "Revival";
         }
-        public override void MagicEffect(Wizard origin, Character target)
+
+        public override void MagicEffect(Wizard origin, Wizard target)
         {
-            if (origin.CurMana < ManaCost)
+            if (origin.CurrentMana < ManaCost)
             {
                 Console.WriteLine("Not enough mana to cast revival spell");
                 return;
             }
-            if(target.CharacterState != Enums.State.Dead)
+
+            if (target.CharacterState != Enums.State.Dead)
             {
                 Console.WriteLine("Target character must be dead");
                 return;
             }
-            origin.CurMana -= ManaCost;
+
+            origin.CurrentMana -= ManaCost;
             target.CurrentHealthPoints = 1;
             target.CharacterState = State.Weakened;
         }

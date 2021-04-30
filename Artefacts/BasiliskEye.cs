@@ -18,9 +18,10 @@ namespace OurCoolGame.Artefacts
                 Console.WriteLine("Your enemy is already dead, this artefact didn't do anything, but spoiled artefact");
                 Console.ResetColor();
             }
+
             target.CharacterState = State.Paralyzed;
-            //add move modifier
         }
+
         public override string ToString()
         {
             return "basilisk eye";

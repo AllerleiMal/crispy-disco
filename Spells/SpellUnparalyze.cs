@@ -1,5 +1,6 @@
 ﻿using System;
 using OurCoolGame.Enums;
+
 namespace OurCoolGame.Spells
 {
     class SpellUnparalyze : Spell
@@ -12,19 +13,22 @@ namespace OurCoolGame.Spells
         {
             return "Unparalyze";
         }
-        public override void MagicEffect(Wizard origin, Character target)
+
+        public override void MagicEffect(Wizard origin, Wizard target)
         {
-            if (origin.CurMana < ManaCost)
+            if (origin.CurrentMana < ManaCost)
             {
                 Console.WriteLine("Not enough mana to cast unparalyze spell");
                 return;
             }
+
             if (target.CharacterState != Enums.State.Paralyzed)
             {
                 Console.WriteLine("Target character must be paralyzed");
                 return;
             }
-            origin.CurMana -= ManaCost;
+
+            origin.CurrentMana -= ManaCost;
             target.CurrentHealthPoints = 1;
             target.CharacterState = State.Weakened;
         }

@@ -5,7 +5,7 @@ namespace OurCoolGame.Artefacts
 {
     public class DeadWater : Artefact
     {
-        public DeadWater(BottleSize size) : base((int)size)
+        public DeadWater(BottleSize size) : base((int) size)
         {
             Renewability = false;
         }
@@ -15,13 +15,16 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything, but a puddle of odd-smelling liquid");
+                Console.WriteLine(
+                    "Your enemy is already dead, this artefact didn't do anything, but a puddle of odd-smelling liquid");
                 Console.ResetColor();
                 return;
             }
-            target.CurMana += ArtefactPower;
+
+            target.CurrentMana += ArtefactPower;
             target.CharacterState = State.Dead;
         }
+
         public override string ToString()
         {
             return ArtefactPower switch

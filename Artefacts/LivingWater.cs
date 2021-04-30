@@ -5,7 +5,7 @@ namespace OurCoolGame.Artefacts
 {
     public class LivingWater : Artefact
     {
-        public LivingWater(BottleSize size) : base((int)size)
+        public LivingWater(BottleSize size) : base((int) size)
         {
             Renewability = false;
         }
@@ -15,10 +15,12 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This character is already dead, this artefact didn't do anything. But flowers are growing around you now.");
+                Console.WriteLine(
+                    "This character is already dead, this artefact didn't do anything. But flowers are growing around you now.");
                 Console.ResetColor();
                 return;
             }
+
             target.CurrentHealthPoints += ArtefactPower;
         }
 

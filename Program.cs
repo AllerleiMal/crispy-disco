@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using OurCoolGame.Enums;
 
 namespace OurCoolGame
@@ -11,20 +10,22 @@ namespace OurCoolGame
             var gameLogic = new GameLogic();
             gameLogic.GameStart();
             Wizard wizard = null;
-            gameLogic.CreateCharacter(ref wizard);
+            gameLogic.CreateCharacter(wizard);
             gameLogic.GenerateLevel();
-            //add ++_difficultyLevel after ending of each level
             while (true)
             {
-                if (GameLogic.MoveCounter == 0)
+                if (GameLogic.MoveCounter == 0 || wizard.CharacterState == State.Dead)
                 {
                     gameLogic.GenerateLevel();
                 }
-
+                
                 if (gameLogic.FinalLevelComplete())
                 {
                     break;
                 }
+                
+                gameLogic.InputProcessing();
+                
             }
 
             Console.WriteLine("Congratulations! You really did it! Thanks for playing. Hope you like it. Bis bald :)");

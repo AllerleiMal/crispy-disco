@@ -7,26 +7,26 @@ namespace OurCoolGame
 {
     public class Wizard : Character
     {
-        private int _curMana;
+        private int _currentMana;
 
-        public int CurMana
+        public int CurrentMana
         {
-            get => _curMana;
+            get => _currentMana;
             set
             {
                 if (value < 0)
                 {
-                    _curMana = 0;
+                    _currentMana = 0;
                     return;
                 }
 
                 if (value > MaxMana)
                 {
-                    _curMana = MaxMana;
+                    _currentMana = MaxMana;
                     return;
                 }
 
-                _curMana = value;
+                _currentMana = value;
             }
         }
 
@@ -65,14 +65,14 @@ namespace OurCoolGame
                 }
             }
 
-            CurMana = MaxMana;
+            CurrentMana = MaxMana;
             _learnedSpells = new List<Spell>();
         }
 
         public override string ToString()
         {
             var characterInfo = "";
-            characterInfo += base.ToString() + ", MP: " + CurMana + ", maximum MP: " + MaxMana;
+            characterInfo += base.ToString() + ", MP: " + CurrentMana + ", maximum MP: " + MaxMana;
             return characterInfo;
         }
 
@@ -96,9 +96,9 @@ namespace OurCoolGame
                 Console.WriteLine("Your HP is low {0}/{1}", CurrentHealthPoints, MaxHealthPoints);
             }
 
-            if ((double) CurMana / MaxMana * 100 - 10 < 0)
+            if ((double) CurrentMana / MaxMana * 100 - 10 < 0)
             {
-                Console.WriteLine("Your mana is low {0}/{1}", CurMana, MaxMana);
+                Console.WriteLine("Your mana is low {0}/{1}", CurrentMana, MaxMana);
             }
         }
 
@@ -124,21 +124,23 @@ namespace OurCoolGame
             }
         }
 
-        public void CastSpell(Spell spell, Character target,
-                int magicPower)
+        public void CastSpell(Spell spell, Wizard target,
+            int magicPower)
         {
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this, target, magicPower);
+                Console.WriteLine("Spell {0} was used by {1} on {2}", spell, Name, target.Name);
                 ExperiencePoints += 150;
             }
         }
 
-        public void CastSpell(Spell spell, Character target)
+        public void CastSpell(Spell spell, Wizard target)
         {
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this, target);
+                Console.WriteLine("Spell {0} was used by {1} on {2}", spell, Name, target.Name);
                 ExperiencePoints += 150;
             }
         }
@@ -148,6 +150,7 @@ namespace OurCoolGame
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this, magicPower);
+                Console.WriteLine("Spell {0} was used by {1}", spell, Name);
                 ExperiencePoints += 150;
             }
         }
@@ -157,6 +160,7 @@ namespace OurCoolGame
             if (SpellLearnedCheck(spell))
             {
                 spell.MagicEffect(this);
+                Console.WriteLine("Spell {0} was used by {1}", spell, Name);
                 ExperiencePoints += 150;
             }
         }

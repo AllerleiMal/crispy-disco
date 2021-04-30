@@ -6,12 +6,6 @@ using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
 using OurCoolGame.Spells;
 
-//todo test constructor
-//todo test menu
-//todo add move counters changing to the appropriate methods(menu methods i bet)
-//todo implement enemy move(maybe generalize it)
-//todo add spell
-
 
 namespace OurCoolGame
 {
@@ -41,10 +35,10 @@ namespace OurCoolGame
         {
             Console.WriteLine(
                 "Welcome!\nIt is our mini version of console RPG game.\nAll the characters are fictional, and the coincidences are random.\nThe whole story will develop in a magical medieval fantasy world(do not be surprised by talking goblins and orcs).\nYour task is to pass all the tests and overcome the difficulties on the way to such a cherished goal - to learn magic from the great Merlin.\nP.S. follow the instructions that will be given later, otherwise you risk hearing a lot of bad words in your direction. You can enter \"!help\" to get info with all valid commands.\n(Press any key to continue)\n");
-            Console.ReadKey();
+            Console.ReadLine();
         }
 
-        public void CreateCharacter(ref Wizard wizard)
+        public void CreateCharacter(Wizard wizard)
         {
             Console.WriteLine("Now is the time to create the character and choose the subclass");
             string name;
@@ -57,10 +51,10 @@ namespace OurCoolGame
                     break;
                 }
 
-                Console.WriteLine("As I already said name couldn't be empty you stupid piece of shit");
+                Console.WriteLine("As I already said name couldn't be empty");
             }
 
-            int age = 0;
+            int age;
             while (true)
             {
                 Console.WriteLine("Enter the age of your character:");
@@ -72,11 +66,12 @@ namespace OurCoolGame
                         Console.WriteLine("Age must be at least 12. Try again");
                         continue;
                     }
+
                     break;
                 }
 
                 Console.WriteLine(
-                    "It is probably a miss click or you don't even know, that age contains only numbers you stupid piece of shit");
+                    "It is probably a miss click or you don't even know, that age contains only numbers");
             }
 
             var race = Race.Elf;
@@ -119,7 +114,7 @@ namespace OurCoolGame
                     break;
                 }
 
-                Console.WriteLine("You need numbers from 1 to 5 you stupid piece of shit");
+                Console.WriteLine("You need numbers from 1 to 5");
             }
 
             var gender = Gender.Undefined;
@@ -152,7 +147,7 @@ namespace OurCoolGame
                     break;
                 }
 
-                Console.WriteLine("You need numbers from 1 to 3 you stupid piece of shit");
+                Console.WriteLine("You need numbers from 1 to 3");
             }
 
             Console.WriteLine(
@@ -166,49 +161,55 @@ namespace OurCoolGame
         }
 
         //that is a method that would be called with !help, it shows information about basic game commands
-        public void InputProcessing(int playerMustChose = 0)
+        public void InputProcessing(int playerMustChoose = 0)
         {
             string temp;
             while (true)
             {
                 temp = Console.ReadLine();
-                if (temp == "!help" && (playerMustChose == 0 || playerMustChose == 1))
+                if (temp == "!help" && (playerMustChoose == 0 || playerMustChoose == 1))
                 {
                     Console.WriteLine(
-                        "!help - get info about commands\n!new_game - will start the game from the very beginning\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts\n!show_spells - to see list of learned spells");
+                        "!help - get info about commands\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts\n!show_spells - to see list of learned spells");
                     Thread.Sleep(2000);
                     break;
                 }
 
-                if (temp == "!use" && (playerMustChose == 0 || playerMustChose == 2))
+                if (temp == "!use" && (playerMustChoose == 0 || playerMustChoose == 2))
                 {
                     UseMenu();
+                    if (playerMustChoose == 0)
+                    {
+                        foreach (var enemy in _enemy)
+                        {
+                            EnemyMove(enemy);
+                        }
+
+                        UpdateMoveCounters();
+                    }
+
+                    ++MoveCounter;
                     break;
                 }
 
-                if (temp == "!inventory" && (playerMustChose == 0 || playerMustChose == 3))
+                if (temp == "!inventory" && (playerMustChoose == 0 || playerMustChoose == 3))
                 {
                     _mainPlayer.ShowInventory();
                     break;
                 }
 
-                if (temp == "!new_game" && playerMustChose == 0)
-                {
-                    GameStart(); 
-                    break;
-                }
-                
-                if(temp == "!learned_spells" && playerMustChose == 0)
+                if (temp == "!learned_spells" && playerMustChoose == 0)
                 {
                     _mainPlayer.ShowLearnedSpells();
                     break;
                 }
 
-                if (playerMustChose != 0)
+                if (playerMustChoose != 0)
                 {
                     Console.WriteLine("woops, there's mistake in command or you are truing to break the tutorial");
                     continue;
                 }
+
                 //add other commands
                 Console.WriteLine(
                     "omg... please, check what you're trying to enter. if you forget, i can remind: enter \"!help\"");
@@ -231,8 +232,10 @@ namespace OurCoolGame
                     return select;
                 }
 
-                Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
-                _mainPlayer.CurrentHealthPoints -= 20;
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("Gods hate ridicule, you played with fire and lose");
+                _mainPlayer.CurrentHealthPoints -= 50;
+                Console.ResetColor();
             }
         }
 
@@ -258,8 +261,10 @@ namespace OurCoolGame
                             break;
                         }
 
-                        Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
-                        _mainPlayer.CurrentHealthPoints -= 20;
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Gods hate ridicule, you played with fire and lose");
+                        _mainPlayer.CurrentHealthPoints -= 50;
+                        Console.ResetColor();
                     }
 
                     Thread.Sleep(2000);
@@ -267,6 +272,8 @@ namespace OurCoolGame
                     _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1],
                         select == 0 ? _mainPlayer : _enemy[select - 1]);
                     Thread.Sleep(2000);
+                    //todo
+                    //todo
                     Console.WriteLine("OMG! Let's check, what happened");
                     ShowFightInfo();
                     break;
@@ -294,8 +301,10 @@ namespace OurCoolGame
                                 break;
                             }
 
-                            Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
-                            _mainPlayer.CurrentHealthPoints -= 20;
+                            Console.BackgroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Gods hate ridicule, you played with fire and lose");
+                            _mainPlayer.CurrentHealthPoints -= 50;
+                            Console.ResetColor();
                         }
 
                         int select = SelectTarget();
@@ -307,25 +316,30 @@ namespace OurCoolGame
                             while (true)
                             {
                                 if (int.TryParse(Console.ReadLine(), out magic) && magic > 0 &&
-                                    magic * _mainPlayer._learnedSpells[pickSpell - 1].ManaCost <= _mainPlayer.CurMana)
+                                    magic * _mainPlayer._learnedSpells[pickSpell - 1].ManaCost <=
+                                    _mainPlayer.CurrentMana)
                                 {
                                     break;
                                 }
 
-                                Console.WriteLine("What are you trying to enter you stupid piece of shit. -20HP");
-                                _mainPlayer.CurrentHealthPoints -= 20;
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Gods hate ridicule, you played with fire and lose");
+                                _mainPlayer.CurrentHealthPoints -= 50;
+                                Console.ResetColor();
                             }
 
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1], magic);
 
+                            //todo
+                            //todo
                             Console.WriteLine("OMG ! Let's check, what happened");
                             ShowFightInfo();
                             break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellArmor().ToString() || 
-                             _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString())
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellArmor().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString())
                         {
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1]);
@@ -339,14 +353,15 @@ namespace OurCoolGame
                 }
 
                 Console.WriteLine(
-                    "Something went wrong, try again and follow the right command's format. -20HP");
+                    "Something went wrong, try again and follow the right command's format.");
             }
         }
 
 
         public void ShowRules()
         {
-            Console.WriteLine("So, now there is the most important part - RULES! Jk, have fan and don't write stupid \"things\", Gods will punish you...");
+            Console.WriteLine(
+                "So, now there is the most important part - RULES! Jk, have fan and don't write anything gods don't want to see. It is quite dangerous...");
         }
 
         public void GenerateLevel()
@@ -418,6 +433,26 @@ namespace OurCoolGame
             _mainPlayer.LearnSpell(new SpellHeal());
             InputProcessing(2);
             Console.WriteLine("Training is ended. Now you can begin you journey");
+            var weapon = _random.Next(0, 2);
+            switch (weapon)
+            {
+                case 0:
+                    Console.WriteLine(
+                        "Mhm, we decided that you are to young for the new weapon. Continue your fight with LightningStaff!");
+                    break;
+
+                case 1:
+                    Console.WriteLine(
+                        "Otaaay, Lets try something new!. Continue your fight with BloodMace!");
+                    _mainPlayer._inventory[0] = new BloodMace();
+                    break;
+
+                case 2:
+                    Console.WriteLine(
+                        "Wow, you did a great job! So we decided to give you some really cool staff. Continue your fight with ShadowDagger!");
+                    _mainPlayer._inventory[0] = new ShadowDagger();
+                    break;
+            }
             Console.Write("Preparing all things down");
             Thread.Sleep(2000);
             Console.Write(".");
@@ -431,7 +466,7 @@ namespace OurCoolGame
             _teammates.Clear();
             ++_difficultyLevel;
             _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
-            _mainPlayer.CurMana = _mainPlayer.MaxMana;
+            _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
         }
 
         private void LevelStartingMessages(string message, ConsoleColor color)
@@ -450,27 +485,32 @@ namespace OurCoolGame
         {
             Console.WriteLine("New level starts so you can learn spell: ");
             Thread.Sleep(1000);
-            List<Spell> unlearnedSpells = new List<Spell>(_enemyGenerator._allSpells); //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            List<Spell> unlearnedSpells = new List<Spell>(_enemyGenerator._allSpells);
             for (int i = 0; i < _mainPlayer._learnedSpells.Capacity; i++)
-                unlearnedSpells.Remove(unlearnedSpells.Find(match => match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
+                unlearnedSpells.Remove(unlearnedSpells.Find(match =>
+                    match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
             for (int i = 0; i < unlearnedSpells.Capacity; i++)
-                Console.WriteLine($"({i + 1}) {unlearnedSpells[i].ToString()}");
+                Console.WriteLine($"({i + 1}) {unlearnedSpells[i]}");
             int switchIntInput;
             while (true)
             {
-                if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 || switchIntInput > unlearnedSpells.Capacity)
+                if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 ||
+                    switchIntInput > unlearnedSpells.Capacity)
                 {
-                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
                     _mainPlayer.CurrentHealthPoints -= 50;
+                    Console.ResetColor();
                     continue;
                 }
 
                 break;
             }
+
             _mainPlayer.LearnSpell(unlearnedSpells[switchIntInput - 1]);
         }
-        private void ChooseArtefactWhenLevelStarts()
+
+       private void ChooseArtefactWhenLevelStarts()
         {
             Console.WriteLine("It's time to choose the artefact: ");
             Thread.Sleep(1000);
@@ -481,7 +521,7 @@ namespace OurCoolGame
             {
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput is < 1 or > 5)
                 {
-                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
                     _mainPlayer.CurrentHealthPoints -= 50;
                     continue;
@@ -519,12 +559,14 @@ namespace OurCoolGame
                 }
             }
         }
+
         //this method will generate easy fight situation 1v2 or 1v1
         private void RunEasyLevel()
         {
             LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
             _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Male, 74));
-            Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name, _enemy[0].CharacterRace, _enemy[0].Age);
+            Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name,
+                _enemy[0].CharacterRace, _enemy[0].Age);
             _enemy[0].MaxHealthPoints = 1000;
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
             _enemy[0].GiveArtefact(_enemy[0], new ShadowDagger());
@@ -535,6 +577,7 @@ namespace OurCoolGame
             _teammates.Clear();
             ++_difficultyLevel;
         }
+
         //this method will generate easy fight situation 2v2 or 2v3
         private void RunMediumLevel()
         {
@@ -560,11 +603,11 @@ namespace OurCoolGame
         //this method will be used to generate artefacts for bots and at the level start
         public bool FinalLevelComplete()
         {
-            return _difficultyLevel == 6;
+            return _difficultyLevel == 5;
         }
 
         //use it after all made a move
-        public void UpdateMoveCounters()
+        private void UpdateMoveCounters()
         {
             foreach (var enemy in _enemy)
             {
@@ -578,14 +621,14 @@ namespace OurCoolGame
 
             _mainPlayer.MoveCounter -= 1;
         }
-        
+
         void EnemyMove(Wizard enemy)
         {
             if (enemy.CharacterState == State.Dead)
             {
                 return;
             }
-            
+
             Wizard inDangerTarget = enemy;
             Wizard lowerManaTarget = enemy;
 
@@ -593,7 +636,8 @@ namespace OurCoolGame
             {
                 foreach (var wizard in _enemy)
                 {
-                    if (wizard.CurrentHealthPoints < inDangerTarget.CurrentHealthPoints || wizard.CharacterState is State.Dead or State.Paralyzed)
+                    if (wizard.CurrentHealthPoints < inDangerTarget.CurrentHealthPoints ||
+                        wizard.CharacterState is State.Dead or State.Paralyzed)
                     {
                         if (wizard.CharacterState == State.Paralyzed &&
                             inDangerTarget.CharacterState == State.Paralyzed)
@@ -617,7 +661,7 @@ namespace OurCoolGame
                         }
                     }
 
-                    if (wizard.CurMana < lowerManaTarget.CurMana)
+                    if (wizard.CurrentMana < lowerManaTarget.CurrentMana)
                     {
                         lowerManaTarget = wizard;
                     }
@@ -632,6 +676,7 @@ namespace OurCoolGame
                     {
                         return;
                     }
+
                     break;
                 }
                 case State.Paralyzed:
@@ -640,31 +685,40 @@ namespace OurCoolGame
                     {
                         return;
                     }
+
                     break;
                 }
             }
+
+            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 && enemy.CurrentMana > enemy.MaxMana / 3)
+            {
+                TryCastSpell(new SpellHeal(), enemy, inDangerTarget);
+                return;
+            }
             
             Artefact outFromFunc;
-            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 && enemy.HasWaterBottle(true, out outFromFunc))
+            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 &&
+                enemy.HasWaterBottle(true, out outFromFunc))
             {
                 enemy.UseArtefact(outFromFunc, inDangerTarget);
                 return;
             }
-            
-            if (lowerManaTarget.CurMana < lowerManaTarget.MaxMana / 4 && enemy.HasWaterBottle(false, out outFromFunc))
+
+            if (lowerManaTarget.CurrentMana < lowerManaTarget.MaxMana / 4 &&
+                enemy.HasWaterBottle(false, out outFromFunc))
             {
                 enemy.UseArtefact(outFromFunc, lowerManaTarget);
                 return;
             }
 
-            if (enemy.CurMana > enemy.MaxMana * 8 / 10)
+            if (enemy.CurrentMana > enemy.MaxMana * 8 / 10)
             {
                 if (TryCastSpell(new SpellArmor(), enemy, enemy))
                 {
                     return;
                 }
             }
-            
+
             switch (enemy.CharacterState)
             {
                 case State.Poisoned:
@@ -673,6 +727,7 @@ namespace OurCoolGame
                     {
                         return;
                     }
+
                     break;
                 }
                 case State.Sick:
@@ -681,16 +736,25 @@ namespace OurCoolGame
                     {
                         return;
                     }
+
                     break;
                 }
             }
 
-            if (_mainPlayer.CharacterState != State.Dead && (_mainPlayer.CharacterState is State.Healthy or State.Weakened) && enemy.HasStatusArtefact(out outFromFunc))
+            if (_mainPlayer.CharacterState != State.Dead &&
+                (_mainPlayer.CharacterState is State.Healthy or State.Weakened) &&
+                enemy.HasStatusArtefact(out outFromFunc))
             {
                 enemy.UseArtefact(outFromFunc, _mainPlayer);
                 return;
             }
-            
+
+            if (enemy._learnedSpells.FindIndex(spell => spell == new SpellFireball()) != -1 &&
+                enemy.CurrentMana > enemy.MaxMana / 4)
+            {
+                enemy.CastSpell(new SpellFireball(), _mainPlayer, enemy.CurrentMana / 4);
+            }
+
             enemy.UseArtefact(enemy._inventory[0], _mainPlayer);
         }
 
@@ -699,7 +763,14 @@ namespace OurCoolGame
             var usedItemIndex = origin._learnedSpells.FindIndex(targetSpell => targetSpell == spell);
             if (usedItemIndex != -1)
             {
-                origin.CastSpell(origin._learnedSpells[usedItemIndex], target);
+                if (spell == new SpellHeal())
+                {
+                    origin.CastSpell(origin._learnedSpells[usedItemIndex], target, origin.CurrentMana / 3);
+                }
+                else
+                {
+                    origin.CastSpell(origin._learnedSpells[usedItemIndex], target);
+                }
                 return true;
             }
 
@@ -721,7 +792,7 @@ namespace OurCoolGame
         private void ShowFightInfo()
         {
             Console.WriteLine("Your HP: {0}/{1}\nYour MP: {2}/{3}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
-                               _mainPlayer.MaxHealthPoints, _mainPlayer.CurMana, _mainPlayer.MaxMana);
+                               _mainPlayer.MaxHealthPoints, _mainPlayer.CurrentMana, _mainPlayer.MaxMana);
             for (int i = 0; i < _enemy.Count; i++)
             {
                 Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
