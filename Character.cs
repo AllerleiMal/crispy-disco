@@ -243,7 +243,7 @@ namespace OurCoolGame
         {
             if (_inventory.Count == 0)
             {
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.BackgroundColor = ConsoleColor.Gray;
                 Console.WriteLine("You can't throw away anything, while your inventory is empty");
                 Console.ResetColor();
                 return;
@@ -264,7 +264,7 @@ namespace OurCoolGame
             {
                 ThrowAwayArtefact(artefact);
             }
-
+            
             Console.WriteLine("Artefact {0} was used by {1} on {2}", artefact, Name, target.Name);
             artefact.UseArtefact(target);
             ExperiencePoints += 100;
