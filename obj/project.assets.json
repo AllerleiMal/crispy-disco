@@ -8,24 +8,33 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\emely\\.nuget\\packages\\": {}
+    "C:\\Users\\max\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj",
+      "projectUniqueName": "D:\\temp\\crispy-disco\\OurCoolGame.csproj",
       "projectName": "OurCoolGame",
-      "projectPath": "E:\\programming\\git\\crispy-disco\\OurCoolGame.csproj",
-      "packagesPath": "C:\\Users\\emely\\.nuget\\packages\\",
-      "outputPath": "E:\\programming\\git\\crispy-disco\\obj\\",
+      "projectPath": "D:\\temp\\crispy-disco\\OurCoolGame.csproj",
+      "packagesPath": "C:\\Users\\max\\.nuget\\packages\\",
+      "outputPath": "D:\\temp\\crispy-disco\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\emely\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\max\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -58,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\emely\\.dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

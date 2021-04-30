@@ -64,8 +64,13 @@ namespace OurCoolGame
             {
                 Console.WriteLine("Enter the age of your character:");
                 //here we try to parse string with age, and if it is not possible, ask for input one more time
-                if (int.TryParse(Console.ReadLine(), out age) && age >= 12)
+                if (int.TryParse(Console.ReadLine(), out age))
                 {
+                    if (age < 12)
+                    {
+                        Console.WriteLine("Age must be at least 12. Try again");
+                        continue;
+                    }
                     break;
                 }
 
@@ -160,40 +165,43 @@ namespace OurCoolGame
         }
 
         //that is a method that would be called with !help, it shows information about basic game commands
-        public void InputProcessing()
+        public void InputProcessing(int playerMustChose = 0)
         {
             string temp;
-            //maybe while true should be deleted
             while (true)
             {
                 temp = Console.ReadLine();
-                if (temp == "!help")
+                if (temp == "!help" && (playerMustChose == 0 || playerMustChose == 1))
                 {
                     Console.WriteLine(
                         "!help - get info about commands\n!new_game - will start the game from the very beginning\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts");
                     Thread.Sleep(2000);
-                    Console.WriteLine("Ok, now you know more and can do something");
                     break;
                 }
 
-                if (temp == "!use")
+                if (temp == "!use" && (playerMustChose == 0 || playerMustChose == 2))
                 {
                     UseMenu();
                     break;
                 }
 
-                if (temp == "!inventory")
+                if (temp == "!inventory" && (playerMustChose == 0 || playerMustChose == 3))
                 {
                     _mainPlayer.ShowInventory();
                     break;
                 }
 
-                if (temp == "!new_game")
+                if (temp == "!new_game" && (playerMustChose == 0 || playerMustChose == 4))
                 {
                     GameStart(); //хз как это правильно вызвать а то ты написал что новую игру можно сделать а тут не прописал
                     break;
                 }
 
+                if (playerMustChose != 0)
+                {
+                    Console.WriteLine("woops, there's mistake in command or you are truing to break the tutorial");
+                    continue;
+                }
                 //add other commands
                 Console.WriteLine(
                     "omg... please, check what you're trying to enter. if you forget, i can remind: enter \"!help\"");
@@ -252,11 +260,7 @@ namespace OurCoolGame
                     _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1],
                         select == 0 ? _mainPlayer : _enemy[select - 1]);
                     Thread.Sleep(2000);
-                    if (select == 0)
-                        Console.WriteLine(
-                            "YOU STUPID ASSHOLE WTF ARE YOU DOING K NOW YOU HAVE DOUBLE DAMAGE AHHAHA"); //JOKE
-                    else
-                        Console.WriteLine("OMG! Let's check, what happened");
+                    Console.WriteLine("OMG! Let's check, what happened");
                     Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
                         _mainPlayer.MaxHealthPoints);
                     for (int i = 0; i < _enemy.Count; i++)
@@ -264,7 +268,6 @@ namespace OurCoolGame
                         Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
                             _enemy[i].MaxHealthPoints);
                     }
-
                     break;
                 }
 
@@ -273,7 +276,7 @@ namespace OurCoolGame
                     bool isEmpty = !_mainPlayer._learnedSpells.Any();
                     if (isEmpty)
                     {
-                        Console.WriteLine("Oopsie... You don't know it yet ;(");
+                        Console.WriteLine("Oopsie... You don't know any spell yet ;(");
                         UseMenu();
                     }
                     else
@@ -315,6 +318,13 @@ namespace OurCoolGame
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1], magic);
 
+                            Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
+                               _mainPlayer.MaxHealthPoints);
+                            for (int i = 0; i < _enemy.Count; i++)
+                            {
+                                Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
+                                    _enemy[i].MaxHealthPoints);
+                            }
                             break;
                         }
 
@@ -326,10 +336,13 @@ namespace OurCoolGame
                         }
 
                         Thread.Sleep(2000);
-                        Console.WriteLine("OMG! Let's check, what happened");
-                        Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP: {2}/{3}", _mainPlayer.CurrentHealthPoints,
-                            _mainPlayer.MaxHealthPoints, _enemy[select - 1].CurrentHealthPoints,
-                            _enemy[select - 1].MaxHealthPoints);
+                        Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
+                        _mainPlayer.MaxHealthPoints);
+                        for (int i = 0; i < _enemy.Count; i++)
+                        {
+                            Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
+                                _enemy[i].MaxHealthPoints);
+                        }
                     }
 
                     break;
@@ -386,13 +399,15 @@ namespace OurCoolGame
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
                 _enemy[0].Name);
             _mainPlayer.PickUpArtefact(new LightningStaff());
-            InputProcessing();
+            InputProcessing(3);
 
             Console.WriteLine(
                 "Good job! Now you can see what is in your bag. Choose one of the artefact and use it on your enemy.\n Ah, ye... You don't know how. Enter \"!help\"");
             Thread.Sleep(2000);
-            InputProcessing();
-            UseMenu();
+            InputProcessing(1);
+            Console.WriteLine(
+                "ok, now let's try !use. attack enemy with you Lightning Staff(start with !use)");
+            InputProcessing(2);
             Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
             _enemy[0]._inventory.Add(new LightningStaff());
@@ -407,11 +422,11 @@ namespace OurCoolGame
             _mainPlayer.PickUpArtefact(new DeadWater(BottleSize.Small));
             Thread.Sleep(2000);
             Console.WriteLine(
-                "You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP");
-            UseMenu();
-            Console.WriteLine("Now let's check what you can do! Check your spells");
+                "You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP(start with !use)");
+            InputProcessing(2);
+            Console.WriteLine("Now let's check what you can do! Check your spells(start with !use)");
             _mainPlayer.LearnSpell(new SpellHeal());
-            UseMenu();
+            InputProcessing(2);
             Console.WriteLine("Training is ended. Now you can begin you journey");
             Console.Write("Preparing all things down");
             Thread.Sleep(2000);
@@ -429,23 +444,6 @@ namespace OurCoolGame
             _mainPlayer.CurMana = _mainPlayer.MaxMana;
         }
 
-        //this method will generate easy fight situation 1v2 or 1v1
-        private void RunEasyLevel()
-        {
-            LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
-            _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Male, 74));
-            Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name, _enemy[0].CharacterRace, _enemy[0].Age);
-            _enemy[0].MaxHealthPoints = 1000;
-            Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
-            _enemy[0].GiveArtefact(_enemy[0], new ShadowDagger());
-            Console.WriteLine("Oh, and he has Shadow Dagger... Good luck :)");
-            
-            
-            _enemy.Clear();
-            _teammates.Clear();
-            ++_difficultyLevel;
-        }
-
         private void GenerateNamesForEasyLevel()
         {
         }
@@ -457,10 +455,41 @@ namespace OurCoolGame
             Console.WriteLine(message);
             Console.ResetColor();
             Thread.Sleep(2000);
+            LearnSpellWhenLevelStarts();
             ChooseArtefactWhenLevelStarts();
             Thread.Sleep(2000);
         }
 
+        private void LearnSpellWhenLevelStarts()
+        {
+            Console.WriteLine("New level starts so you can learn spell: ");
+            Thread.Sleep(1000);
+            List<Spell> unlearnedSpells = new List<Spell>();
+            unlearnedSpells.Add(new SpellAntidote());
+            unlearnedSpells.Add(new SpellArmor());
+            unlearnedSpells.Add(new SpellCure());
+            unlearnedSpells.Add(new SpellFireball());
+            unlearnedSpells.Add(new SpellRevival());
+            unlearnedSpells.Add(new SpellUnparalyze());
+            for (int i = 0; i < _mainPlayer._learnedSpells.Capacity; i++)
+                unlearnedSpells.Remove(unlearnedSpells.Find(match => match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
+            for (int i = 0; i < unlearnedSpells.Capacity; i++)
+                Console.WriteLine($"({i + 1}) {unlearnedSpells[i].ToString()}");
+            int switchIntInput;
+            while (true)
+            {
+                if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 || switchIntInput > unlearnedSpells.Capacity)
+                {
+                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("Gods hate ridicule, you played with fire and lose");
+                    _mainPlayer.CurrentHealthPoints -= 50;
+                    continue;
+                }
+
+                break;
+            }
+            _mainPlayer.LearnSpell(unlearnedSpells[switchIntInput - 1]);
+        }
         private void ChooseArtefactWhenLevelStarts()
         {
             Console.WriteLine("It's time to choose the artefact: ");
@@ -510,7 +539,22 @@ namespace OurCoolGame
                 }
             }
         }
+        //this method will generate easy fight situation 1v2 or 1v1
+        private void RunEasyLevel()
+        {
+            LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
+            _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Male, 74));
+            Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name, _enemy[0].CharacterRace, _enemy[0].Age);
+            _enemy[0].MaxHealthPoints = 1000;
+            Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
+            _enemy[0].GiveArtefact(_enemy[0], new ShadowDagger());
+            Console.WriteLine("Oh, and he has Shadow Dagger... Good luck :)");
 
+
+            _enemy.Clear();
+            _teammates.Clear();
+            ++_difficultyLevel;
+        }
         //this method will generate easy fight situation 2v2 or 2v3
         private void RunMediumLevel()
         {
