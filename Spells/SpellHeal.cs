@@ -13,19 +13,22 @@ namespace OurCoolGame.Spells
         {
             return "Heal";
         }
-        public override void MagicEffect(Wizard origin, Character target, int magicPower)
+
+        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
         {
-            if(origin.CurMana < ManaCost * magicPower)
+            if (origin.CurrentMana < ManaCost * magicPower)
             {
                 Console.WriteLine("Not enough mana to cast heal spell");
                 return;
             }
+
             if (target.CharacterState == State.Dead)
             {
                 Console.WriteLine("Can't heal dead character (SpellRestoreHealth)");
                 return;
             }
-            origin.CurMana -= 2 * magicPower;
+
+            origin.CurrentMana -= 2 * magicPower;
             if (target.CurrentHealthPoints + magicPower < target.MaxHealthPoints)
             {
                 target.CurrentHealthPoints += magicPower;

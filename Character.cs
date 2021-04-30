@@ -89,7 +89,21 @@ namespace OurCoolGame
             }
         }
 
-        public int MaxHealthPoints { get; set; }
+        private int _maxHealthPoints;
+
+        public int MaxHealthPoints
+        {
+            get => _maxHealthPoints;
+            set
+            {
+                _maxHealthPoints = value;
+                if (CurrentHealthPoints > value)
+                {
+                    CurrentHealthPoints = value;
+                }
+            }
+        }
+
         public int ExperiencePoints { get; set; } = 0;
         private int _moveCounter;
 

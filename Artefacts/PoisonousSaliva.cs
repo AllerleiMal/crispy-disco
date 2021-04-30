@@ -15,14 +15,16 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything. You have a strange acid taste in your mouth.");
+                Console.WriteLine(
+                    "Your enemy is already dead, this artefact didn't do anything. You have a strange acid taste in your mouth.");
                 Console.ResetColor();
                 return;
             }
+
             target.CharacterState = State.Poisoned;
             target.CurrentHealthPoints -= ArtefactPower;
         }
-        
+
         public override string ToString()
         {
             return "poisonous saliva";

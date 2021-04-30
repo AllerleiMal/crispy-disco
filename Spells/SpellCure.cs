@@ -13,9 +13,10 @@ namespace OurCoolGame.Spells
         {
             return "Cure";
         }
-        public override void MagicEffect(Wizard origin, Character target)
+
+        public override void MagicEffect(Wizard origin, Wizard target)
         {
-            if (origin.CurMana < ManaCost)
+            if (origin.CurrentMana < ManaCost)
             {
                 Console.WriteLine("You don't have enough mana to cure character");
             }
@@ -30,9 +31,11 @@ namespace OurCoolGame.Spells
                 Console.WriteLine("You can't apply it to the dead character");
             }
 
-            target.CharacterState = target.CurrentHealthPoints <= target.MaxHealthPoints / 10 ? State.Weakened : State.Healthy;
+            target.CharacterState = target.CurrentHealthPoints <= target.MaxHealthPoints / 10
+                ? State.Weakened
+                : State.Healthy;
 
-            origin.CurMana -= ManaCost;
+            origin.CurrentMana -= ManaCost;
         }
     }
 }

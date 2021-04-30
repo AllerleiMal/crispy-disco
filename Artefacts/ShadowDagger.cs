@@ -15,10 +15,12 @@ namespace OurCoolGame.Artefacts
             if (target.CharacterState == State.Dead)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Your enemy is already dead, this artefact didn't do anything. Unless enemy has one rib less");
+                Console.WriteLine(
+                    "Your enemy is already dead, this artefact didn't do anything. Unless enemy has one rib less");
                 Console.ResetColor();
                 return;
             }
+
             target.CurrentHealthPoints -= ArtefactPower;
             //add move modifier
             ArtefactPower = _random.Next(100, 150);
