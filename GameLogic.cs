@@ -10,8 +10,7 @@ using OurCoolGame.Spells;
 //todo test menu
 //todo add move counters changing to the appropriate methods(menu methods i bet)
 //todo implement enemy move(maybe generalize it)
-//todo add attack spell
-//todo add spell randomizer
+//todo add spell
 
 
 namespace OurCoolGame
@@ -20,10 +19,11 @@ namespace OurCoolGame
     {
         public static int MoveCounter { get; set; } = 0;
         private Wizard _mainPlayer;
+        EnemyGenerator _enemyGenerator;
 
         private int _difficultyLevel;
         private readonly Random _random;
-
+        
         public GameLogic()
         {
             _random = new Random();
@@ -31,6 +31,7 @@ namespace OurCoolGame
             _mainPlayer = null;
             _enemy = new List<Wizard>();
             _teammates = new List<Wizard>();
+            _enemyGenerator = new EnemyGenerator();
         }
 
         private List<Wizard> _enemy;
@@ -174,7 +175,7 @@ namespace OurCoolGame
                 if (temp == "!help" && (playerMustChose == 0 || playerMustChose == 1))
                 {
                     Console.WriteLine(
-                        "!help - get info about commands\n!new_game - will start the game from the very beginning\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts");
+                        "!help - get info about commands\n!new_game - will start the game from the very beginning\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts\n!show_spells - to see list of learned spells");
                     Thread.Sleep(2000);
                     break;
                 }
@@ -191,9 +192,15 @@ namespace OurCoolGame
                     break;
                 }
 
-                if (temp == "!new_game" && (playerMustChose == 0 || playerMustChose == 4))
+                if (temp == "!new_game" && playerMustChose == 0)
                 {
-                    GameStart(); //хз как это правильно вызвать а то ты написал что новую игру можно сделать а тут не прописал
+                    GameStart(); 
+                    break;
+                }
+                
+                if(temp == "!learned_spells" && playerMustChose == 0)
+                {
+                    _mainPlayer.ShowLearnedSpells();
                     break;
                 }
 
@@ -261,13 +268,7 @@ namespace OurCoolGame
                         select == 0 ? _mainPlayer : _enemy[select - 1]);
                     Thread.Sleep(2000);
                     Console.WriteLine("OMG! Let's check, what happened");
-                    Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
-                        _mainPlayer.MaxHealthPoints);
-                    for (int i = 0; i < _enemy.Count; i++)
-                    {
-                        Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
-                            _enemy[i].MaxHealthPoints);
-                    }
+                    ShowFightInfo();
                     break;
                 }
 
@@ -318,13 +319,8 @@ namespace OurCoolGame
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1], magic);
 
-                            Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
-                               _mainPlayer.MaxHealthPoints);
-                            for (int i = 0; i < _enemy.Count; i++)
-                            {
-                                Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
-                                    _enemy[i].MaxHealthPoints);
-                            }
+                            Console.WriteLine("OMG ! Let's check, what happened");
+                            ShowFightInfo();
                             break;
                         }
 
@@ -335,21 +331,15 @@ namespace OurCoolGame
                                 select == 0 ? _mainPlayer : _enemy[select - 1]);
                         }
 
-                        Thread.Sleep(2000);
-                        Console.WriteLine("Your HP: {0}/{1}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
-                        _mainPlayer.MaxHealthPoints);
-                        for (int i = 0; i < _enemy.Count; i++)
-                        {
-                            Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
-                                _enemy[i].MaxHealthPoints);
-                        }
+                        Console.WriteLine("OMG ! Let's check, what happened");
+                        ShowFightInfo();
                     }
 
                     break;
                 }
 
                 Console.WriteLine(
-                    "Something went wrong, try again and follow the right command's format. -20HP"); //JOKE
+                    "Something went wrong, try again and follow the right command's format. -20HP");
             }
         }
 
@@ -444,10 +434,6 @@ namespace OurCoolGame
             _mainPlayer.CurMana = _mainPlayer.MaxMana;
         }
 
-        private void GenerateNamesForEasyLevel()
-        {
-        }
-
         private void LevelStartingMessages(string message, ConsoleColor color)
         {
             MoveCounter = 0;
@@ -464,13 +450,7 @@ namespace OurCoolGame
         {
             Console.WriteLine("New level starts so you can learn spell: ");
             Thread.Sleep(1000);
-            List<Spell> unlearnedSpells = new List<Spell>();
-            unlearnedSpells.Add(new SpellAntidote());
-            unlearnedSpells.Add(new SpellArmor());
-            unlearnedSpells.Add(new SpellCure());
-            unlearnedSpells.Add(new SpellFireball());
-            unlearnedSpells.Add(new SpellRevival());
-            unlearnedSpells.Add(new SpellUnparalyze());
+            List<Spell> unlearnedSpells = new List<Spell>(_enemyGenerator._allSpells); //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             for (int i = 0; i < _mainPlayer._learnedSpells.Capacity; i++)
                 unlearnedSpells.Remove(unlearnedSpells.Find(match => match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
             for (int i = 0; i < unlearnedSpells.Capacity; i++)
@@ -514,12 +494,12 @@ namespace OurCoolGame
             {
                 case 1:
                 {
-                    _mainPlayer.PickUpArtefact(new LivingWater(RandomizeBottleSize()));
+                    _mainPlayer.PickUpArtefact(new LivingWater(_enemyGenerator.RandomizeBottleSize())); /////////////////////////////////////////////////////////////////////////////////////////////////////////
                     break;
                 }
                 case 2:
                 {
-                    _mainPlayer.PickUpArtefact(new DeadWater(RandomizeBottleSize()));
+                    _mainPlayer.PickUpArtefact(new DeadWater(_enemyGenerator.RandomizeBottleSize()));
                     break;
                 }
                 case 3:
@@ -577,34 +557,7 @@ namespace OurCoolGame
             ++_difficultyLevel;
         }
 
-        //this is an additional method to create living/dead water bottles during artefact generation or after killing bots
-        private BottleSize RandomizeBottleSize()
-        {
-            var size = _random.Next(3);
-            return size switch
-            {
-                0 => BottleSize.Small,
-                1 => BottleSize.Medium,
-                2 => BottleSize.Big,
-                _ => BottleSize.Big
-            };
-        }
-
         //this method will be used to generate artefacts for bots and at the level start
-        private Artefact RandomizeArtefact()
-        {
-            var artefactNumber = _random.Next(1, 5);
-            return artefactNumber switch
-            {
-                1 => new FrogLegsDecoct(),
-                2 => new BasiliskEye(),
-                3 => new DeadWater(RandomizeBottleSize()),
-                4 => new LivingWater(RandomizeBottleSize()),
-                5 => new PoisonousSaliva(),
-                _ => new LivingWater(RandomizeBottleSize())
-            };
-        }
-
         public bool FinalLevelComplete()
         {
             return _difficultyLevel == 6;
@@ -763,6 +716,17 @@ namespace OurCoolGame
             }
 
             return false;
+        }
+
+        private void ShowFightInfo()
+        {
+            Console.WriteLine("Your HP: {0}/{1}\nYour MP: {2}/{3}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
+                               _mainPlayer.MaxHealthPoints, _mainPlayer.CurMana, _mainPlayer.MaxMana);
+            for (int i = 0; i < _enemy.Count; i++)
+            {
+                Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
+                    _enemy[i].MaxHealthPoints);
+            }
         }
     }
 }
