@@ -555,33 +555,48 @@ namespace OurCoolGame
         //this method will generate easy fight situation 1v2 or 1v1
         private void RunEasyLevel()
         {
-            LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
+            LevelStartingMessages("-- EASY LEVEL --", ConsoleColor.Cyan);
             _enemy.Add(_enemyGenerator.Generate(1));
             Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name,
                 _enemy[0].CharacterRace, _enemy[0].Age);
             _enemy[0].MaxHealthPoints = 1000;
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
         }
-
-        //this method will generate easy fight situation 2v2 or 2v3
+        
         private void RunMediumLevel()
         {
             LevelStartingMessages("-- MEDIUM LEVEL --", ConsoleColor.DarkCyan);
-
-            ++_difficultyLevel;
+            _enemy.Add(_enemyGenerator.Generate(2));
+            Console.WriteLine("Your enemies are:");
+            foreach (var t in _enemy)
+            {
+                Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
+                    t.CharacterRace, t.Age);
+                Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
+            }
         }
 
-        //this method will generate easy fight situation 2v3 or 2v4 ??????
+        
         private void RunHardLevel()
         {
             LevelStartingMessages("-- HARD LEVEL --", ConsoleColor.DarkBlue);
-            ++_difficultyLevel;
+            _enemy.Add(_enemyGenerator.Generate(3));
+            _enemy.Add(_enemyGenerator.Generate(3));
+            Console.WriteLine("Your enemies are:");
+            foreach (var t in _enemy)
+            {
+                Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
+                    t.CharacterRace, t.Age);
+                _enemy[0].MaxHealthPoints = 1000;
+                Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
+            }
         }
 
         //final plot will be lineal as the training level i bet
         private void RunFinalPlot()
         {
             LevelStartingMessages("-- FINAL --", ConsoleColor.Red);
+            Console.WriteLine("Final level will suddenly appear if our team will get 10 as a game project mark :)");
             ++_difficultyLevel;
         }
 

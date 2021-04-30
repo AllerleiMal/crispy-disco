@@ -36,6 +36,8 @@ namespace OurCoolGame
                 if (deadEnemies == gameLogic._enemy.Count)
                 {
                     ++gameLogic._difficultyLevel;
+                    GameLogic.MoveCounter = 0;
+                    gameLogic._enemy.Clear();
                 }
                 gameLogic.InputProcessing();
 
