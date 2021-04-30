@@ -7,7 +7,7 @@ namespace OurCoolGame.Spells
     {
         public override int ManaCost { get; protected set; } = 150;
         public override bool Gesturing { get; protected set; } = true;
-        public override bool Pronouncing { get; protected set; } = false;
+        public override bool Pronouncing { get; protected set; } = true;
 
         public override string ToString()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
@@ -24,17 +25,15 @@ namespace OurCoolGame
             _difficultyLevel = 0;
             _mainPlayer = null;
             _enemy = new List<Wizard>();
-            _teammates = new List<Wizard>();
             _enemyGenerator = new EnemyGenerator();
         }
 
         private List<Wizard> _enemy;
-        private List<Wizard> _teammates;
 
         public void GameStart()
         {
             Console.WriteLine(
-                "Welcome!\nIt is our mini version of console RPG game.\nAll the characters are fictional, and the coincidences are random.\nThe whole story will develop in a magical medieval fantasy world(do not be surprised by talking goblins and orcs).\nYour task is to pass all the tests and overcome the difficulties on the way to such a cherished goal - to learn magic from the great Merlin.\nP.S. follow the instructions that will be given later, otherwise you risk hearing a lot of bad words in your direction. You can enter \"!help\" to get info with all valid commands.\n(Press any key to continue)\n");
+                "Welcome!\nIt is our mini version of console RPG game.\nAll the characters are fictional, and the coincidences are random.\nThe whole story will develop in a magical medieval fantasy world(do not be surprised by talking goblins and orcs).\nYour task is to pass all the tests and overcome the difficulties on the way to such a cherished goal - to learn magic from the great Merlin.\nP.S. follow the instructions that will be given later, otherwise you risk hearing a lot of bad words in your direction. You can enter \"!help\" to get info with all valid commands.\n(Press enter to continue)\n");
             Console.ReadLine();
         }
 
@@ -42,12 +41,17 @@ namespace OurCoolGame
         {
             Console.WriteLine("Now is the time to create the character and choose the subclass");
             string name;
+            Regex reg = new Regex(@"^\s*$");
             while (true)
             {
                 Console.WriteLine("Enter the name of your character(name couldn't be empty):");
                 name = Console.ReadLine();
-                if (name != "")
+                if (!reg.IsMatch(name))
                 {
+                    while (name[0] == ' ')
+                        name.Remove(0);
+                    while (name[^1] == ' ')
+                        name.Remove(name.Length - 1);
                     break;
                 }
 
@@ -170,7 +174,14 @@ namespace OurCoolGame
                 if (temp == "!help" && (playerMustChoose == 0 || playerMustChoose == 1))
                 {
                     Console.WriteLine(
-                        "!help - get info about commands\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts\n!show_spells - to see list of learned spells");
+                        "!help - get info about commands\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts\n!show_spells - to see list of learned spells\n!rules - to see rules of the game");
+                    Thread.Sleep(2000);
+                    break;
+                }
+                
+                if (temp == "!rules" && playerMustChoose == 0)
+                {
+                    ShowRules();
                     Thread.Sleep(2000);
                     break;
                 }
@@ -232,9 +243,8 @@ namespace OurCoolGame
                     return select;
                 }
 
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.BackgroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                _mainPlayer.CurrentHealthPoints -= 50;
                 Console.ResetColor();
             }
         }
@@ -261,9 +271,8 @@ namespace OurCoolGame
                             break;
                         }
 
-                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.BackgroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                        _mainPlayer.CurrentHealthPoints -= 50;
                         Console.ResetColor();
                     }
 
@@ -301,9 +310,8 @@ namespace OurCoolGame
                                 break;
                             }
 
-                            Console.BackgroundColor = ConsoleColor.Red;
+                            Console.BackgroundColor = ConsoleColor.Gray;
                             Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                            _mainPlayer.CurrentHealthPoints -= 50;
                             Console.ResetColor();
                         }
 
@@ -322,9 +330,8 @@ namespace OurCoolGame
                                     break;
                                 }
 
-                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.BackgroundColor = ConsoleColor.Gray;
                                 Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                                _mainPlayer.CurrentHealthPoints -= 50;
                                 Console.ResetColor();
                             }
 
@@ -463,7 +470,6 @@ namespace OurCoolGame
             Console.WriteLine("");
             Thread.Sleep(2000);
             _enemy.Clear();
-            _teammates.Clear();
             ++_difficultyLevel;
             _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
             _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
@@ -497,9 +503,8 @@ namespace OurCoolGame
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 ||
                     switchIntInput > unlearnedSpells.Capacity)
                 {
-                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.BackgroundColor = ConsoleColor.Gray;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                    _mainPlayer.CurrentHealthPoints -= 50;
                     Console.ResetColor();
                     continue;
                 }
@@ -521,9 +526,8 @@ namespace OurCoolGame
             {
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput is < 1 or > 5)
                 {
-                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.BackgroundColor = ConsoleColor.Gray;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                    _mainPlayer.CurrentHealthPoints -= 50;
                     continue;
                 }
 
@@ -574,7 +578,6 @@ namespace OurCoolGame
 
 
             _enemy.Clear();
-            _teammates.Clear();
             ++_difficultyLevel;
         }
 
@@ -596,7 +599,7 @@ namespace OurCoolGame
         //final plot will be lineal as the training level i bet
         private void RunFinalPlot()
         {
-            LevelStartingMessages("-- FINAL --", ConsoleColor.Red);
+            LevelStartingMessages("-- FINAL --", ConsoleColor.Gray);
             ++_difficultyLevel;
         }
 
@@ -612,11 +615,6 @@ namespace OurCoolGame
             foreach (var enemy in _enemy)
             {
                 enemy.MoveCounter -= 1;
-            }
-
-            foreach (var teammate in _teammates)
-            {
-                teammate.MoveCounter -= 1;
             }
 
             _mainPlayer.MoveCounter -= 1;

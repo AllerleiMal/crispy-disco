@@ -6,8 +6,8 @@ namespace OurCoolGame.Spells
     class SpellCure : Spell
     {
         public override int ManaCost { get; protected set; } = 20;
-        public override bool Gesturing { get; protected set; } = true;
-        public override bool Pronouncing { get; protected set; } = true;
+        public override bool Gesturing { get; protected set; } = false;
+        public override bool Pronouncing { get; protected set; } = false;
 
         public override string ToString()
         {
