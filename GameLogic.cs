@@ -47,6 +47,10 @@ namespace OurCoolGame
                 Regex reg = new Regex(@"^\s*$");
                 if (!reg.IsMatch(name))
                 {
+                    while(name[0] == ' ')
+                        name = name.Remove(0, 1);
+                    while(name[^1] == ' ')
+                        name = name.Remove(name.Length - 1, 1);
                     break;
                 }
 
@@ -178,11 +182,13 @@ namespace OurCoolGame
                 if (temp == "!use" && (playerMustChoose == 0 || playerMustChoose == 2))
                 {
                     UseMenu();
+                    _mainPlayer.MoveCounter -= 1;
                     if (playerMustChoose == 0)
                     {
                         foreach (var enemy in _enemy)
                         {
                             EnemyMove(enemy);
+                            enemy.MoveCounter -= 1;
                         }
 
                         UpdateMoveCounters();
@@ -491,7 +497,6 @@ namespace OurCoolGame
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                    _mainPlayer.CurrentHealthPoints -= 50;
                     Console.ResetColor();
                     continue;
                 }
@@ -515,7 +520,6 @@ namespace OurCoolGame
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                    _mainPlayer.CurrentHealthPoints -= 50;
                     continue;
                 }
 
@@ -560,18 +564,22 @@ namespace OurCoolGame
             Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name,
                 _enemy[0].CharacterRace, _enemy[0].Age);
             _enemy[0].MaxHealthPoints = 1000;
+            _enemy[0].ShowInventory();
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
         }
         
         private void RunMediumLevel()
         {
             LevelStartingMessages("-- MEDIUM LEVEL --", ConsoleColor.DarkCyan);
+            _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
+            _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
             _enemy.Add(_enemyGenerator.Generate(2));
             Console.WriteLine("Your enemies are:");
             foreach (var t in _enemy)
             {
                 Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
                     t.CharacterRace, t.Age);
+                t.ShowInventory();
                 Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
             }
         }
@@ -580,6 +588,8 @@ namespace OurCoolGame
         private void RunHardLevel()
         {
             LevelStartingMessages("-- HARD LEVEL --", ConsoleColor.DarkBlue);
+            _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
+            _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
             _enemy.Add(_enemyGenerator.Generate(3));
             _enemy.Add(_enemyGenerator.Generate(3));
             Console.WriteLine("Your enemies are:");
@@ -587,7 +597,8 @@ namespace OurCoolGame
             {
                 Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
                     t.CharacterRace, t.Age);
-                _enemy[0].MaxHealthPoints = 1000;
+                t.MaxHealthPoints = 1000;
+                t.ShowInventory();
                 Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
             }
         }
@@ -786,12 +797,12 @@ namespace OurCoolGame
 
         private void ShowFightInfo()
         {
-            Console.WriteLine("Your HP: {0}/{1}\nYour MP: {2}/{3}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
-                               _mainPlayer.MaxHealthPoints, _mainPlayer.CurrentMana, _mainPlayer.MaxMana);
+            Console.WriteLine("Your HP: {0}/{1}\nYour MP: {2}/{3}\nYour state: {4}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,
+                _mainPlayer.MaxHealthPoints, _mainPlayer.CurrentMana, _mainPlayer.MaxMana, _mainPlayer.CharacterState);
             for (int i = 0; i < _enemy.Count; i++)
             {
-                Console.WriteLine("{0}: {1}/{2}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
-                    _enemy[i].MaxHealthPoints);
+                Console.WriteLine("{0} HP: {1}/{2} state:{3}", _enemy[i].Name, _enemy[i].CurrentHealthPoints,
+                    _enemy[i].MaxHealthPoints, _enemy[i].CharacterState);
             }
         }
     }

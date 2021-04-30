@@ -104,7 +104,7 @@ namespace OurCoolGame
         {
             Race race = new Race();
             Gender gender = new Gender();
-            switch (_random.Next(0, 4))
+            switch (_random.Next(1, 5))
             {
                 case 1: race = Race.Elf; break;
                 case 2: race = Race.Gnome; break;
@@ -112,14 +112,14 @@ namespace OurCoolGame
                 case 4: race = Race.Human; break;
                 case 5: race = Race.Orc; break;
             }
-            switch (_random.Next(0,2))
+            switch (_random.Next(1,3))
             {
                 case 1: gender = Gender.Female; break;
                 case 2: gender = Gender.Male; break;
                 case 3: gender = Gender.Undefined; break;
             }
             Wizard enemy = new Wizard(_names[_random.Next(_names.Length)], race, gender, _random.Next(200));
-            switch (_random.Next(0, 2))
+            switch (_random.Next(1, 3))
             {
                 case 1: enemy._inventory.Add(new ShadowDagger()); break;
                 case 2: enemy._inventory.Add(new LightningStaff()); break;

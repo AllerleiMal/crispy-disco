@@ -78,10 +78,10 @@ namespace OurCoolGame
 
         private bool SpellLearnedCheck(Spell spell)
         {
-            var learned = _learnedSpells.FindIndex(target => spell == target) != -1;
+            var learned = _learnedSpells.FindIndex(target => spell.ToString() == target.ToString()) != -1;
             if (!learned)
             {
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("The character doesn't know this spell");
                 Console.ResetColor();
             }
@@ -104,13 +104,13 @@ namespace OurCoolGame
 
         public void LearnSpell(Spell spell)
         {
-            if (_learnedSpells.FindIndex(target => spell == target) == -1)
+            if (_learnedSpells.FindIndex(target => spell.ToString() == target.ToString()) == -1)
             {
                 _learnedSpells.Add(spell);
             }
             else
             {
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("The character already knows this spell");
                 Console.ResetColor();
             }

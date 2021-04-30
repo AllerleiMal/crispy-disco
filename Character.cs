@@ -25,7 +25,7 @@ namespace OurCoolGame
                         return;
                     }
                 }
-
+                
                 switch (value)
                 {
                     case State.Dead or State.Healthy or State.Weakened:
@@ -50,9 +50,9 @@ namespace OurCoolGame
                         break;
                     }
                 }
-
-                MoveCounter = 3;
+                
                 _characterState = value;
+                MoveCounter = 3;
             }
         }
 
@@ -68,7 +68,7 @@ namespace OurCoolGame
             get => _currentHealthPoints;
             set
             {
-                if (CharacterState == State.Invulnerable && _currentHealthPoints < value)
+                if (CharacterState == State.Invulnerable && _currentHealthPoints > value)
                 {
                     return;
                 }

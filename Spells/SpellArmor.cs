@@ -14,9 +14,9 @@ namespace OurCoolGame.Spells
             return "Armor";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public override void MagicEffect(Wizard origin, Wizard target)
         {
-            if (origin.CurrentMana < ManaCost * magicPower)
+            if (origin.CurrentMana < ManaCost)
             {
                 Console.WriteLine("Not enough mana to cast armor spell");
                 return;

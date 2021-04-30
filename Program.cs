@@ -23,7 +23,9 @@ namespace OurCoolGame
                 {
                     break;
                 }
-
+                
+                gameLogic.InputProcessing();
+                
                 int deadEnemies = 0;
                 foreach (var enemy in gameLogic._enemy)
                 {
@@ -32,15 +34,13 @@ namespace OurCoolGame
                         ++deadEnemies;
                     }
                 }
-
+                
                 if (deadEnemies == gameLogic._enemy.Count)
                 {
                     ++gameLogic._difficultyLevel;
                     GameLogic.MoveCounter = 0;
                     gameLogic._enemy.Clear();
                 }
-                gameLogic.InputProcessing();
-
             }
 
             Console.WriteLine("Congratulations! You really did it! Thanks for playing. Hope you like it. Bis bald :)");
