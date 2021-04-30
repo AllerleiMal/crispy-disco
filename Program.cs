@@ -19,12 +19,13 @@ namespace OurCoolGame
                     gameLogic.GenerateLevel();
                 }
                 
-                gameLogic.InputProcessing();
-                
                 if (gameLogic.FinalLevelComplete())
                 {
                     break;
                 }
+                
+                gameLogic.InputProcessing();
+                
             }
 
             Console.WriteLine("Congratulations! You really did it! Thanks for playing. Hope you like it. Bis bald :)");
