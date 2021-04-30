@@ -5,7 +5,7 @@ using System.Threading;
 using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
 using OurCoolGame.Spells;
-
+using System.Text.RegularExpressions;
 
 namespace OurCoolGame
 {
@@ -15,7 +15,7 @@ namespace OurCoolGame
         private Wizard _mainPlayer;
         EnemyGenerator _enemyGenerator;
 
-        private int _difficultyLevel;
+        public int _difficultyLevel;
         private readonly Random _random;
         
         public GameLogic()
@@ -24,13 +24,11 @@ namespace OurCoolGame
             _difficultyLevel = 0;
             _mainPlayer = null;
             _enemy = new List<Wizard>();
-            _teammates = new List<Wizard>();
             _enemyGenerator = new EnemyGenerator();
         }
 
-        private List<Wizard> _enemy;
-        private List<Wizard> _teammates;
-
+        public List<Wizard> _enemy;
+        
         public void GameStart()
         {
             Console.WriteLine(
@@ -38,7 +36,7 @@ namespace OurCoolGame
             Console.ReadLine();
         }
 
-        public void CreateCharacter(Wizard wizard)
+        public Wizard CreateCharacter(Wizard wizard)
         {
             Console.WriteLine("Now is the time to create the character and choose the subclass");
             string name;
@@ -46,7 +44,8 @@ namespace OurCoolGame
             {
                 Console.WriteLine("Enter the name of your character(name couldn't be empty):");
                 name = Console.ReadLine();
-                if (name != "")
+                Regex reg = new Regex(@"^\s*$");
+                if (!reg.IsMatch(name))
                 {
                     break;
                 }
@@ -158,6 +157,7 @@ namespace OurCoolGame
             Thread.Sleep(2000);
             wizard = new Wizard(name, race, gender, age);
             _mainPlayer = wizard;
+            return _mainPlayer;
         }
 
         //that is a method that would be called with !help, it shows information about basic game commands
@@ -186,6 +186,8 @@ namespace OurCoolGame
                         }
 
                         UpdateMoveCounters();
+                        Console.WriteLine("OMG let's check what happned");
+                        ShowFightInfo();
                     }
 
                     ++MoveCounter;
@@ -272,10 +274,6 @@ namespace OurCoolGame
                     _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1],
                         select == 0 ? _mainPlayer : _enemy[select - 1]);
                     Thread.Sleep(2000);
-                    //todo
-                    //todo
-                    Console.WriteLine("OMG! Let's check, what happened");
-                    ShowFightInfo();
                     break;
                 }
 
@@ -309,7 +307,8 @@ namespace OurCoolGame
 
                         int select = SelectTarget();
                         if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellArmor().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString())
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString() || 
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellFireball().ToString())
                         {
                             Console.WriteLine("Enter magic power");
                             int magic;
@@ -330,23 +329,16 @@ namespace OurCoolGame
 
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1], magic);
-
-                            //todo
-                            //todo
-                            Console.WriteLine("OMG ! Let's check, what happened");
-                            ShowFightInfo();
                             break;
                         }
 
                         if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellArmor().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString())
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellFireball().ToString())
                         {
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1]);
                         }
-
-                        Console.WriteLine("OMG ! Let's check, what happened");
-                        ShowFightInfo();
                     }
 
                     break;
@@ -463,8 +455,8 @@ namespace OurCoolGame
             Console.WriteLine("");
             Thread.Sleep(2000);
             _enemy.Clear();
-            _teammates.Clear();
             ++_difficultyLevel;
+            MoveCounter = 0;
             _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
             _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
         }
@@ -486,16 +478,16 @@ namespace OurCoolGame
             Console.WriteLine("New level starts so you can learn spell: ");
             Thread.Sleep(1000);
             List<Spell> unlearnedSpells = new List<Spell>(_enemyGenerator._allSpells);
-            for (int i = 0; i < _mainPlayer._learnedSpells.Capacity; i++)
+            for (int i = 0; i < _mainPlayer._learnedSpells.Count; i++)
                 unlearnedSpells.Remove(unlearnedSpells.Find(match =>
                     match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
-            for (int i = 0; i < unlearnedSpells.Capacity; i++)
+            for (int i = 0; i < unlearnedSpells.Count; i++)
                 Console.WriteLine($"({i + 1}) {unlearnedSpells[i]}");
             int switchIntInput;
             while (true)
             {
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 ||
-                    switchIntInput > unlearnedSpells.Capacity)
+                    switchIntInput > unlearnedSpells.Count)
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
@@ -534,7 +526,7 @@ namespace OurCoolGame
             {
                 case 1:
                 {
-                    _mainPlayer.PickUpArtefact(new LivingWater(_enemyGenerator.RandomizeBottleSize())); /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    _mainPlayer.PickUpArtefact(new LivingWater(_enemyGenerator.RandomizeBottleSize()));
                     break;
                 }
                 case 2:
@@ -564,18 +556,11 @@ namespace OurCoolGame
         private void RunEasyLevel()
         {
             LevelStartingMessages("-- EASY LEVEL __", ConsoleColor.Cyan);
-            _enemy.Add(new Wizard("Tramp", Race.Human, Gender.Male, 74));
+            _enemy.Add(_enemyGenerator.Generate(1));
             Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name,
                 _enemy[0].CharacterRace, _enemy[0].Age);
             _enemy[0].MaxHealthPoints = 1000;
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
-            _enemy[0].GiveArtefact(_enemy[0], new ShadowDagger());
-            Console.WriteLine("Oh, and he has Shadow Dagger... Good luck :)");
-
-
-            _enemy.Clear();
-            _teammates.Clear();
-            ++_difficultyLevel;
         }
 
         //this method will generate easy fight situation 2v2 or 2v3
@@ -607,22 +592,17 @@ namespace OurCoolGame
         }
 
         //use it after all made a move
-        private void UpdateMoveCounters()
+        public void UpdateMoveCounters()
         {
             foreach (var enemy in _enemy)
             {
                 enemy.MoveCounter -= 1;
             }
 
-            foreach (var teammate in _teammates)
-            {
-                teammate.MoveCounter -= 1;
-            }
-
             _mainPlayer.MoveCounter -= 1;
         }
 
-        void EnemyMove(Wizard enemy)
+        public void EnemyMove(Wizard enemy)
         {
             if (enemy.CharacterState == State.Dead)
             {
