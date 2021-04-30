@@ -61,6 +61,7 @@ namespace OurCoolGame
         };
         public EnemyGenerator()
         {
+            _random = new Random();
             _allSpells = new List<Spell>();
             _allSpells.Add(new SpellAntidote());
             _allSpells.Add(new SpellArmor());
@@ -99,7 +100,7 @@ namespace OurCoolGame
                 _ => BottleSize.Big
             };
         }
-        Wizard Generate(int difficulty)
+        public Wizard Generate(int difficulty)
         {
             Race race = new Race();
             Gender gender = new Gender();

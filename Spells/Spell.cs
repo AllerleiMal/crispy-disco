@@ -18,8 +18,7 @@ namespace OurCoolGame.Spells
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
         }
 
-        public virtual void
-            MagicEffect(Wizard origin,
+        public virtual void MagicEffect(Wizard origin,
                 int magicPower) // i guess this and the next one we should delete + in Wizard.CastSpell
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
