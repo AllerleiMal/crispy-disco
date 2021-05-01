@@ -129,16 +129,19 @@ namespace OurCoolGame
             {
                 case 1: //Easy level: 1 artefact
                     enemy._inventory.Add(RandomizeArtefact()); 
+                    enemy._inventory.Add(new LivingWater(BottleSize.Medium));
                     break;
                 case 2: //Normal level: 2 artefacts, 1 spell
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._learnedSpells.Add(RandomizeSpell());
+                    enemy._inventory.Add(new LivingWater(BottleSize.Big));
                     break;
                 case 3: //Hard level: 3 artefacts, 1 random spell and 1 armor spell
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._inventory.Add(RandomizeArtefact());
+                    enemy._inventory.Add(new LivingWater(BottleSize.Medium));
                     enemy._learnedSpells.Add(RandomizeSpell());
                     Spell spell = new SpellArmor();
                     while(enemy._learnedSpells.FindIndex(match => match.ToString() == spell.ToString()) != -1)

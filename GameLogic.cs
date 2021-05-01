@@ -204,7 +204,7 @@ namespace OurCoolGame
                         }
 
                         UpdateMoveCounters();
-                        Console.WriteLine("OMG let's check what happned");
+                        Console.WriteLine("OMG let's check what happened");
                         ShowFightInfo();
                     }
 
@@ -251,14 +251,9 @@ namespace OurCoolGame
             Console.WriteLine("Now select your target:\n(0)YOU");
             for (int i = 1; i <= _enemy.Count; i++)
             {
-                if (_enemy[i - 1].CharacterState == State.Dead)
-                {
-                    Console.WriteLine($"({i}) {_enemy[i - 1].Name} (ENEMY) (DEAD)");
-                }
-                else
-                {
-                    Console.WriteLine($"({i}) {_enemy[i - 1].Name} (ENEMY)");
-                }
+                Console.WriteLine(_enemy[i - 1].CharacterState == State.Dead
+                    ? $"({i}) {_enemy[i - 1].Name} (ENEMY) (DEAD)"
+                    : $"({i}) {_enemy[i - 1].Name} (ENEMY)");
             }
 
             int select;
@@ -315,7 +310,7 @@ namespace OurCoolGame
                 }
 
                 //spell cast section
-                if (temp == "SPELL" || temp == "S")
+                if (temp is "SPELL" or "S")
                 {
                     //check for empty list of learned spells
                     bool isEmpty = !_mainPlayer._learnedSpells.Any();
@@ -775,7 +770,7 @@ namespace OurCoolGame
             
             Artefact outFromFunc;
             //use living water when it is in inventory and inDangerTarget needs hp regeneration
-            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 &&
+            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 2 &&
                 enemy.HasWaterBottle(true, out outFromFunc))
             {
                 enemy.UseArtefact(outFromFunc, inDangerTarget);
