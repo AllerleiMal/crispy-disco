@@ -167,6 +167,7 @@ namespace OurCoolGame
         //that is a method that would be called with !help, it shows information about basic game commands
         public void InputProcessing(int playerMustChoose = 0)
         {
+            Console.WriteLine("Enter the command");
             string temp;
             while (true)
             {
@@ -240,9 +241,8 @@ namespace OurCoolGame
                     return select;
                 }
 
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                _mainPlayer.CurrentHealthPoints -= 50;
                 Console.ResetColor();
             }
         }
@@ -269,9 +269,8 @@ namespace OurCoolGame
                             break;
                         }
 
-                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                        _mainPlayer.CurrentHealthPoints -= 50;
                         Console.ResetColor();
                     }
 
@@ -305,13 +304,13 @@ namespace OurCoolGame
                                 break;
                             }
 
-                            Console.BackgroundColor = ConsoleColor.Red;
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                            _mainPlayer.CurrentHealthPoints -= 50;
                             Console.ResetColor();
                         }
 
                         int select = SelectTarget();
+                        
                         if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellArmor().ToString() ||
                             _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString() || 
                             _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellFireball().ToString())
@@ -327,9 +326,8 @@ namespace OurCoolGame
                                     break;
                                 }
 
-                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Gods hate ridicule, you played with fire and lose");
-                                _mainPlayer.CurrentHealthPoints -= 50;
                                 Console.ResetColor();
                             }
 
@@ -338,8 +336,8 @@ namespace OurCoolGame
                             break;
                         }
 
-                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellArmor().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString() ||
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellArmor().ToString() ||
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString() || 
                             _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellFireball().ToString())
                         {
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
@@ -364,6 +362,9 @@ namespace OurCoolGame
 
         public void GenerateLevel()
         {
+            //todo
+            //todo
+            MoveCounter = 0;
             switch (_difficultyLevel)
             {
                 case 0:
@@ -495,7 +496,7 @@ namespace OurCoolGame
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 ||
                     switchIntInput > unlearnedSpells.Count)
                 {
-                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
                     Console.ResetColor();
                     continue;
@@ -518,7 +519,7 @@ namespace OurCoolGame
             {
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput is < 1 or > 5)
                 {
-                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Gods hate ridicule, you played with fire and lose");
                     continue;
                 }
@@ -555,15 +556,14 @@ namespace OurCoolGame
                 }
             }
         }
-
-        //this method will generate easy fight situation 1v2 or 1v1
+       
         private void RunEasyLevel()
         {
             LevelStartingMessages("-- EASY LEVEL --", ConsoleColor.Cyan);
             _enemy.Add(_enemyGenerator.Generate(1));
             Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name,
                 _enemy[0].CharacterRace, _enemy[0].Age);
-            _enemy[0].MaxHealthPoints = 1000;
+            _enemy[0].MaxHealthPoints = 500;
             _enemy[0].ShowInventory();
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
         }
@@ -579,6 +579,9 @@ namespace OurCoolGame
             {
                 Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
                     t.CharacterRace, t.Age);
+                _enemy[0].MaxHealthPoints = 1000;
+                //todo
+                //todo
                 t.ShowInventory();
                 Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
             }
@@ -597,7 +600,7 @@ namespace OurCoolGame
             {
                 Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
                     t.CharacterRace, t.Age);
-                t.MaxHealthPoints = 1000;
+                t.MaxHealthPoints = 750;
                 t.ShowInventory();
                 Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
             }

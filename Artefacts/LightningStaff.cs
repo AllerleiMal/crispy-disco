@@ -23,7 +23,6 @@ namespace OurCoolGame.Artefacts
 
             target.CurrentHealthPoints -= ArtefactPower;
             ArtefactPower = _random.Next(150, 200);
-            target.CharacterState = State.Sick;
         }
 
         public override string ToString()

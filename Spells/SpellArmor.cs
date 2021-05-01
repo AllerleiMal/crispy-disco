@@ -5,7 +5,7 @@ namespace OurCoolGame.Spells
 {
     class SpellArmor : Spell
     {
-        public override int ManaCost { get; protected set; } = 150;
+        public override int ManaCost { get; protected set; } = 50;
         public override bool Gesturing { get; protected set; } = true;
         public override bool Pronouncing { get; protected set; } = true;
 
@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Armor";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target)
+        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
         {
             if (origin.CurrentMana < ManaCost)
             {
