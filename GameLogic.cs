@@ -11,13 +11,21 @@ namespace OurCoolGame
 {
     public class GameLogic
     {
+        //common move counter is used to generate new level, when previous was ended
         public static int MoveCounter { get; set; } = 0;
+        //main player is a user, that plays game
         private Wizard _mainPlayer;
+        //enemy generator is a separate class that is used to create enemies in each level
         EnemyGenerator _enemyGenerator;
-
-        public int _difficultyLevel;
-        private readonly Random _random;
         
+        //difficulty level depends on the quantity of levels that you have finished, also help to choose which level should be generated
+        public int _difficultyLevel;
+        //single field to reduce the possibility of same generation
+        private readonly Random _random;
+        //list of enemies that is active now
+        public List<Wizard> _enemy;
+        
+        //constructor that initialize all fields
         public GameLogic()
         {
             _random = new Random();
@@ -27,8 +35,8 @@ namespace OurCoolGame
             _enemyGenerator = new EnemyGenerator();
         }
 
-        public List<Wizard> _enemy;
         
+        //output starting message
         public void GameStart()
         {
             Console.WriteLine(
@@ -36,6 +44,7 @@ namespace OurCoolGame
             Console.ReadLine();
         }
 
+        //works as a constructor, it creates character and returns it
         public Wizard CreateCharacter(Wizard wizard)
         {
             Console.WriteLine("Now is the time to create the character and choose the subclass");
@@ -44,6 +53,7 @@ namespace OurCoolGame
             {
                 Console.WriteLine("Enter the name of your character(name couldn't be empty):");
                 name = Console.ReadLine();
+                //regexp to process and check the input data
                 Regex reg = new Regex(@"^\s*$");
                 if (!reg.IsMatch(name))
                 {
@@ -54,7 +64,7 @@ namespace OurCoolGame
                     break;
                 }
 
-                Console.WriteLine("As I already said name couldn't be empty");
+                Console.WriteLine("Wrong format");
             }
 
             int age;
@@ -164,7 +174,7 @@ namespace OurCoolGame
             return _mainPlayer;
         }
 
-        //that is a method that would be called with !help, it shows information about basic game commands
+        //that is a method that would be called instantly to process user input and call appropriate methods
         public void InputProcessing(int playerMustChoose = 0)
         {
             Console.WriteLine("Enter the command");
@@ -172,7 +182,8 @@ namespace OurCoolGame
             while (true)
             {
                 temp = Console.ReadLine();
-                if (temp == "!help" && (playerMustChoose == 0 || playerMustChoose == 1))
+                //!help calls basic command info
+                if (temp == "!help" && (playerMustChoose is 0 or 1))
                 {
                     Console.WriteLine(
                         "!help - get info about commands\n!use - get info about usage of spells and artefacts\n!inventory - to see your artefacts\n!show_spells - to see list of learned spells");
@@ -180,16 +191,16 @@ namespace OurCoolGame
                     break;
                 }
 
-                if (temp == "!use" && (playerMustChoose == 0 || playerMustChoose == 2))
+                //!use helps to use artefacts from inventory and spells from list of learned spells
+                if (temp == "!use" && (playerMustChoose is 0 or 2))
                 {
                     UseMenu();
-                    _mainPlayer.MoveCounter -= 1;
+                    //we need it to block enemy move in training
                     if (playerMustChoose == 0)
                     {
                         foreach (var enemy in _enemy)
                         {
                             EnemyMove(enemy);
-                            enemy.MoveCounter -= 1;
                         }
 
                         UpdateMoveCounters();
@@ -200,37 +211,54 @@ namespace OurCoolGame
                     ++MoveCounter;
                     break;
                 }
-
-                if (temp == "!inventory" && (playerMustChoose == 0 || playerMustChoose == 3))
+                
+                if (temp == "!rules" && playerMustChoose == 0 )
+                {
+                    ShowRules();
+                    break;
+                }
+                
+                //shows current inventory
+                if (temp == "!inventory" && (playerMustChoose is 0 or 3))
                 {
                     _mainPlayer.ShowInventory();
                     break;
                 }
-
+                
+                //shows learned spells
                 if (temp == "!learned_spells" && playerMustChoose == 0)
                 {
                     _mainPlayer.ShowLearnedSpells();
                     break;
                 }
-
+                
+                //special message that is used in training only
                 if (playerMustChoose != 0)
                 {
                     Console.WriteLine("woops, there's mistake in command or you are truing to break the tutorial");
                     continue;
                 }
 
-                //add other commands
+                //common message of wrong input
                 Console.WriteLine(
                     "omg... please, check what you're trying to enter. if you forget, i can remind: enter \"!help\"");
             }
         }
 
+        //method to choose on which character artefact or spells are used
         private int SelectTarget()
         {
             Console.WriteLine("Now select your target:\n(0)YOU");
             for (int i = 1; i <= _enemy.Count; i++)
             {
-                Console.WriteLine($"({i}) {_enemy[i - 1].Name} (ENEMY)");
+                if (_enemy[i - 1].CharacterState == State.Dead)
+                {
+                    Console.WriteLine($"({i}) {_enemy[i - 1].Name} (ENEMY) (DEAD)");
+                }
+                else
+                {
+                    Console.WriteLine($"({i}) {_enemy[i - 1].Name} (ENEMY)");
+                }
             }
 
             int select;
@@ -248,14 +276,15 @@ namespace OurCoolGame
         }
 
         //a little menu for usage of spells and artefacts
-        public void UseMenu()
+        private void UseMenu()
         {
             Console.WriteLine("Write what do you want do use: \"spell\" or \"artefact\"");
             string temp;
             while (true)
             {
                 temp = Console.ReadLine()?.ToUpper();
-                if (temp == "A" || temp == "ARTEFACT")
+                //artefact usage section
+                if (temp is "A" or "ARTEFACT")
                 {
                     _mainPlayer.ShowInventory();
                     Thread.Sleep(2000);
@@ -263,6 +292,7 @@ namespace OurCoolGame
                     int pickArtefact;
                     while (true)
                     {
+                        //checks for correct input of picked artefact
                         if (int.TryParse(Console.ReadLine(), out pickArtefact) &&
                             pickArtefact <= _mainPlayer._inventory.Count && pickArtefact > 0)
                         {
@@ -275,15 +305,19 @@ namespace OurCoolGame
                     }
 
                     Thread.Sleep(2000);
+                    //call for target selection
                     int select = SelectTarget();
+                    //use previously picked artefact on selected enemy
                     _mainPlayer.UseArtefact(_mainPlayer._inventory[pickArtefact - 1],
                         select == 0 ? _mainPlayer : _enemy[select - 1]);
                     Thread.Sleep(2000);
                     break;
                 }
 
+                //spell cast section
                 if (temp == "SPELL" || temp == "S")
                 {
+                    //check for empty list of learned spells
                     bool isEmpty = !_mainPlayer._learnedSpells.Any();
                     if (isEmpty)
                     {
@@ -298,6 +332,7 @@ namespace OurCoolGame
                         int pickSpell;
                         while (true)
                         {
+                            //check for correct input
                             if (int.TryParse(Console.ReadLine(), out pickSpell) &&
                                 pickSpell <= _mainPlayer._learnedSpells.Count && pickSpell > 0)
                             {
@@ -309,16 +344,18 @@ namespace OurCoolGame
                             Console.ResetColor();
                         }
 
+                        //select target for spell cast
                         int select = SelectTarget();
                         
-                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellArmor().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString() || 
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString() || 
                             _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellFireball().ToString())
                         {
+                            //cast spells with magic power parameter
                             Console.WriteLine("Enter magic power");
                             int magic;
                             while (true)
                             {
+                                //check for correct input of spell choice
                                 if (int.TryParse(Console.ReadLine(), out magic) && magic > 0 &&
                                     magic * _mainPlayer._learnedSpells[pickSpell - 1].ManaCost <=
                                     _mainPlayer.CurrentMana)
@@ -330,15 +367,14 @@ namespace OurCoolGame
                                 Console.WriteLine("Gods hate ridicule, you played with fire and lose");
                                 Console.ResetColor();
                             }
-
+                            //cast picked spell with magic power parameter on selected enemy
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1], magic);
                             break;
                         }
-
-                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellArmor().ToString() ||
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellHeal().ToString() || 
-                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() == new SpellFireball().ToString())
+                        //cast all the spells that do not need magic power parameter
+                        if (_mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellHeal().ToString() || 
+                            _mainPlayer._learnedSpells[pickSpell - 1].ToString() != new SpellFireball().ToString())
                         {
                             _mainPlayer.CastSpell(_mainPlayer._learnedSpells[pickSpell - 1],
                                 select == 0 ? _mainPlayer : _enemy[select - 1]);
@@ -348,22 +384,23 @@ namespace OurCoolGame
                     break;
                 }
 
+                //common message for wrong input
                 Console.WriteLine(
                     "Something went wrong, try again and follow the right command's format.");
             }
         }
 
 
-        public void ShowRules()
+        //method to output game rules
+        private void ShowRules()
         {
             Console.WriteLine(
                 "So, now there is the most important part - RULES! Jk, have fan and don't write anything gods don't want to see. It is quite dangerous...");
         }
 
+        //creates level depending on difficulty level
         public void GenerateLevel()
         {
-            //todo
-            //todo
             MoveCounter = 0;
             switch (_difficultyLevel)
             {
@@ -398,19 +435,23 @@ namespace OurCoolGame
         //this method is for creating a basic arena with 1 enemy with training messages
         private void RunTraining()
         {
+            //create enemy
             _enemy.Add(new Wizard("dummy", Race.Human, Gender.Undefined, 10));
             Console.WriteLine(
                 "Hello, exile! That is your first fight. Your enemy is {0}. Now we are going to train not to suck in the real fight.\nThere is something interesting in your bag, check it(enter \"!inventory\")",
                 _enemy[0].Name);
             _mainPlayer.PickUpArtefact(new LightningStaff());
+            //ask for !inventory
             InputProcessing(3);
 
             Console.WriteLine(
                 "Good job! Now you can see what is in your bag. Choose one of the artefact and use it on your enemy.\n Ah, ye... You don't know how. Enter \"!help\"");
             Thread.Sleep(2000);
+            //ask for !help
             InputProcessing(1);
             Console.WriteLine(
                 "ok, now let's try !use. attack enemy with you Lightning Staff(start with !use)");
+            //ask for !use
             InputProcessing(2);
             Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
@@ -427,11 +468,14 @@ namespace OurCoolGame
             Thread.Sleep(2000);
             Console.WriteLine(
                 "You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP(start with !use)");
+            //ask fot !use
             InputProcessing(2);
             Console.WriteLine("Now let's check what you can do! Check your spells(start with !use)");
             _mainPlayer.LearnSpell(new SpellHeal());
+            //ask for !use
             InputProcessing(2);
             Console.WriteLine("Training is ended. Now you can begin you journey");
+            //weapon randomizer to change main player's main renewable artefact
             var weapon = _random.Next(0, 2);
             switch (weapon)
             {
@@ -461,6 +505,7 @@ namespace OurCoolGame
             Console.Write(".");
             Console.WriteLine("");
             Thread.Sleep(2000);
+            //clear all training changes, except main player inventory
             _enemy.Clear();
             ++_difficultyLevel;
             MoveCounter = 0;
@@ -468,6 +513,7 @@ namespace OurCoolGame
             _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
         }
 
+        //each level starts with common methods and messages, that is the combination of all these methods 
         private void LevelStartingMessages(string message, ConsoleColor color)
         {
             MoveCounter = 0;
@@ -480,17 +526,26 @@ namespace OurCoolGame
             Thread.Sleep(2000);
         }
 
+        //main player choose which spell he want to learn on the level start
         private void LearnSpellWhenLevelStarts()
         {
             Console.WriteLine("New level starts so you can learn spell: ");
             Thread.Sleep(1000);
             List<Spell> unlearnedSpells = new List<Spell>(_enemyGenerator._allSpells);
-            for (int i = 0; i < _mainPlayer._learnedSpells.Count; i++)
+            //delete already learned spells
+            foreach (var spell in _mainPlayer._learnedSpells)
+            {
                 unlearnedSpells.Remove(unlearnedSpells.Find(match =>
-                    match.ToString() == _mainPlayer._learnedSpells[i].ToString()));
-            for (int i = 0; i < unlearnedSpells.Count; i++)
+                    match.ToString() == spell.ToString()));
+            }
+            //output unlearned spells
+            for (var i = 0; i < unlearnedSpells.Count; i++)
+            {
                 Console.WriteLine($"({i + 1}) {unlearnedSpells[i]}");
+            }
+
             int switchIntInput;
+            //input choice and check if it is correct 
             while (true)
             {
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput < 1 ||
@@ -505,9 +560,11 @@ namespace OurCoolGame
                 break;
             }
 
+            //learn picked spell
             _mainPlayer.LearnSpell(unlearnedSpells[switchIntInput - 1]);
         }
 
+        //same method as it was for spells
        private void ChooseArtefactWhenLevelStarts()
         {
             Console.WriteLine("It's time to choose the artefact: ");
@@ -515,6 +572,7 @@ namespace OurCoolGame
             Console.WriteLine(
                 "(1)Bottle of living water\n(2)Bottle of dead water\n(3)Basilisk eye\n(4)Frog legs decoct\n(5)Poisonous saliva");
             int switchIntInput;
+            //input choice and check if it is correct
             while (true)
             {
                 if (!int.TryParse(Console.ReadLine(), out switchIntInput) || switchIntInput is < 1 or > 5)
@@ -527,6 +585,7 @@ namespace OurCoolGame
                 break;
             }
 
+            //switch to pick artefact that was chosen
             switch (switchIntInput)
             {
                 case 1:
@@ -557,42 +616,43 @@ namespace OurCoolGame
             }
         }
        
+       //generate easy level with 1 enemy and 500hp
         private void RunEasyLevel()
         {
             LevelStartingMessages("-- EASY LEVEL --", ConsoleColor.Cyan);
+            //enemy generation depends on difficulty level, for easy level that is 1
             _enemy.Add(_enemyGenerator.Generate(1));
             Console.WriteLine("Say hi to your first enemy - {0}! He is {1}, his age: {2}, ", _enemy[0].Name,
                 _enemy[0].CharacterRace, _enemy[0].Age);
             _enemy[0].MaxHealthPoints = 500;
-            _enemy[0].ShowInventory();
             Console.WriteLine("By the way, his max health points is {0}", _enemy[0].MaxHealthPoints);
         }
         
+        //generate medium level with 1 enemy and 1000hp
         private void RunMediumLevel()
         {
             LevelStartingMessages("-- MEDIUM LEVEL --", ConsoleColor.DarkCyan);
             _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
             _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
+            //enemy generation depends on difficulty level, for medium level that is 2
             _enemy.Add(_enemyGenerator.Generate(2));
             Console.WriteLine("Your enemies are:");
-            foreach (var t in _enemy)
+            foreach (var enemy in _enemy)
             {
-                Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
-                    t.CharacterRace, t.Age);
+                Console.WriteLine("{0}. He is {1}, his age: {2}, ", enemy.Name,
+                    enemy.CharacterRace, enemy.Age);
                 _enemy[0].MaxHealthPoints = 1000;
-                //todo
-                //todo
-                t.ShowInventory();
-                Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
+                Console.WriteLine("By the way, his max health points is {0}", enemy.MaxHealthPoints);
             }
         }
 
-        
+        //generate hard level with 2 enemies and 750hp
         private void RunHardLevel()
         {
             LevelStartingMessages("-- HARD LEVEL --", ConsoleColor.DarkBlue);
             _mainPlayer.CurrentHealthPoints = _mainPlayer.MaxHealthPoints;
             _mainPlayer.CurrentMana = _mainPlayer.MaxMana;
+            //enemy generation depends on difficulty level, for hard level that is 3
             _enemy.Add(_enemyGenerator.Generate(3));
             _enemy.Add(_enemyGenerator.Generate(3));
             Console.WriteLine("Your enemies are:");
@@ -601,12 +661,10 @@ namespace OurCoolGame
                 Console.WriteLine("{0}. He is {1}, his age: {2}, ", t.Name,
                     t.CharacterRace, t.Age);
                 t.MaxHealthPoints = 750;
-                t.ShowInventory();
                 Console.WriteLine("By the way, his max health points is {0}", t.MaxHealthPoints);
             }
         }
-
-        //final plot will be lineal as the training level i bet
+        
         private void RunFinalPlot()
         {
             LevelStartingMessages("-- FINAL --", ConsoleColor.Red);
@@ -614,14 +672,14 @@ namespace OurCoolGame
             ++_difficultyLevel;
         }
 
-        //this method will be used to generate artefacts for bots and at the level start
+        //this method used to end the game when final level is completed
         public bool FinalLevelComplete()
         {
             return _difficultyLevel == 5;
         }
 
-        //use it after all made a move
-        public void UpdateMoveCounters()
+        //update personal move counter of each character
+        private void UpdateMoveCounters()
         {
             foreach (var enemy in _enemy)
             {
@@ -631,16 +689,21 @@ namespace OurCoolGame
             _mainPlayer.MoveCounter -= 1;
         }
 
-        public void EnemyMove(Wizard enemy)
+        //method to make enemy move logic
+        private void EnemyMove(Wizard enemy)
         {
+            //dead enemy can't make a move
             if (enemy.CharacterState == State.Dead)
             {
                 return;
             }
 
+            //enemy that need revival, heal or unparalyze
             Wizard inDangerTarget = enemy;
+            //enemy that need mana regeneration
             Wizard lowerManaTarget = enemy;
 
+            //if enemy quantity more than 1 we want to choose the most weakened character in list of enemies
             if (_enemy.Count > 1)
             {
                 foreach (var wizard in _enemy)
@@ -651,6 +714,7 @@ namespace OurCoolGame
                         if (wizard.CharacterState == State.Paralyzed &&
                             inDangerTarget.CharacterState == State.Paralyzed)
                         {
+                            //if both characters are paralyzed it chooses one with least hp 
                             switch (wizard.CurrentHealthPoints < inDangerTarget.CurrentHealthPoints)
                             {
                                 case true:
@@ -669,7 +733,7 @@ namespace OurCoolGame
                             inDangerTarget = wizard;
                         }
                     }
-
+                    //find character with the least mana
                     if (wizard.CurrentMana < lowerManaTarget.CurrentMana)
                     {
                         lowerManaTarget = wizard;
@@ -677,6 +741,7 @@ namespace OurCoolGame
                 }
             }
 
+            //switch to revive or unparalyze character or his teammate
             switch (inDangerTarget.CharacterState)
             {
                 case State.Dead:
@@ -698,14 +763,18 @@ namespace OurCoolGame
                     break;
                 }
             }
-
+            
+            //cast heal spell when character is lowHP and mana is not low
             if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 && enemy.CurrentMana > enemy.MaxMana / 3)
             {
-                TryCastSpell(new SpellHeal(), enemy, inDangerTarget);
-                return;
+                if (TryCastSpell(new SpellHeal(), enemy, inDangerTarget))
+                {
+                    return;
+                }
             }
             
             Artefact outFromFunc;
+            //use living water when it is in inventory and inDangerTarget needs hp regeneration
             if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 &&
                 enemy.HasWaterBottle(true, out outFromFunc))
             {
@@ -713,13 +782,15 @@ namespace OurCoolGame
                 return;
             }
 
+            //use dead water when it is in inventory and lowerManaTarget needs mana regeneration
             if (lowerManaTarget.CurrentMana < lowerManaTarget.MaxMana / 4 &&
                 enemy.HasWaterBottle(false, out outFromFunc))
             {
                 enemy.UseArtefact(outFromFunc, lowerManaTarget);
                 return;
             }
-
+            
+            //use armor spell when mana is almost full(it is quite expensive)
             if (enemy.CurrentMana > enemy.MaxMana * 8 / 10)
             {
                 if (TryCastSpell(new SpellArmor(), enemy, enemy))
@@ -728,6 +799,7 @@ namespace OurCoolGame
                 }
             }
 
+            //switch to undo the negative state
             switch (enemy.CharacterState)
             {
                 case State.Poisoned:
@@ -749,7 +821,8 @@ namespace OurCoolGame
                     break;
                 }
             }
-
+            
+            //use artefact with negative status on main player
             if (_mainPlayer.CharacterState != State.Dead &&
                 (_mainPlayer.CharacterState is State.Healthy or State.Weakened) &&
                 enemy.HasStatusArtefact(out outFromFunc))
@@ -757,7 +830,8 @@ namespace OurCoolGame
                 enemy.UseArtefact(outFromFunc, _mainPlayer);
                 return;
             }
-
+            
+            //use spell FireBall on main player when there is enough mana and spell is learned
             if (enemy._learnedSpells.FindIndex(spell => spell == new SpellFireball()) != -1 &&
                 enemy.CurrentMana > enemy.MaxMana / 4)
             {
@@ -767,6 +841,7 @@ namespace OurCoolGame
             enemy.UseArtefact(enemy._inventory[0], _mainPlayer);
         }
 
+        //method that casts spell and returns true, when spell is learned, otherwise doesn't cast and return false
         private bool TryCastSpell(Spell spell, Wizard origin, Wizard target)
         {
             var usedItemIndex = origin._learnedSpells.FindIndex(targetSpell => targetSpell == spell);
@@ -786,6 +861,7 @@ namespace OurCoolGame
             return false;
         }
 
+        //method that uses artefact and returns true, when artefact is in inventory, otherwise doesn't use and return false
         private bool TryUseArtefact(Artefact artefact, Wizard origin, Wizard target)
         {
             var usedItemIndex = origin._inventory.FindIndex(targetArtefact => targetArtefact == artefact);
@@ -798,6 +874,7 @@ namespace OurCoolGame
             return false;
         }
 
+        //output basic info about main player and enemies that we use after each move
         private void ShowFightInfo()
         {
             Console.WriteLine("Your HP: {0}/{1}\nYour MP: {2}/{3}\nYour state: {4}\nEnemy's HP:", _mainPlayer.CurrentHealthPoints,

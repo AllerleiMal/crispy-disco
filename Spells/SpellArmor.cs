@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Armor";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public override void MagicEffect(Wizard origin, Wizard target)
         {
             if (origin.CurrentMana < ManaCost)
             {
@@ -22,7 +22,7 @@ namespace OurCoolGame.Spells
                 return;
             }
 
-            if (target.CharacterState != State.Dead)
+            if (target.CharacterState == State.Dead)
             {
                 Console.WriteLine("Can't use armor on dead character");
                 return;

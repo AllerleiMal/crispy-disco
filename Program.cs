@@ -16,6 +16,7 @@ namespace OurCoolGame
             {
                 if (GameLogic.MoveCounter == 0 || wizard.CharacterState == State.Dead)
                 {
+                    gameLogic._enemy.Clear();
                     gameLogic.GenerateLevel();
                 }
 

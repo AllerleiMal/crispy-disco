@@ -29,8 +29,9 @@ namespace OurCoolGame.Spells
             }
 
             origin.CurrentMana -= ManaCost;
-            target.CurrentHealthPoints = 1;
-            target.CharacterState = State.Weakened;
+            target.CharacterState = target.CurrentHealthPoints <= target.MaxHealthPoints / 10
+                ? State.Weakened
+                : State.Healthy;
         }
     }
 }
