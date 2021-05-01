@@ -22,7 +22,6 @@ namespace OurCoolGame.Artefacts
             }
 
             target.CurrentMana += ArtefactPower;
-            target.CharacterState = State.Dead;
         }
 
         public override string ToString()

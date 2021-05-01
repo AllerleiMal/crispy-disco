@@ -89,23 +89,11 @@ namespace OurCoolGame
             return learned;
         }
 
-        public void LowManaOrHpMessage()
-        {
-            if ((double) CurrentHealthPoints / MaxHealthPoints * 100 - 10 < 0)
-            {
-                Console.WriteLine("Your HP is low {0}/{1}", CurrentHealthPoints, MaxHealthPoints);
-            }
-
-            if ((double) CurrentMana / MaxMana * 100 - 10 < 0)
-            {
-                Console.WriteLine("Your mana is low {0}/{1}", CurrentMana, MaxMana);
-            }
-        }
-
         public void LearnSpell(Spell spell)
         {
             if (_learnedSpells.FindIndex(target => spell.ToString() == target.ToString()) == -1)
             {
+                Console.WriteLine("{0} learned spell {1}", Name, spell);
                 _learnedSpells.Add(spell);
             }
             else

@@ -113,10 +113,6 @@ namespace OurCoolGame
             set
             {
                 _moveCounter = value;
-                if (_moveCounter < 0)
-                {
-                    _moveCounter = 0;
-                }
 
                 if (CharacterState is State.Poisoned or State.Sick)
                 {
@@ -126,6 +122,11 @@ namespace OurCoolGame
                 if (_moveCounter == 0)
                 {
                     StateUpdate();
+                }
+                
+                if (_moveCounter < 0)
+                {
+                    _moveCounter = 0;
                 }
             }
         }

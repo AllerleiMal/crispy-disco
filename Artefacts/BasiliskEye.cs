@@ -20,6 +20,7 @@ namespace OurCoolGame.Artefacts
             }
 
             target.CharacterState = State.Paralyzed;
+            target.CurrentHealthPoints -= ArtefactPower;
         }
 
         public override string ToString()
