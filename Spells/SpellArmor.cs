@@ -22,7 +22,7 @@ namespace OurCoolGame.Spells
                 return;
             }
 
-            if (target.CharacterState != State.Dead)
+            if (target.CharacterState == State.Dead)
             {
                 Console.WriteLine("Can't use armor on dead character");
                 return;

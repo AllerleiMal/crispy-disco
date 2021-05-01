@@ -16,7 +16,8 @@ namespace OurCoolGame
             {
                 if (GameLogic.MoveCounter == 0 || wizard.CharacterState == State.Dead)  //generate level if move counter equal to 0(means that new level just starter) or main character died(then player will play same level again, without full game restart)
                 {
-                    gameLogic.GenerateLevel();              //this will print some messsages, let you select new artefacts and spells, generate new enemies
+                    gameLogic._enemy.Clear();
+                    gameLogic.GenerateLevel(); //this will print some messsages, let you select new artefacts and spells, generate new enemies
                 }
 
                 if (gameLogic.FinalLevelComplete())         //game cycle breaks when final level is complited

@@ -92,6 +92,7 @@ namespace OurCoolGame
         {
             if (_learnedSpells.FindIndex(target => spell.ToString() == target.ToString()) == -1)
             {
+                Console.WriteLine("{0} learned spell {1}", Name, spell);
                 _learnedSpells.Add(spell);
             }
             else
