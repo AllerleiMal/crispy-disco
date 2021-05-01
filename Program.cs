@@ -22,6 +22,7 @@ namespace OurCoolGame
 
                 if (gameLogic.FinalLevelComplete())         //game cycle breaks when final level is complited
                 {
+                    Console.WriteLine("Congratulations! You really did it! Thanks for playing. Hope you like it. Bis bald :)\nYour score: " + wizard.ExperiencePoints.ToString());
                     break;
                 }
                 
@@ -44,7 +45,7 @@ namespace OurCoolGame
                 }
             }
 
-            Console.WriteLine("Congratulations! You really did it! Thanks for playing. Hope you like it. Bis bald :)");
+            
         }
     }
 }
