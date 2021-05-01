@@ -5,12 +5,12 @@ namespace OurCoolGame.Artefacts
 {
     public class LightningStaff : Artefact
     {
-        public LightningStaff() : base(175)
+        public LightningStaff() : base(225)
         {
             Renewability = true;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target) //deal 150-300 damage to target
         {
             if (target.CharacterState == State.Dead)
             {
@@ -22,7 +22,7 @@ namespace OurCoolGame.Artefacts
             }
 
             target.CurrentHealthPoints -= ArtefactPower;
-            ArtefactPower = _random.Next(150, 200);
+            ArtefactPower = _random.Next(150, 300);
         }
 
         public override string ToString()

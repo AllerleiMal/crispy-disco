@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Antidote";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target)
+        public override void MagicEffect(Wizard origin, Wizard target) //changes target character's state from poisoned to weakened/healthy
         {
             if (origin.CurrentMana < ManaCost)
             {

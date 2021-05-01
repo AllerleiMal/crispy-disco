@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Heal";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public override void MagicEffect(Wizard origin, Wizard target, int magicPower) // heal target for magic power equal amount of HP 
         {
             if (origin.CurrentMana < ManaCost * magicPower)
             {

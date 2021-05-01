@@ -10,7 +10,7 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target) //add ArtefactPower equal amount of mana to target (ArtefactPower depends on BottleSize)
         {
             if (target.CharacterState == State.Dead)
             {
@@ -22,7 +22,6 @@ namespace OurCoolGame.Artefacts
             }
 
             target.CurrentMana += ArtefactPower;
-            target.CharacterState = State.Dead;
         }
 
         public override string ToString()

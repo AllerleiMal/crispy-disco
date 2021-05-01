@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Cure";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target)
+        public override void MagicEffect(Wizard origin, Wizard target) //changes target's state from Sick to Weakened/Healthy
         {
             if (origin.CurrentMana < ManaCost)
             {

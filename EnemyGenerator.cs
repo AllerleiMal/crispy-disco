@@ -6,12 +6,12 @@ using OurCoolGame.Spells;
 
 namespace OurCoolGame
 {
-    public class EnemyGenerator
+    public class EnemyGenerator //used to generate enemies for fights
     {
 
-        public List<Spell> _allSpells;
-        private readonly Random _random;
-        private string[] _names = {
+        public List<Spell> _allSpells;  //list with all spells, used to give enemies random spells
+        private readonly Random _random; //_random Random object to randomize different things :D
+        private string[] _names = {  //possible enemy names
             "Acanthuridae", "Achatina", "Achatinoidea", "Acinonyx", "Actinidia", "Aegypius", "Aepyceros", "Ailuropoda",
             "Ailurus", "Ajaja", "Alcelaphinae", "Alces", "Alligator", "Alopex", "Alouatta", "Ambystoma",
             "Amphiprioninae", "Anas", "Anguis", "Anisoptera", "Anthozoa", "Apatura", "Apis", "Apodemus", "Aptenodytes",
@@ -59,7 +59,7 @@ namespace OurCoolGame
             "Tyto", "Urochordata", "Uroplatus", "Ursidae", "Ursus", "Varanus", "Vespa", "Viverra", "Vombatus", "Vulpes",
             "Xenopus"
         };
-        public EnemyGenerator()
+        public EnemyGenerator()  //EnemyGenerator constructor. initializes _allSpells list and Random object
         {
             _random = new Random();
             _allSpells = new List<Spell>();
@@ -71,11 +71,11 @@ namespace OurCoolGame
             _allSpells.Add(new SpellRevival());
             _allSpells.Add(new SpellUnparalyze());
         }
-        private Spell RandomizeSpell()
+        private Spell RandomizeSpell() //returns random spell from _allSpells list
         {
             return _allSpells[_random.Next(0, 6)];
         }
-        private Artefact RandomizeArtefact()
+        private Artefact RandomizeArtefact() //returns random non reusable artefact
         {
             var artefactNumber = _random.Next(1, 5);
             return artefactNumber switch
@@ -88,8 +88,8 @@ namespace OurCoolGame
                 _ => new LivingWater(RandomizeBottleSize())
             };
         }
-        //this is an additional method to create living/dead water bottles during artefact generation or after killing bots
-        public BottleSize RandomizeBottleSize()
+        
+        public BottleSize RandomizeBottleSize() //this is an additional method to create living/dead water bottles during artefact generation
         {
             var size = _random.Next(3);
             return size switch
@@ -100,11 +100,11 @@ namespace OurCoolGame
                 _ => BottleSize.Big
             };
         }
-        public Wizard Generate(int difficulty)
+        public Wizard Generate(int difficulty) //returns new enemy with randomized characteristics. difficulty parameter determines how many artefacts and spell enemy will have
         {
             Race race = new Race();
             Gender gender = new Gender();
-            switch (_random.Next(1, 5))
+            switch (_random.Next(1, 5))  //selects random race
             {
                 case 1: race = Race.Elf; break;
                 case 2: race = Race.Gnome; break;
@@ -112,30 +112,30 @@ namespace OurCoolGame
                 case 4: race = Race.Human; break;
                 case 5: race = Race.Orc; break;
             }
-            switch (_random.Next(1,3))
+            switch (_random.Next(1,3))  //selects random gender
             {
                 case 1: gender = Gender.Female; break;
                 case 2: gender = Gender.Male; break;
                 case 3: gender = Gender.Undefined; break;
             }
-            Wizard enemy = new Wizard(_names[_random.Next(_names.Length)], race, gender, _random.Next(200));
-            switch (_random.Next(1, 3))
+            Wizard enemy = new Wizard(_names[_random.Next(_names.Length)], race, gender, _random.Next(200)); //creates Wizard enemy object
+            switch (_random.Next(1, 3)) //gives enemy random basic weapon 
             {
                 case 1: enemy._inventory.Add(new ShadowDagger()); break;
                 case 2: enemy._inventory.Add(new LightningStaff()); break;
                 case 3: enemy._inventory.Add(new BloodMace()); break;
             }
-            switch (difficulty)
+            switch (difficulty) //gives enemy random artefacts and spells depending on difficulty level
             {
-                case 1: 
+                case 1: //Easy level: 1 artefact
                     enemy._inventory.Add(RandomizeArtefact()); 
                     break;
-                case 2: 
+                case 2: //Normal level: 2 artefacts, 1 spell
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._learnedSpells.Add(RandomizeSpell());
                     break;
-                case 3:
+                case 3: //Hard level: 3 artefacts, 1 random spell and 1 armor spell
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._inventory.Add(RandomizeArtefact());
                     enemy._inventory.Add(RandomizeArtefact());

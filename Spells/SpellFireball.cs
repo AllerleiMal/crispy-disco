@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Fireball";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public override void MagicEffect(Wizard origin, Wizard target, int magicPower) //deal magic power equal damage to target
         {
             if (origin.CurrentMana < ManaCost * magicPower)
             {

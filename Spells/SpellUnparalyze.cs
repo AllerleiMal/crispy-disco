@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Unparalyze";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target)
+        public override void MagicEffect(Wizard origin, Wizard target) //changes state from Paralyzed to Healthy/Weakened
         {
             if (origin.CurrentMana < ManaCost)
             {
@@ -29,8 +29,9 @@ namespace OurCoolGame.Spells
             }
 
             origin.CurrentMana -= ManaCost;
-            target.CurrentHealthPoints = 1;
-            target.CharacterState = State.Weakened;
+            target.CharacterState = target.CurrentHealthPoints <= target.MaxHealthPoints / 10
+                ? State.Weakened
+                : State.Healthy;
         }
     }
 }

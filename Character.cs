@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 using OurCoolGame.Artefacts;
 using OurCoolGame.Enums;
 
@@ -13,7 +12,7 @@ namespace OurCoolGame
         public string Name { get; private set; }
         private State _characterState;
 
-        public State CharacterState
+        public State CharacterState // getter/setter for character's state
         {
             get => _characterState;
             set
@@ -63,7 +62,7 @@ namespace OurCoolGame
         public int Age { get; set; }
         private int _currentHealthPoints;
 
-        public int CurrentHealthPoints
+        public int CurrentHealthPoints // getter/setter for character's current health points
         {
             get => _currentHealthPoints;
             set
@@ -91,7 +90,7 @@ namespace OurCoolGame
 
         private int _maxHealthPoints;
 
-        public int MaxHealthPoints
+        public int MaxHealthPoints  // getter/setter for character's maximum health points
         {
             get => _maxHealthPoints;
             set
@@ -107,7 +106,7 @@ namespace OurCoolGame
         public int ExperiencePoints { get; set; } = 0;
         private int _moveCounter;
 
-        public int MoveCounter
+        public int MoveCounter // getter/setter for move counter. Is used for state updates and interactions
         {
             get => _moveCounter;
             set
@@ -132,7 +131,7 @@ namespace OurCoolGame
 
         public List<Artefact> _inventory;
 
-        public Character(string name, Race characterRace, Gender characterGender, int age)
+        public Character(string name, Race characterRace, Gender characterGender, int age) //character constructor
         {
             _moveCounter = 0;
             ID = _objectId;
@@ -141,7 +140,7 @@ namespace OurCoolGame
             CharacterRace = characterRace;
             CharacterGender = characterGender;
             Age = age;
-            switch (characterRace)
+            switch (characterRace)  //sets max HP according to character's race
             {
                 case Race.Elf:
                 {
@@ -179,12 +178,12 @@ namespace OurCoolGame
             _inventory = new List<Artefact>();
         }
 
-        public bool IsBetter(Character lhs)
+        public bool IsBetter(Character lhs) 
         {
             return ExperiencePoints > lhs.ExperiencePoints;
         }
 
-        private void StateUpdate()
+        private void StateUpdate()  //updates state according to current HP
         {
             var healthPercentage = (double) CurrentHealthPoints * 100 / MaxHealthPoints;
             if (healthPercentage - 10 > double.Epsilon)
@@ -223,7 +222,7 @@ namespace OurCoolGame
             return characterInfo;
         }
 
-        public void Cure()
+        public void Cure()  //changes Sick state to Healthy/Weakened
         {
             if (CharacterState != State.Sick)
             {
@@ -233,13 +232,13 @@ namespace OurCoolGame
             StateUpdate();
         }
 
-        public void PickUpArtefact(Artefact artefact)
+        public void PickUpArtefact(Artefact artefact) //add artefact to characters inventory
         {
             _inventory.Add(artefact);
             Console.WriteLine("Artefact {0} was added to the inventory of {1}", artefact, Name);
         }
 
-        public void ThrowAwayArtefact(Artefact artefact)
+        public void ThrowAwayArtefact(Artefact artefact) //remove artefact from characters inventory
         {
             if (_inventory.Count == 0)
             {
@@ -252,13 +251,13 @@ namespace OurCoolGame
             _inventory.Remove(artefact);
         }
 
-        public void GiveArtefact(Character target, Artefact artefact)
+        public void GiveArtefact(Character target, Artefact artefact) //remove artefact from inventory and add it to targets inventory
         {
             ThrowAwayArtefact(artefact);
             target.PickUpArtefact(artefact);
         }
 
-        public void UseArtefact(Artefact artefact, Wizard target)
+        public void UseArtefact(Artefact artefact, Wizard target) //obviously runs Artefact.UseArtefact method and throws away artefact if it's not reusable
         {
             if (!artefact.Renewability)
             {
@@ -270,7 +269,7 @@ namespace OurCoolGame
             ExperiencePoints += 100;
         }
 
-        public void ShowInventory()
+        public void ShowInventory()  //write list of character's artefacts
         {
             for (var i = 0; i < _inventory.Count; ++i)
             {
@@ -278,7 +277,7 @@ namespace OurCoolGame
             }
         }
 
-        public bool HasWaterBottle(bool isLiving, out Artefact outputArtefact)
+        public bool HasWaterBottle(bool isLiving, out Artefact outputArtefact) //checks if character has a bottle of living/dead water. used in GameLogic.EnemyMove method
         {
             Tuple<Artefact, Artefact, Artefact> variants = isLiving switch
             {
@@ -294,7 +293,7 @@ namespace OurCoolGame
             return foundIndex != -1;
         }
 
-        public bool HasStatusArtefact(out Artefact outputArtefact)
+        public bool HasStatusArtefact(out Artefact outputArtefact) //checks if character has an artifact that changes opponent's state. used in GameLogic.EnemyMove method
         {
             var artefactIndex = _inventory.FindIndex(artefact => artefact == new BasiliskEye());
             if (artefactIndex != -1)

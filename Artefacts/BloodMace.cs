@@ -10,7 +10,7 @@ namespace OurCoolGame.Artefacts
             Renewability = true;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target) //deal 180-250 damage to target
         {
             if (target.CharacterState == State.Dead)
             {

@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Revival";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target)
+        public override void MagicEffect(Wizard origin, Wizard target) //revives target and sets its HP to 1, state to Weakened
         {
             if (origin.CurrentMana < ManaCost)
             {

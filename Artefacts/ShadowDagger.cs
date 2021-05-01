@@ -5,12 +5,12 @@ namespace OurCoolGame.Artefacts
 {
     public class ShadowDagger : Artefact
     {
-        public ShadowDagger() : base(120)
+        public ShadowDagger() : base(200)
         {
             Renewability = true;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target)//deal 200-220 damage to target
         {
             if (target.CharacterState == State.Dead)
             {
@@ -22,7 +22,7 @@ namespace OurCoolGame.Artefacts
             }
 
             target.CurrentHealthPoints -= ArtefactPower;
-            ArtefactPower = _random.Next(100, 150);
+            ArtefactPower = _random.Next(200, 220);
         }
 
         public override string ToString()

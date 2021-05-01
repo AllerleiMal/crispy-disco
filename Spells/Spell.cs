@@ -8,23 +8,22 @@ namespace OurCoolGame.Spells
         public virtual bool Pronouncing { get; protected set; }
         public virtual bool Gesturing { get; protected set; }
 
-        public virtual void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public virtual void MagicEffect(Wizard origin, Wizard target, int magicPower)  //template for spell that has both target and magic power as parameters
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
         }
 
-        public virtual void MagicEffect(Wizard origin, Wizard target)
+        public virtual void MagicEffect(Wizard origin, Wizard target) // template for spell that have only target as parameter
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
         }
 
-        public virtual void MagicEffect(Wizard origin,
-                int magicPower) // i guess this and the next one we should delete + in Wizard.CastSpell
+        public virtual void MagicEffect(Wizard origin, int magicPower) //template for spell that have only magicPower as parameter
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
         }
 
-        public virtual void MagicEffect(Wizard origin)
+        public virtual void MagicEffect(Wizard origin) //template for spell without any parameters
         {
             Console.WriteLine("Wrong method parameters (Spell MagicEffect)");
         }

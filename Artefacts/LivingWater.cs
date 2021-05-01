@@ -10,7 +10,7 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target)//add ArtefactPower equal amount of HP to target (ArtefactPower depends on BottleSize)
         {
             if (target.CharacterState == State.Dead)
             {

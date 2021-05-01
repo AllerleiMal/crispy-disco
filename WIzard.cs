@@ -9,7 +9,7 @@ namespace OurCoolGame
     {
         private int _currentMana;
 
-        public int CurrentMana
+        public int CurrentMana  // getter/setter for characters current mana
         {
             get => _currentMana;
             set
@@ -33,10 +33,9 @@ namespace OurCoolGame
         public int MaxMana { get; private set; }
         public List<Spell> _learnedSpells;
 
-        public Wizard(string name, Race characterRace, Gender characterGender, int age) : base(name, characterRace,
-            characterGender, age)
+        public Wizard(string name, Race characterRace, Gender characterGender, int age) : base(name, characterRace, characterGender, age) //Wizard consructor based on Character constructor
         {
-            switch (characterRace)
+            switch (characterRace)  //sets max mana according to Race
             {
                 case Race.Elf:
                 {
@@ -76,7 +75,7 @@ namespace OurCoolGame
             return characterInfo;
         }
 
-        private bool SpellLearnedCheck(Spell spell)
+        private bool SpellLearnedCheck(Spell spell)  //checks if spell is in wizards _learnedSpells list
         {
             var learned = _learnedSpells.FindIndex(target => spell.ToString() == target.ToString()) != -1;
             if (!learned)
@@ -89,20 +88,7 @@ namespace OurCoolGame
             return learned;
         }
 
-        public void LowManaOrHpMessage()
-        {
-            if ((double) CurrentHealthPoints / MaxHealthPoints * 100 - 10 < 0)
-            {
-                Console.WriteLine("Your HP is low {0}/{1}", CurrentHealthPoints, MaxHealthPoints);
-            }
-
-            if ((double) CurrentMana / MaxMana * 100 - 10 < 0)
-            {
-                Console.WriteLine("Your mana is low {0}/{1}", CurrentMana, MaxMana);
-            }
-        }
-
-        public void LearnSpell(Spell spell)
+        public void LearnSpell(Spell spell) //adds spell to wizards _learnedSpells list
         {
             if (_learnedSpells.FindIndex(target => spell.ToString() == target.ToString()) == -1)
             {
@@ -116,7 +102,7 @@ namespace OurCoolGame
             }
         }
 
-        public void ForgetSpell(Spell spell)
+        public void ForgetSpell(Spell spell) //renoves spell from wizards _learnedSpells list
         {
             if (SpellLearnedCheck(spell))
             {
@@ -124,8 +110,7 @@ namespace OurCoolGame
             }
         }
 
-        public void CastSpell(Spell spell, Wizard target,
-            int magicPower)
+        public void CastSpell(Spell spell, Wizard target, int magicPower)  //cast spell method for spells that have both target and magic power as parameters
         {
             if (SpellLearnedCheck(spell))
             {
@@ -138,7 +123,7 @@ namespace OurCoolGame
             }
         }
 
-        public void CastSpell(Spell spell, Wizard target)
+        public void CastSpell(Spell spell, Wizard target) //cast spell method for spells that have only target as parameter
         {
             if (SpellLearnedCheck(spell))
             {
@@ -151,7 +136,7 @@ namespace OurCoolGame
             }
         }
 
-        public void CastSpell(Spell spell, int magicPower)
+        public void CastSpell(Spell spell, int magicPower) //cast spell method for spells that have only magic power as parameter 
         {
             if (SpellLearnedCheck(spell))
             {
@@ -164,7 +149,7 @@ namespace OurCoolGame
             }
         }
 
-        public void CastSpell(Spell spell)
+        public void CastSpell(Spell spell) //cast spell method for spells without parameters
         {
             if (SpellLearnedCheck(spell))
             {
@@ -177,7 +162,7 @@ namespace OurCoolGame
             }
         }
 
-        public void ShowLearnedSpells()
+        public void ShowLearnedSpells()  //writes wizards learned spells lists
         {
             for (var i = 0; i < _learnedSpells.Count; ++i)
             {

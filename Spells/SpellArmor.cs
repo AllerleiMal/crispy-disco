@@ -5,7 +5,7 @@ namespace OurCoolGame.Spells
 {
     class SpellArmor : Spell
     {
-        public override int ManaCost { get; protected set; } = 50;
+        public override int ManaCost { get; protected set; } = 150;
         public override bool Gesturing { get; protected set; } = true;
         public override bool Pronouncing { get; protected set; } = true;
 
@@ -14,7 +14,7 @@ namespace OurCoolGame.Spells
             return "Armor";
         }
 
-        public override void MagicEffect(Wizard origin, Wizard target, int magicPower)
+        public override void MagicEffect(Wizard origin, Wizard target) //changes targets state to Invulnerable for 3 turns
         {
             if (origin.CurrentMana < ManaCost)
             {

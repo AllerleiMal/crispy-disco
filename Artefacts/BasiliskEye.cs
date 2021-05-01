@@ -10,7 +10,7 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target) //sets target state to Paralyzed and deals 250 damage
         {
             if (target.CharacterState == State.Dead)
             {
@@ -20,6 +20,7 @@ namespace OurCoolGame.Artefacts
             }
 
             target.CharacterState = State.Paralyzed;
+            target.CurrentHealthPoints -= ArtefactPower;
         }
 
         public override string ToString()

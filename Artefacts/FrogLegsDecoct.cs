@@ -10,7 +10,7 @@ namespace OurCoolGame.Artefacts
             Renewability = false;
         }
 
-        public override void UseArtefact(Wizard target)
+        public override void UseArtefact(Wizard target) //changes target state from Sick to Weakened/Healthy and restores 200 HP 
         {
             if (target.CharacterState == State.Dead)
             {
