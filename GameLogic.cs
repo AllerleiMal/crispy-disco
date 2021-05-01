@@ -91,7 +91,7 @@ namespace OurCoolGame
             while (true)
             {
                 Console.WriteLine("Which race would you choose:\nHuman(1)\nGnome(2)\nElf(3)\nOrc(4)\nGoblin(5)");
-                //here we try to parse string with choice number, and if it is not possible or number is wrong, ask for input one more time                int choice; 
+                //here we try to parse string with choice number, and if it is not possible or number is wrong, ask for input one more time                 
                 int choice;
                 if (int.TryParse(Console.ReadLine(), out choice) && choice is >= 1 and <= 5)
                 {
@@ -445,9 +445,10 @@ namespace OurCoolGame
             //ask for !help
             InputProcessing(1);
             Console.WriteLine(
-                "ok, now let's try !use. attack enemy with you Lightning Staff(start with !use)");
+                "ok, now let's try !use. attack enemy with you Lightning Staff");
             //ask for !use
             InputProcessing(2);
+            Console.WriteLine("Look at this damage\n{0}: {1}/{2} HP", _enemy[0].Name, _enemy[0].CurrentHealthPoints, _enemy[0].MaxHealthPoints);
             Console.WriteLine("Now we would check how you can take damage");
             Thread.Sleep(2000);
             _enemy[0]._inventory.Add(new LightningStaff());
@@ -465,7 +466,7 @@ namespace OurCoolGame
                 "You have 2 special bottles. Living is for live regeneration and dead is for mana regeneration.\nThey disappoint after using, so think twice and don't use it when you are full. Now restore your HP(start with !use)");
             //ask fot !use
             InputProcessing(2);
-            Console.WriteLine("Now let's check what you can do! Check your spells(start with !use)");
+            Console.WriteLine("Now let's try to use heal spell!(start with !use)");
             _mainPlayer.LearnSpell(new SpellHeal());
             //ask for !use
             InputProcessing(2);
@@ -735,7 +736,6 @@ namespace OurCoolGame
                     }
                 }
             }
-
             //switch to revive or unparalyze character or his teammate
             switch (inDangerTarget.CharacterState)
             {
@@ -760,7 +760,7 @@ namespace OurCoolGame
             }
             
             //cast heal spell when character is lowHP and mana is not low
-            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 4 && enemy.CurrentMana > enemy.MaxMana / 3)
+            if (inDangerTarget.CurrentHealthPoints < inDangerTarget.MaxHealthPoints / 2 && enemy.CurrentMana >= enemy.MaxMana / 2)
             {
                 if (TryCastSpell(new SpellHeal(), enemy, inDangerTarget))
                 {
@@ -827,7 +827,7 @@ namespace OurCoolGame
             }
             
             //use spell FireBall on main player when there is enough mana and spell is learned
-            if (enemy._learnedSpells.FindIndex(spell => spell == new SpellFireball()) != -1 &&
+            if (enemy._learnedSpells.FindIndex(spell => spell.ToString() == new SpellFireball().ToString()) != -1 &&
                 enemy.CurrentMana > enemy.MaxMana / 4)
             {
                 enemy.CastSpell(new SpellFireball(), _mainPlayer, enemy.CurrentMana / 4);
@@ -839,12 +839,12 @@ namespace OurCoolGame
         //method that casts spell and returns true, when spell is learned, otherwise doesn't cast and return false
         private bool TryCastSpell(Spell spell, Wizard origin, Wizard target)
         {
-            var usedItemIndex = origin._learnedSpells.FindIndex(targetSpell => targetSpell == spell);
+            var usedItemIndex = origin._learnedSpells.FindIndex(targetSpell => targetSpell.ToString() == spell.ToString());
             if (usedItemIndex != -1)
             {
                 if (spell == new SpellHeal())
                 {
-                    origin.CastSpell(origin._learnedSpells[usedItemIndex], target, origin.CurrentMana / 3);
+                    origin.CastSpell(origin._learnedSpells[usedItemIndex], target, origin.CurrentMana / 4);
                 }
                 else
                 {
@@ -859,7 +859,7 @@ namespace OurCoolGame
         //method that uses artefact and returns true, when artefact is in inventory, otherwise doesn't use and return false
         private bool TryUseArtefact(Artefact artefact, Wizard origin, Wizard target)
         {
-            var usedItemIndex = origin._inventory.FindIndex(targetArtefact => targetArtefact == artefact);
+            var usedItemIndex = origin._inventory.FindIndex(targetArtefact => targetArtefact.ToString() == artefact.ToString());
             if (usedItemIndex != -1)
             {
                 origin.UseArtefact(origin._inventory[usedItemIndex], target);

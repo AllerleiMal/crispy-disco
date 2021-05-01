@@ -127,7 +127,7 @@ namespace OurCoolGame
             }
             switch (difficulty) //gives enemy random artefacts and spells depending on difficulty level
             {
-                case 1: //Easy level: 1 artefact
+                case 1: //Easy level: 1 artefact + medium living bottle
                     enemy._inventory.Add(RandomizeArtefact()); 
                     enemy._inventory.Add(new LivingWater(BottleSize.Medium));
                     break;

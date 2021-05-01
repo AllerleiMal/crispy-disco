@@ -289,21 +289,21 @@ namespace OurCoolGame
             };
 
             int foundIndex = _inventory.FindIndex(artefact =>
-                artefact == variants.Item1 || artefact == variants.Item2 || artefact == variants.Item3);
+                artefact.ToString() == variants.Item1.ToString() || artefact.ToString() == variants.Item2.ToString() || artefact.ToString() == variants.Item3.ToString());
             outputArtefact = foundIndex != -1 ? _inventory[foundIndex] : null;
             return foundIndex != -1;
         }
 
         public bool HasStatusArtefact(out Artefact outputArtefact) //checks if character has an artifact that changes opponent's state. used in GameLogic.EnemyMove method
         {
-            var artefactIndex = _inventory.FindIndex(artefact => artefact == new BasiliskEye());
+            var artefactIndex = _inventory.FindIndex(artefact => artefact.ToString() == new BasiliskEye().ToString());
             if (artefactIndex != -1)
             {
                 outputArtefact = _inventory[artefactIndex];
                 return true;
             }
 
-            artefactIndex = _inventory.FindIndex(artefact => artefact == new PoisonousSaliva());
+            artefactIndex = _inventory.FindIndex(artefact => artefact.ToString() == new PoisonousSaliva().ToString());
             if (artefactIndex != -1)
             {
                 outputArtefact = _inventory[artefactIndex];
