@@ -358,6 +358,12 @@ namespace OurCoolGame
                                     break;
                                 }
 
+                                if (magic * _mainPlayer._learnedSpells[pickSpell - 1].ManaCost <=
+                                    _mainPlayer.CurrentMana)
+                                {
+                                    Console.WriteLine("You don't have enough mana");
+                                    UseMenu();
+                                }
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Gods hate ridicule, you played with fire and lose");
                                 Console.ResetColor();
