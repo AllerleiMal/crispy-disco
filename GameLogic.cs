@@ -59,7 +59,7 @@ namespace OurCoolGame
                 {
                     while(name[0] == ' ')
                         name = name.Remove(0, 1);
-                    while(name[^1] == ' ')
+                    while(name[name.Lenght - 1] == ' ')
                         name = name.Remove(name.Length - 1, 1);
                     break;
                 }
